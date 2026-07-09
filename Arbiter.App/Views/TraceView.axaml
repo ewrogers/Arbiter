@@ -19,6 +19,9 @@
         <Style Selector="ToggleButton.trace-state.active">
             <Setter Property="Foreground" Value="{StaticResource Talgonite.Color.LightBlue}" />
         </Style>
+        <Style Selector="ToggleButton.trace-state.active /template/ Border#SelectionBorder">
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
         <Style Selector="ToggleButton.trace-state:not(.active):checked">
             <Setter Property="Foreground" Value="{StaticResource Talgonite.ToggleButton.Foreground}" />
         </Style>
@@ -126,8 +129,7 @@
                     <!-- Toggle Find Button -->
                     <ToggleButton IsChecked="{Binding ShowSearchBar}"
                                   ToolTip.Tip="Shows or hides the search bar."
-                                  Classes="trace-state"
-                                  Classes.outline="{Binding !IsSearchActive}"
+                                  Classes="trace-state outline"
                                   Classes.active="{Binding IsSearchActive}">
                         <Path Width="16" Height="16"
                               Stroke="{Binding $parent[Button].Foreground}"
@@ -138,8 +140,7 @@
                     <ToggleButton IsChecked="{Binding ShowFilterBar}"
                                   HotKey="Ctrl+G"
                                   ToolTip.Tip="Shows or hides the trace filters."
-                                  Classes="trace-state"
-                                  Classes.outline="{Binding !IsFilterActive}"
+                                  Classes="trace-state outline"
                                   Classes.active="{Binding IsFilterActive}">
                         <Path Width="16" Height="16"
                               Stroke="{Binding $parent[Button].Foreground}"
