@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Keep entity collections on the UI thread and queue console and trace updates in UI batches
+- Updated Avalonia and supporting packages to their latest compatible patch versions
 
 ## [1.8.1] - 2025-11-14
 
