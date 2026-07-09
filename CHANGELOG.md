@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Keep entity collections on the UI thread and queue console and trace updates in UI batches
 - Prioritize heartbeat and tick sync packets in the network send queue
+- Use Delete or Backspace to remove selected packets from the trace
 - Updated Avalonia and supporting packages to their latest compatible patch versions
 
 ## [1.8.1] - 2025-11-14

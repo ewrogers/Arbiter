@@ -415,6 +415,10 @@
                  behaviors:ScrollToIndexBehavior.ScrollToIndex="{Binding ScrollToIndexRequested}"
                  behaviors:ScrollToEndBehavior.ScrollToEnd="{Binding ScrollToEndRequested}"
                  behaviors:ScrollToEndBehavior.AutoScrollToEnd="True">
+            <ListBox.KeyBindings>
+                <KeyBinding Gesture="Delete" Command="{Binding DeleteSelectedCommand}" />
+                <KeyBinding Gesture="Back" Command="{Binding DeleteSelectedCommand}" />
+            </ListBox.KeyBindings>
             <ListBox.DataTemplates>
                 <DataTemplate DataType="vm:TracePacketViewModel">
                     <v:TracePacketView />
@@ -428,6 +432,7 @@
                               Command="{Binding SaveSelectedCommand}"/>
                     <Separator/>
                     <MenuItem Header="Delete Selected"
+                              InputGesture="Delete"
                               Command="{Binding DeleteSelectedCommand}"/>
                     <Separator/>
                     <MenuItem Header="Find Selected"
