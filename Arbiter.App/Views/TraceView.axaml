@@ -15,6 +15,11 @@
         <SolidColorBrush x:Key="Talgonite.Trace.Background" Color="#373d49" />
     </UserControl.Resources>
 
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Ctrl+F" Command="{Binding ToggleSearchBarCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveAllCommand}" />
+    </UserControl.KeyBindings>
+
     <Grid RowDefinitions="Auto,Auto,Auto,*" Background="{StaticResource Talgonite.Trace.Background}">
         <!-- Toolbar Area -->
         <Border Grid.Row="0" Padding="4">
@@ -108,7 +113,6 @@
                 <WrapPanel Grid.Column="2" Orientation="Horizontal" ItemSpacing="4" ItemsAlignment="End">
                     <!-- Toggle Find Button -->
                     <ToggleButton IsChecked="{Binding ShowSearchBar}"
-                                  HotKey="Ctrl+F"
                                   ToolTip.Tip="Shows or hides the search bar."
                                   Classes="outline">
                         <Path Width="16" Height="16"
@@ -147,7 +151,6 @@
                     <!-- Save Trace Button -->
                     <Button Command="{Binding SaveAllCommand}"
                             ToolTip.Tip="Saves this trace to a file."
-                            HotKey="Ctrl+S"
                             Classes="toolbar"
                             IsEnabled="{Binding IsEmpty, Converter={x:Static BoolConverters.Not}}">
                         <Path Width="16" Height="16"
@@ -416,8 +419,12 @@
                  behaviors:ScrollToEndBehavior.ScrollToEnd="{Binding ScrollToEndRequested}"
                  behaviors:ScrollToEndBehavior.AutoScrollToEnd="True">
             <ListBox.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" />
+                <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveSelectedCommand}" />
                 <KeyBinding Gesture="Delete" Command="{Binding DeleteSelectedCommand}" />
                 <KeyBinding Gesture="Back" Command="{Binding DeleteSelectedCommand}" />
+                <KeyBinding Gesture="Ctrl+F" Command="{Binding FindSelectedCommand}" />
+                <KeyBinding Gesture="Ctrl+D" Command="{Binding ExcludeSelectedCommand}" />
             </ListBox.KeyBindings>
             <ListBox.DataTemplates>
                 <DataTemplate DataType="vm:TracePacketViewModel">
@@ -427,8 +434,10 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Copy Selected"
+                              InputGesture="Ctrl+C"
                               Command="{Binding CopyToClipboardCommand}"/>
                     <MenuItem Header="Save Selected"
+                              InputGesture="Ctrl+S"
                               Command="{Binding SaveSelectedCommand}"/>
                     <Separator/>
                     <MenuItem Header="Delete Selected"
@@ -436,8 +445,10 @@
                               Command="{Binding DeleteSelectedCommand}"/>
                     <Separator/>
                     <MenuItem Header="Find Selected"
+                              InputGesture="Ctrl+F"
                               Command="{Binding FindSelectedCommand}"/>
                     <MenuItem Header="Exclude Selected"
+                              InputGesture="Ctrl+D"
                               Command="{Binding ExcludeSelectedCommand}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>

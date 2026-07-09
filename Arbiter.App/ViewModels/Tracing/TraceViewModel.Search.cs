@@ -38,6 +38,12 @@ public partial class TraceViewModel
 
     public bool HasSearchResults => SearchResultCount > 0;
 
+    [RelayCommand]
+    private void ToggleSearchBar()
+    {
+        ShowSearchBar = !ShowSearchBar;
+    }
+
     private void OnSearchParametersChanged(object? sender, PropertyChangedEventArgs e)
     {
         // Do not filter on this, wait for actual command byte to change
