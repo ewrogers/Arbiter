@@ -197,7 +197,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="i8" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -213,7 +218,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="i8"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="i8"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -225,7 +231,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="u8" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -241,7 +252,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="u8"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="u8"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -253,7 +265,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="i16" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -269,7 +286,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="i16"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="i16"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -281,7 +299,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="u16" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -297,7 +320,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="u16"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="u16"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -309,7 +333,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="i32" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -325,7 +354,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="i32"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="i32"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -337,7 +367,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="u32" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -353,7 +388,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="u32"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="u32"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -365,7 +401,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="i64" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -381,7 +422,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="i64"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="i64"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -393,7 +435,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="u64" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -409,7 +456,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="u64"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="u64"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -421,7 +469,12 @@
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="ipv4" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -437,7 +490,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="ipv4"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="ipv4"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
@@ -449,7 +503,12 @@
                      FontSize="{StaticResource Talgonite.HexView.SmallFontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
+                     Focusable="True"
+                     ClearSelectionOnLostFocus="True"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="flags" />
+                </TextBox.KeyBindings>
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
                             BorderBrush="{StaticResource Talgonite.HexView.LabelBorderBrush}"
@@ -465,7 +524,8 @@
                 </TextBox.InnerLeftContent>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="flags"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="flags"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
