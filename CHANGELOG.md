@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Keep entity collections on the UI thread and queue console and trace updates in UI batches
 - Prioritize heartbeat and tick sync packets in the network send queue
-- Add focus-aware keyboard shortcuts to the trace, inspector, and packet send views
-- Add visual feedback when inspector and raw packet values are copied
+- Add focus-aware keyboard shortcuts to the trace, inspector, raw packet fields, and packet send views
+- Add visual copy feedback to inspector and raw packet fields, with separate states for selected text and full-field copies
 - Highlight active trace search and filter tools when their bars are hidden
 - Updated Avalonia and supporting packages to their latest compatible patch versions
 
