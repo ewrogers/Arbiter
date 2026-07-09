@@ -382,7 +382,7 @@
                                Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
                                FontSize="16"/>
                     <Border Classes="divider-h" Margin="16,8"/>
-                    <TextBlock Text="Erik 'SiLo' Rogers - 2025"
+                    <TextBlock Text="Erik 'SiLo' Rogers - 2026"
                                TextAlignment="Center"
                                FontSize="18"/>
                     <HyperlinkButton Command="{Binding VisitProjectWebsiteCommand}"

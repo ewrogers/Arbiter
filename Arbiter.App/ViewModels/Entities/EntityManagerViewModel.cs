@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using Arbiter.App.Collections;
 using Arbiter.App.Models.Entities;
 using Arbiter.App.Services.Entities;
@@ -18,11 +17,12 @@ public partial class EntityManagerViewModel : ViewModelBase
 {
     private readonly IEntityStore _entityStore;
     private readonly IPlayerService _playerService;
-    private readonly ConcurrentObservableCollection<EntityViewModel> _allEntities = [];
+    private readonly ObservableCollection<EntityViewModel> _allEntities = [];
 
     private long _indexCounter = 1;
 
-    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(InteractCommand))]
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(InteractCommand))]
     private ClientViewModel? _selectedClient;
 
     [ObservableProperty] private bool _isItemSelected;
@@ -80,7 +80,7 @@ public partial class EntityManagerViewModel : ViewModelBase
             return;
         }
 
-        var sortIndex = Interlocked.Increment(ref _indexCounter);
+        var sortIndex = ++_indexCounter;
         var vm = new EntityViewModel(entity)
         {
             SortIndex = sortIndex
@@ -98,13 +98,9 @@ public partial class EntityManagerViewModel : ViewModelBase
             Dispatcher.UIThread.Post(() => OnEntityUpdated(entity));
             return;
         }
-        
-        EntityViewModel? vm = null;
-        _allEntities.WithinLock(() =>
-        {
-            vm =  _allEntities.FirstOrDefault(e => e.Id == entity.Id);
-        });
-        
+
+        var vm = _allEntities.FirstOrDefault(e => e.Id == entity.Id);
+
         if (vm is null)
         {
             OnEntityAdded(entity);
@@ -137,9 +133,8 @@ public partial class EntityManagerViewModel : ViewModelBase
             Dispatcher.UIThread.Post(() => OnEntityRemoved(entity));
             return;
         }
-        
-        EntityViewModel? vm = null;
-        _allEntities.WithinLock(() => { vm = _allEntities.FirstOrDefault(e => e.Id == entity.Id); });
+
+        var vm = _allEntities.FirstOrDefault(e => e.Id == entity.Id);
 
         if (vm is null)
         {

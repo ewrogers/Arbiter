@@ -1,7 +1,9 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
 using Arbiter.App.Collections;
 using Arbiter.App.Logging;
-using Avalonia.Threading;
+using Arbiter.App.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -10,16 +12,21 @@ namespace Arbiter.App.ViewModels.Logging;
 
 public partial class ConsoleViewModel : ViewModelBase
 {
-    private readonly ConcurrentObservableCollection<LogEntryViewModel> _allLogEntries = [];
+    private sealed record QueuedLogEntry(long Generation, ArbiterLogEntry Entry);
+
+    private readonly ObservableCollection<LogEntryViewModel> _allLogEntries = [];
+    private readonly DispatcherBatchQueue<QueuedLogEntry> _logQueue;
+
+    private long _logGeneration;
 
     public FilteredObservableCollection<LogEntryViewModel> FilteredLogEntries { get; }
 
-    [ObservableProperty] private bool _isEmpty;
+    [ObservableProperty] private bool _isEmpty = true;
     [ObservableProperty] private int _debugCount;
     [ObservableProperty] private int _infoCount;
     [ObservableProperty] private int _warningCount;
     [ObservableProperty] private int _errorCount;
-    
+
     [ObservableProperty] private bool _scrollToEndRequested;
 
     private bool _showDebugMessages = true;
@@ -82,60 +89,52 @@ public partial class ConsoleViewModel : ViewModelBase
     public ConsoleViewModel(ArbiterLoggerProvider provider)
     {
         FilteredLogEntries = new FilteredObservableCollection<LogEntryViewModel>(_allLogEntries, MatchesFilter);
+        _logQueue = new DispatcherBatchQueue<QueuedLogEntry>(ApplyLogBatch);
 
-        _allLogEntries.CollectionChanged += OnLogCollectionChanged;
-
-        provider.LogEntryCreated += logEntry => { _allLogEntries.Add(new LogEntryViewModel(logEntry)); };
+        provider.LogEntryCreated += OnLogEntryCreated;
     }
 
-    private void OnLogCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnLogEntryCreated(ArbiterLogEntry entry)
     {
-        Dispatcher.UIThread.Post(() =>
-        {
-            _allLogEntries.WithinLock(() =>
-            {
-                IsEmpty = _allLogEntries.Count == 0;
-                UpdateCounts();
-            });
-            
-            OnPropertyChanged(nameof(IsEmpty));
-            OnPropertyChanged(nameof(DebugCount));
-            OnPropertyChanged(nameof(InfoCount));
-            OnPropertyChanged(nameof(WarningCount));
-            OnPropertyChanged(nameof(ErrorCount));
-        }, DispatcherPriority.Background);
+        var generation = Volatile.Read(ref _logGeneration);
+        _logQueue.Enqueue(new QueuedLogEntry(generation, entry));
     }
 
-    private void UpdateCounts()
+    private void ApplyLogBatch(IReadOnlyList<QueuedLogEntry> entries)
     {
-        var debugCount = 0;
-        var infoCount = 0;
-        var warningCount = 0;
-        var errorCount = 0;
-
-        foreach (var logEntry in _allLogEntries)
+        var generation = Volatile.Read(ref _logGeneration);
+        foreach (var queued in entries)
         {
-            switch (logEntry.Level)
+            if (queued.Generation != generation)
             {
-                case LogLevel.Debug or LogLevel.Trace:
-                    debugCount++;
-                    break;
-                case LogLevel.Information:
-                    infoCount++;
-                    break;
-                case LogLevel.Warning:
-                    warningCount++;
-                    break;
-                case LogLevel.Error or LogLevel.Critical:
-                    errorCount++;
-                    break;
+                continue;
             }
+
+            var entry = new LogEntryViewModel(queued.Entry);
+            _allLogEntries.Add(entry);
+            IncrementCount(entry.Level);
         }
 
-        DebugCount = debugCount;
-        InfoCount = infoCount;
-        WarningCount = warningCount;
-        ErrorCount = errorCount;
+        IsEmpty = _allLogEntries.Count == 0;
+    }
+
+    private void IncrementCount(LogLevel level)
+    {
+        switch (level)
+        {
+            case LogLevel.Debug or LogLevel.Trace:
+                DebugCount++;
+                break;
+            case LogLevel.Information:
+                InfoCount++;
+                break;
+            case LogLevel.Warning:
+                WarningCount++;
+                break;
+            case LogLevel.Error or LogLevel.Critical:
+                ErrorCount++;
+                break;
+        }
     }
 
     private bool MatchesFilter(LogEntryViewModel logEntry)
@@ -153,8 +152,15 @@ public partial class ConsoleViewModel : ViewModelBase
     [RelayCommand]
     private void ClearLogs()
     {
+        _logQueue.Clear();
+        Interlocked.Increment(ref _logGeneration);
+
         _allLogEntries.Clear();
-        OnPropertyChanged(nameof(FilteredLogEntries));
+        IsEmpty = true;
+        DebugCount = 0;
+        InfoCount = 0;
+        WarningCount = 0;
+        ErrorCount = 0;
     }
 
     [RelayCommand]
