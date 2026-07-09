@@ -15,14 +15,14 @@ public partial class TraceViewModel
     [NotifyCanExecuteChangedFor(nameof(LoadTraceCommand), nameof(SaveAllCommand), nameof(SaveSelectedCommand),
         nameof(DeleteSelectedCommand), nameof(ClearTraceCommand))]
     private bool _isLoadingTrace;
-    
+
     public async Task LoadFromFileAsync(string inputPath, bool append = false)
     {
         var traceFile = await _traceService.LoadTraceFileAsync(inputPath);
         var packets = traceFile.Packets;
 
         StopTracing();
-        
+
         IsLoadingTrace = true;
         try
         {
@@ -33,15 +33,15 @@ public partial class TraceViewModel
                 IsLive = false;
             }
 
-            // There may be a lot of packets, so defer updates until the end
-            _allPackets.DeferUpdates(() =>
+            // There may be a lot of packets, so refresh the filtered list once at the end
+            using (FilteredPackets.DeferRefresh())
             {
                 foreach (var packet in packets)
                 {
                     var vm = TracePacketViewModel.FromTracePacket(packet, _packetDisplayMode);
                     AddPacketToTrace(vm, false);
                 }
-            });
+            }
         }
         finally
         {

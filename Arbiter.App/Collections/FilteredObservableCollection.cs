@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using Avalonia.Threading;
 
 namespace Arbiter.App.Collections;
 
-public class FilteredObservableCollection<T> : ConcurrentObservableCollection<T>, IDisposable
+public class FilteredObservableCollection<T> : ObservableCollection<T>, IDisposable
 {
     private bool _isDisposed;
+    private int _deferLevel;
+    private bool _refreshRequired;
 
     private readonly ObservableCollection<T> _sourceCollection;
     private Func<T, bool> _predicate;
@@ -24,89 +26,94 @@ public class FilteredObservableCollection<T> : ConcurrentObservableCollection<T>
         }
     }
 
-    public FilteredObservableCollection(ObservableCollection<T> sourceCollection, Func<T, bool> predicate,
-        Dispatcher? dispatcher = null
-    ) : base(dispatcher)
+    public FilteredObservableCollection(ObservableCollection<T> sourceCollection, Func<T, bool> predicate)
     {
         _sourceCollection = sourceCollection ?? throw new ArgumentNullException(nameof(sourceCollection));
         _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-        _sourceCollection.CollectionChanged += OnCollectionChanged;
+        _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
         Refresh();
     }
 
     public void Refresh()
     {
-        List<T> copy;
-        if (_sourceCollection is ConcurrentObservableCollection<T> concurrent)
+        Dispatcher.UIThread.VerifyAccess();
+
+        var copy = _sourceCollection.Where(Predicate).ToList();
+
+        CheckReentrancy();
+        Items.Clear();
+        foreach (var item in copy)
         {
-            copy = [];
-            concurrent.WithinLock(() => copy = _sourceCollection.Where(Predicate).ToList());
-        }
-        else
-        {
-            copy = _sourceCollection.Where(Predicate).ToList();
+            Items.Add(item);
         }
 
-        DeferUpdates(() =>
-        {
-            Clear();
-
-            foreach (var item in copy)
-            {
-                Add(item);
-            }
-        });
+        OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+        OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    public IDisposable DeferRefresh()
     {
-        using var _ = Lock.EnterScope();
-        
+        Dispatcher.UIThread.VerifyAccess();
+        _deferLevel++;
+        return new RefreshDeferral(this);
+    }
+
+    private void OnSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Dispatcher.UIThread.VerifyAccess();
+
+        if (_deferLevel > 0)
+        {
+            _refreshRequired = true;
+            return;
+        }
+
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add when e.NewItems is not null:
-            {
-                // Insert new items at the correct relative positions based on the source index
-                var newIndex = e.NewStartingIndex;
-                var i = 0;
-                foreach (var item in e.NewItems.OfType<T>())
                 {
-                    if (Predicate(item))
+                    // Insert new items at the correct relative positions based on the source index
+                    var newIndex = e.NewStartingIndex;
+                    var i = 0;
+                    foreach (var item in e.NewItems.OfType<T>())
                     {
-                        var targetIndex = GetFilteredIndexForSourceIndex(newIndex + i);
-                        targetIndex = Math.Min(targetIndex, Count);
-                        Insert(targetIndex, item);
-                    }
-                    i++;
-                }
-                break;
-            }
-
-            case NotifyCollectionChangedAction.Move when e.OldItems is not null:
-            {
-                // Move items to match the source order when the source moves them
-                var newIndex = e.NewStartingIndex;
-                var i = 0;
-                foreach (var item in e.OldItems.OfType<T>())
-                {
-                    if (Predicate(item))
-                    {
-                        var currentIndex = IndexOf(item);
-                        if (currentIndex >= 0)
+                        if (Predicate(item))
                         {
                             var targetIndex = GetFilteredIndexForSourceIndex(newIndex + i);
-                            targetIndex = Math.Min(targetIndex, Count - 1);
-                            if (currentIndex != targetIndex)
+                            targetIndex = Math.Min(targetIndex, Count);
+                            Insert(targetIndex, item);
+                        }
+                        i++;
+                    }
+                    break;
+                }
+
+            case NotifyCollectionChangedAction.Move when e.OldItems is not null:
+                {
+                    // Move items to match the source order when the source moves them
+                    var newIndex = e.NewStartingIndex;
+                    var i = 0;
+                    foreach (var item in e.OldItems.OfType<T>())
+                    {
+                        if (Predicate(item))
+                        {
+                            var currentIndex = IndexOf(item);
+                            if (currentIndex >= 0)
                             {
-                                Move(currentIndex, targetIndex);
+                                var targetIndex = GetFilteredIndexForSourceIndex(newIndex + i);
+                                targetIndex = Math.Min(targetIndex, Count - 1);
+                                if (currentIndex != targetIndex)
+                                {
+                                    Move(currentIndex, targetIndex);
+                                }
                             }
                         }
+                        i++;
                     }
-                    i++;
+                    break;
                 }
-                break;
-            }
 
             case NotifyCollectionChangedAction.Remove when e.OldItems is not null:
                 foreach (var item in e.OldItems.OfType<T>())
@@ -147,7 +154,7 @@ public class FilteredObservableCollection<T> : ConcurrentObservableCollection<T>
 
     private int GetFilteredIndexForSourceIndex(int sourceIndex)
     {
-        // Count how many items in the source match the predicate up to (but not including) sourceIndex
+        // Count how many items in the source match the predicate up to the source index
         var count = 0;
         for (var i = 0; i < Math.Min(sourceIndex, _sourceCollection.Count); i++)
         {
@@ -175,9 +182,38 @@ public class FilteredObservableCollection<T> : ConcurrentObservableCollection<T>
 
         if (isDisposing)
         {
-            _sourceCollection.CollectionChanged -= OnCollectionChanged;
+            _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
         }
 
         _isDisposed = true;
+    }
+
+    private void EndDefer()
+    {
+        if (_deferLevel == 0)
+        {
+            return;
+        }
+
+        _deferLevel--;
+        if (_deferLevel > 0 || !_refreshRequired)
+        {
+            return;
+        }
+
+        _refreshRequired = false;
+        Refresh();
+    }
+
+    private sealed class RefreshDeferral(FilteredObservableCollection<T> collection) : IDisposable
+    {
+        private FilteredObservableCollection<T>? _collection = collection;
+
+        public void Dispose()
+        {
+            var owner = _collection;
+            _collection = null;
+            owner?.EndDefer();
+        }
     }
 }

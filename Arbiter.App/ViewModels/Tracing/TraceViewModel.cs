@@ -10,6 +10,7 @@ using Arbiter.App.Models.Tracing;
 using Arbiter.App.Services.Dialogs;
 using Arbiter.App.Services.Input;
 using Arbiter.App.Services.Tracing;
+using Arbiter.App.Threading;
 using Arbiter.Net.Proxy;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -36,7 +37,7 @@ public partial class TraceViewModel : ViewModelBase
     private readonly ITraceService _traceService;
     private readonly ProxyServer _proxyServer;
 
-    private readonly ConcurrentObservableCollection<TracePacketViewModel> _allPackets = [];
+    private readonly ObservableCollection<TracePacketViewModel> _allPackets = [];
 
     private long _indexCounter = 1;
     private bool _isEmpty = true;
@@ -55,7 +56,7 @@ public partial class TraceViewModel : ViewModelBase
     [ObservableProperty] private string? _traceClientName;
 
     public ObservableCollection<TraceClientViewModel> TraceClients { get; } = [new("All Clients")];
-    
+
     public bool IsEmpty => _isEmpty;
 
     public bool ShowRawPackets
@@ -93,6 +94,7 @@ public partial class TraceViewModel : ViewModelBase
 
         SelectedTraceClient = TraceClients.FirstOrDefault();
         FilteredPackets = new FilteredObservableCollection<TracePacketViewModel>(_allPackets, MatchesFilter);
+        _packetQueue = new DispatcherBatchQueue<QueuedTracePacket>(ApplyPacketBatch);
 
         _allPackets.CollectionChanged += OnPacketCollectionChanged;
         SelectedPackets.CollectionChanged += OnSelectedPacketsCollectionChanged;
@@ -143,10 +145,10 @@ public partial class TraceViewModel : ViewModelBase
 
     private void OnPacketCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        var collection = (ConcurrentObservableCollection<TracePacketViewModel>)sender!;
+        var collection = (ObservableCollection<TracePacketViewModel>)sender!;
         if (SetProperty(ref _isEmpty, collection.Count == 0))
         {
-            Dispatcher.UIThread.Post(() => OnPropertyChanged(nameof(IsEmpty)), DispatcherPriority.Background);
+            OnPropertyChanged(nameof(IsEmpty));
         }
 
         // When packets are removed/reset, prune client filters that no longer exist in any remaining packet
@@ -158,34 +160,12 @@ public partial class TraceViewModel : ViewModelBase
 
     private void OnPacketReceived(object? sender, ProxyConnectionDataEventArgs e)
     {
-        // Ignore packets from other clients if a client is selected
-        var name = e.Connection.Name;
-        if (!string.IsNullOrWhiteSpace(TraceClientName) &&
-            !string.Equals(TraceClientName, name, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
-        var packetViewModel = new TracePacketViewModel(e.Encrypted, e.Decrypted, e.FilterResult, e.Connection.Name)
-            { DisplayMode = _packetDisplayMode };
-
-        AddPacketToTrace(packetViewModel);
+        QueuePacket(e);
     }
 
     private void OnPacketQueued(object? sender, ProxyConnectionDataEventArgs e)
     {
-        // Ignore packets from other clients if a client is selected
-        var name = e.Connection.Name;
-        if (!string.IsNullOrWhiteSpace(TraceClientName) &&
-            !string.Equals(TraceClientName, name, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
-        var packetViewModel = new TracePacketViewModel(e.Encrypted, e.Decrypted, e.FilterResult, e.Connection.Name)
-            { DisplayMode = _packetDisplayMode };
-
-        AddPacketToTrace(packetViewModel);
+        QueuePacket(e);
     }
 
     private void AddPacketToTrace(TracePacketViewModel vm, bool pruneHistory = true)
@@ -214,13 +194,16 @@ public partial class TraceViewModel : ViewModelBase
 
     private void ClearPackets()
     {
+        _packetQueue.Clear();
+        Interlocked.Increment(ref _packetGeneration);
+
         _allPackets.Clear();
         SelectedPackets.Clear();
 
         FilterParameters.ClearClients();
 
         Interlocked.Exchange(ref _indexCounter, 1);
-        
+
         IsDirty = false;
         OnPropertyChanged(nameof(FilteredPackets));
     }
@@ -235,6 +218,7 @@ public partial class TraceViewModel : ViewModelBase
 
         TraceClientName = SelectedTraceClient?.Name;
 
+        Volatile.Write(ref _isAcceptingPackets, 1);
         _proxyServer.PacketReceived += OnPacketReceived;
         _proxyServer.PacketQueued += OnPacketQueued;
 
@@ -253,11 +237,15 @@ public partial class TraceViewModel : ViewModelBase
             return;
         }
 
+        Volatile.Write(ref _isAcceptingPackets, 0);
         _proxyServer.PacketReceived -= OnPacketReceived;
         _proxyServer.PacketQueued -= OnPacketQueued;
 
+        _packetQueue.DrainAll();
+        Interlocked.Increment(ref _packetGeneration);
+
         IsRunning = false;
-        
+
         PruneClients();
         _logger.LogInformation("Trace stopped");
     }
