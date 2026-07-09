@@ -94,10 +94,12 @@ public partial class ProxyConnection
 
                     if (filterResult.Output is not null)
                     {
-                        // Prioritize server heartbeat packets to the client, and enqueue others normally
                         var output = filterResult.Output;
-                        var isServerHeartbeat = output is ServerPacket { Command: ServerCommand.Heartbeat };
-                        var writer = isServerHeartbeat ? _prioritySendQueue.Writer : _sendQueue.Writer;
+                        var writer = ResolvePacketPriority(output) switch
+                        {
+                            NetworkPriority.High => _prioritySendQueue.Writer,
+                            _ => _sendQueue.Writer,
+                        };
 
                         // Send the decrypted packet to the other end of the connection (it will be re-encrypted)
                         await writer.WriteAsync(output, token).ConfigureAwait(false);
