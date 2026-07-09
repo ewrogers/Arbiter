@@ -6,10 +6,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Arbiter.App.Views.InspectorValueView"
              x:DataType="vm:InspectorValueViewModel">
-    <UserControl.Resources>
-        <SolidColorBrush x:Key="Talgonite.InspectorValue.Background" Color="#1e2228"/>
-    </UserControl.Resources>
-    
     <Grid ColumnSpacing="4" RowDefinitions="Auto,Auto" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MinWidth="160"/>
@@ -26,16 +22,20 @@
                  Text="{Binding FormattedValue}"
                  TextAlignment="Right"
                  Watermark="&lt;unset&gt;"
-                 PasswordChar="{Binding MaskCharacter, FallbackValue=●}"
+                 PasswordChar="{Binding PasswordCharacter}"
                  RevealPassword="{Binding IsRevealed}"
-                 Classes="read-only"
+                 Classes="read-only copy-feedback"
                  Classes.reveal="{Binding CanReveal}"
-                 Background="{StaticResource Talgonite.InspectorValue.Background}"
+                 Classes.copied="{Binding IsCopyFeedbackActive}"
                  FontFamily="{StaticResource Talgonite.Font.Monospace}"
                  Margin="0,0,4,0"
                  Height="40"
+                 Focusable="True"
                  HorizontalAlignment="Stretch"
                  IsVisible="{Binding !IsMultiline}">
+            <TextBox.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="value" />
+            </TextBox.KeyBindings>
             <TextBox.InnerLeftContent>
                 <!-- Toggle Hex View -->
                 <ToggleButton IsChecked="{Binding ShowHex}"
@@ -59,7 +59,7 @@
             </TextBox.InnerLeftContent>
             <TextBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}"/>
+                    <MenuItem Header="Copy Value" InputGesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}"/>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
@@ -68,19 +68,23 @@
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                  Text="{Binding FormattedValue}"
                  TextWrapping="WrapWithOverflow"
-                 PasswordChar="{Binding MaskCharacter, FallbackValue=●}"
+                 PasswordChar="{Binding PasswordCharacter}"
                  RevealPassword="{Binding IsRevealed}"
-                 Classes="read-only editor"
-                 Background="{StaticResource Talgonite.InspectorValue.Background}"
+                 Classes="read-only editor copy-feedback"
+                 Classes.copied="{Binding IsCopyFeedbackActive}"
                  FontFamily="{StaticResource Talgonite.Font.Monospace}"
                  Margin="4"
                  MinHeight="60" MaxHeight="360"
+                 Focusable="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  IsVisible="{Binding IsMultiline, FallbackValue={x:False}}">
+            <TextBox.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="value" />
+            </TextBox.KeyBindings>
             <TextBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}"/>
+                    <MenuItem Header="Copy Value" InputGesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}"/>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>

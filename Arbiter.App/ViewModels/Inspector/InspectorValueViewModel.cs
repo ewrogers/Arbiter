@@ -19,7 +19,9 @@ public partial class InspectorValueViewModel : InspectorItemViewModel
     
     [ObservableProperty] private string? _toolTip;
 
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(CanReveal))]
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanReveal))]
+    [NotifyPropertyChangedFor(nameof(PasswordCharacter))]
     private char? _maskCharacter;
     
     [ObservableProperty] 
@@ -29,6 +31,7 @@ public partial class InspectorValueViewModel : InspectorItemViewModel
     [ObservableProperty] private bool _isMultiline;
     
     public bool CanReveal => MaskCharacter is not null;
+    public char PasswordCharacter => MaskCharacter ?? default;
 
     public bool IsInteger => Value is sbyte or byte or short or ushort or int or uint or long or ulong || Value?.GetType().IsEnum == true;
 

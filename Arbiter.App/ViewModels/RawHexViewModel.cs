@@ -8,6 +8,7 @@ using Arbiter.App.ViewModels.Tracing;
 using Arbiter.Net.Client;
 using Arbiter.Net.Server;
 using Avalonia;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -28,6 +29,7 @@ public partial class RawHexViewModel : ViewModelBase
     private int _textSelectionStart;
     private int _textSelectionEnd;
     private bool _isSyncing;
+    private int _copyFeedbackVersion;
 
     [NotifyPropertyChangedFor(nameof(FormattedCommand))] [ObservableProperty]
     private byte _command;
@@ -37,6 +39,7 @@ public partial class RawHexViewModel : ViewModelBase
 
     [ObservableProperty] private string? _rawHex;
     [ObservableProperty] private string? _decodedText;
+    [ObservableProperty] private string? _copyFeedbackField;
     [ObservableProperty] private string? _formattedSignedByte;
     [ObservableProperty] private string? _formattedUnsignedByte;
     [ObservableProperty] private string? _formattedSignedShort;
@@ -328,8 +331,8 @@ public partial class RawHexViewModel : ViewModelBase
             "i16" or "u16" => SelectedByteCount >= 2,
             "i32" or "u32" => SelectedByteCount >= 4,
             "i64" or "u64" => SelectedByteCount >= 8,
-            "ip" => SelectedByteCount >= 4,
-            "bits" => SelectedByteCount > 0,
+            "ipv4" => SelectedByteCount >= 4,
+            "flags" => SelectedByteCount > 0,
             _ => false
         };
     }
@@ -357,11 +360,9 @@ public partial class RawHexViewModel : ViewModelBase
             "u64" => FormattedUnsignedLong,
             "ipv4" => FormattedIpAddress,
             "flags" => FormattedBitFlags,
-            "hex-selection" => RawHex?.Substring(HexSelectionStart, HexSelectionEnd - HexSelectionStart) ??
-                               string.Empty,
+            "hex-selection" => GetSelectedText(RawHex, HexSelectionStart, HexSelectionEnd),
             "hex-all" => RawHex,
-            "ascii-selection" => DecodedText?.Substring(TextSelectionStart, TextSelectionEnd - TextSelectionStart) ??
-                                 string.Empty,
+            "ascii-selection" => GetSelectedText(DecodedText, TextSelectionStart, TextSelectionEnd),
             "ascii-all" => DecodedText,
             _ => null
         };
@@ -369,7 +370,39 @@ public partial class RawHexViewModel : ViewModelBase
         if (!string.IsNullOrEmpty(textToCopy))
         {
             await clipboard.SetTextAsync(textToCopy);
+            ShowCopyFeedback(fieldName);
         }
+    }
+
+    private void ShowCopyFeedback(string fieldName)
+    {
+        CopyFeedbackField = fieldName switch
+        {
+            "hex-selection" or "hex-all" => "hex",
+            "ascii-selection" or "ascii-all" => "ascii",
+            _ => fieldName
+        };
+
+        var version = ++_copyFeedbackVersion;
+        DispatcherTimer.RunOnce(() =>
+        {
+            if (version == _copyFeedbackVersion)
+            {
+                CopyFeedbackField = null;
+            }
+        }, TimeSpan.FromMilliseconds(500));
+    }
+
+    private static string GetSelectedText(string? value, int selectionStart, int selectionEnd)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        var start = Math.Clamp(Math.Min(selectionStart, selectionEnd), 0, value.Length);
+        var end = Math.Clamp(Math.Max(selectionStart, selectionEnd), 0, value.Length);
+        return value[start..end];
     }
 
     private static string? FormatBits(ReadOnlySpan<byte> buffer, int groupBits = 8, char groupSeparator = ' ',

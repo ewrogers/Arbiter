@@ -13,7 +13,6 @@
         <sys:Double x:Key="Talgonite.HexView.SmallFontSize">14</sys:Double>
         <sys:Double x:Key="Talgonite.HexView.LabelFontSize">14</sys:Double>
         <sys:Double x:Key="Talgonite.HexView.TextBoxHeight">50</sys:Double>
-        <SolidColorBrush x:Key="Talgonite.HexView.TextBoxBackground" Color="#1e2228"/>
         <SolidColorBrush x:Key="Talgonite.HexView.LabelBackground" Color="#262b33"/>
         <SolidColorBrush x:Key="Talgonite.HexView.LabelBorderBrush" Color="#373d49"/>
     </UserControl.Resources>
@@ -32,14 +31,18 @@
                 <TextBox Text="{Binding FormattedCommand, Mode=OneWay}"
                          TextAlignment="Right"
                          Watermark="--"
-                         Classes="read-only"
-                         Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
+                         Classes="read-only copy-feedback"
+                         Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=command}"
                          FontFamily="{StaticResource Talgonite.Font.Monospace}"
                          MinWidth="60"
-                         Focusable="False">
+                         Focusable="True">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="command" />
+                    </TextBox.KeyBindings>
                     <TextBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="command"/>
+                            <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                      Command="{Binding CopyToClipboardCommand}" CommandParameter="command"/>
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>
@@ -53,14 +56,18 @@
                 <TextBox Text="{Binding FormattedSequence, Mode=OneWay}"
                          TextAlignment="Right"
                          Watermark="--"
-                         Classes="read-only"
-                         Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
+                         Classes="read-only copy-feedback"
+                         Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=sequence}"
                          FontFamily="{StaticResource Talgonite.Font.Monospace}"
                          MinWidth="60"
-                         Focusable="False">
+                         Focusable="True">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="sequence" />
+                    </TextBox.KeyBindings>
                     <TextBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="sequence"/>
+                            <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                      Command="{Binding CopyToClipboardCommand}" CommandParameter="sequence"/>
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>
@@ -111,13 +118,21 @@
                  SelectionStart="{Binding HexSelectionStart, Mode=OneWay}"
                  SelectionEnd="{Binding HexSelectionEnd, Mode=OneWay}"
                  ClearSelectionOnLostFocus="False"
-                 Classes="editor read-only"
+                 Classes="editor read-only copy-feedback"
+                 Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=hex}"
                  FontSize="16"
+                 Focusable="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TextBox.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-selection" />
+                <KeyBinding Gesture="Ctrl+Shift+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-all" />
+            </TextBox.KeyBindings>
             <TextBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Copy Selection" Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-selection"/>
-                    <MenuItem Header="Copy All" Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-all"/>
+                    <MenuItem Header="Copy Selection" InputGesture="Ctrl+C"
+                              Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-selection"/>
+                    <MenuItem Header="Copy All" InputGesture="Ctrl+Shift+C"
+                              Command="{Binding CopyToClipboardCommand}" CommandParameter="hex-all"/>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
@@ -133,13 +148,21 @@
                  SelectionStart="{Binding TextSelectionStart, Mode=TwoWay}"
                  SelectionEnd="{Binding TextSelectionEnd, Mode=TwoWay}"
                  ClearSelectionOnLostFocus="False"
-                 Classes="editor read-only"
+                 Classes="editor read-only copy-feedback"
+                 Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=ascii}"
                  FontSize="16"
+                 Focusable="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TextBox.KeyBindings>
+                <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-selection" />
+                <KeyBinding Gesture="Ctrl+Shift+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-all" />
+            </TextBox.KeyBindings>
             <TextBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Copy Selection" Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-selection"/>
-                    <MenuItem Header="Copy All" Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-all"/>
+                    <MenuItem Header="Copy Selection" InputGesture="Ctrl+C"
+                              Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-selection"/>
+                    <MenuItem Header="Copy All" InputGesture="Ctrl+Shift+C"
+                              Command="{Binding CopyToClipboardCommand}" CommandParameter="ascii-all"/>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
@@ -167,11 +190,11 @@
             
             <!-- Signed 8-bit -->
             <TextBox Text="{Binding FormattedSignedByte, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=i8}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -195,11 +218,11 @@
             
             <!-- Unsigned 8-bit -->
             <TextBox Text="{Binding FormattedUnsignedByte, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=u8}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -223,11 +246,11 @@
             
             <!-- Signed 16-bit -->
             <TextBox Text="{Binding FormattedSignedShort, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=i16}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -251,11 +274,11 @@
             
             <!-- Unsigned 16-bit -->
             <TextBox Text="{Binding FormattedUnsignedShort, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=u16}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -279,11 +302,11 @@
             
             <!-- Signed 32-bit -->
             <TextBox Text="{Binding FormattedSignedInt, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=i32}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -307,11 +330,11 @@
             
             <!-- Unsigned 32-bit -->
             <TextBox Text="{Binding FormattedUnsignedInt, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=u32}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -335,11 +358,11 @@
             
              <!-- Signed 64-bit -->
             <TextBox Text="{Binding FormattedSignedLong, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=i64}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -363,11 +386,11 @@
             
             <!-- Unsigned 64-bit -->
             <TextBox Text="{Binding FormattedUnsignedLong, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=u64}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -391,11 +414,11 @@
             
             <!-- Ipv4 Address -->
             <TextBox Text="{Binding FormattedIpAddress, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=ipv4}"
                      FontSize="{StaticResource Talgonite.HexView.FontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"
@@ -419,11 +442,11 @@
             
             <!-- Bitflags -->
             <TextBox Text="{Binding FormattedBitFlags, FallbackValue=--}"
-                     Classes="read-only"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=flags}"
                      FontSize="{StaticResource Talgonite.HexView.SmallFontSize}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      TextAlignment="Right"
-                     Background="{StaticResource Talgonite.HexView.TextBoxBackground}"
                      Height="{StaticResource Talgonite.HexView.TextBoxHeight}">
                 <TextBox.InnerLeftContent>
                     <Border Background="{StaticResource Talgonite.HexView.LabelBackground}"

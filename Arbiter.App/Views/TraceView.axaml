@@ -15,6 +15,18 @@
         <SolidColorBrush x:Key="Talgonite.Trace.Background" Color="#373d49" />
     </UserControl.Resources>
 
+    <UserControl.Styles>
+        <Style Selector="ToggleButton.trace-state.active">
+            <Setter Property="Foreground" Value="{StaticResource Talgonite.Color.LightBlue}" />
+        </Style>
+        <Style Selector="ToggleButton.trace-state:not(.active):checked">
+            <Setter Property="Foreground" Value="{StaticResource Talgonite.ToggleButton.Foreground}" />
+        </Style>
+        <Style Selector="ToggleButton.trace-state:not(.active):checked /template/ Border#SelectionBorder">
+            <Setter Property="BorderBrush" Value="{StaticResource Talgonite.ToggleButton.SegmentBorderBrush}" />
+        </Style>
+    </UserControl.Styles>
+
     <UserControl.KeyBindings>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding ToggleSearchBarCommand}" />
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveAllCommand}" />
@@ -114,7 +126,9 @@
                     <!-- Toggle Find Button -->
                     <ToggleButton IsChecked="{Binding ShowSearchBar}"
                                   ToolTip.Tip="Shows or hides the search bar."
-                                  Classes="outline">
+                                  Classes="trace-state"
+                                  Classes.outline="{Binding !IsSearchActive}"
+                                  Classes.active="{Binding IsSearchActive}">
                         <Path Width="16" Height="16"
                               Stroke="{Binding $parent[Button].Foreground}"
                               Data="{StaticResource Talgonite.Icon.SearchMagnify}" />
@@ -124,7 +138,9 @@
                     <ToggleButton IsChecked="{Binding ShowFilterBar}"
                                   HotKey="Ctrl+G"
                                   ToolTip.Tip="Shows or hides the trace filters."
-                                  Classes="outline">
+                                  Classes="trace-state"
+                                  Classes.outline="{Binding !IsFilterActive}"
+                                  Classes.active="{Binding IsFilterActive}">
                         <Path Width="16" Height="16"
                               Stroke="{Binding $parent[Button].Foreground}"
                               Data="{StaticResource Talgonite.Icon.FilterFunnel}" />

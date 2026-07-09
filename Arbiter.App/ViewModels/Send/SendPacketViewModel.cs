@@ -68,15 +68,19 @@ public partial class SendPacketViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartSendCommand))]
     [NotifyCanExecuteChangedFor(nameof(StopSendCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CutSelectionCommand), nameof(CommentSelectionCommand),
+        nameof(UncommentSelectionCommand))]
     private bool _isSending;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(StartSendCommand), nameof(CopyToClipboardCommand))]
+    [NotifyCanExecuteChangedFor(nameof(StartSendCommand), nameof(CopyToClipboardCommand), nameof(CutSelectionCommand),
+        nameof(CommentSelectionCommand), nameof(UncommentSelectionCommand))]
     [NotifyPropertyChangedFor(nameof(HasSelection))]
     private int _selectionStart;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(StartSendCommand), nameof(CopyToClipboardCommand))]
+    [NotifyCanExecuteChangedFor(nameof(StartSendCommand), nameof(CopyToClipboardCommand), nameof(CutSelectionCommand),
+        nameof(CommentSelectionCommand), nameof(UncommentSelectionCommand))]
     [NotifyPropertyChangedFor(nameof(HasSelection))]
     private int _selectionEnd;
 
