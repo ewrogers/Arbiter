@@ -11,4 +11,8 @@
         <Version>1.2.0</Version>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Arbiter.Net.Tests" />
+    </ItemGroup>
+
 </Project>

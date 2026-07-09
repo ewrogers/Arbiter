@@ -24,13 +24,7 @@ public partial class ProxyConnection
     {
         CheckIfDisposed();
 
-        // Prioritize outgoing client heartbeat packets
-        if (packet is ClientPacket { Command: ClientCommand.Heartbeat })
-        {
-            priority = NetworkPriority.High;
-        }
-
-        var writer = priority switch
+        var writer = ResolvePacketPriority(packet, priority) switch
         {
             NetworkPriority.High => _prioritySendQueue.Writer,
             _ => _sendQueue.Writer,
@@ -90,12 +84,6 @@ public partial class ProxyConnection
         {
             message.Serialize(ref builder);
             var packet = builder.ToPacket(NetworkPacketSource.Injected);
-            
-            // Prioritize outgoing client heartbeat packets
-            if (packet is ClientPacket { Command: ClientCommand.Heartbeat })
-            {
-                priority = NetworkPriority.High;
-            }
 
             return EnqueuePacket(packet, priority);
         }
@@ -151,17 +139,22 @@ public partial class ProxyConnection
             message.Serialize(ref builder);
             var packet = builder.ToPacket(NetworkPacketSource.Injected);
 
-            // Prioritize incoming server heartbeat packets
-            if (packet is ServerPacket { Command: ServerCommand.Heartbeat })
-            {
-                priority = NetworkPriority.High;
-            }
-
             return EnqueuePacket(packet, priority);
         }
         finally
         {
             builder.Dispose();
         }
+    }
+
+    internal static NetworkPriority ResolvePacketPriority(NetworkPacket packet,
+        NetworkPriority requestedPriority = NetworkPriority.Normal)
+    {
+        return packet switch
+        {
+            ClientPacket { Command: ClientCommand.Heartbeat or ClientCommand.SyncTicks } => NetworkPriority.High,
+            ServerPacket { Command: ServerCommand.Heartbeat or ServerCommand.SyncTicks } => NetworkPriority.High,
+            _ => requestedPriority,
+        };
     }
 }
