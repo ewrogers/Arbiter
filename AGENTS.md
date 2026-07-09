@@ -47,6 +47,8 @@
 - Run `dotnet build Arbiter.sln` after application changes and `dotnet test Arbiter.Net.Tests/Arbiter.Net.Tests.csproj` after network changes.
 - Do not edit generated `bin` or `obj` contents.
 - Keep notable pending changes in the `[Unreleased]` section of `CHANGELOG.md`. Move them into the versioned section when preparing a release.
+- Release tags use `v1.2.3` format and must match the app assembly version, file version, and changelog section.
+- Merge release workflow changes before creating a tag. Version tags package Release `win-x64` binaries and publish the GitHub release automatically.
 
 ## Writing style
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.8.2] - 2026-07-09
 
+### Added
+
+- Automated release packaging for version tags
+
 ### Changed
 
 - Keep entity collections on the UI thread and queue console and trace updates in UI batches

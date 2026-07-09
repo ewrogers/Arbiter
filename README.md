@@ -180,11 +180,15 @@ I personally use JetBrains Rider for development, but any editor should work as 
 
 ## Packaging 📦
 
-To package and deploy the application binary as a single-file executable, use the following command:
+Pushing a version tag such as `v1.8.2` automatically builds, tests, packages, and publishes the matching GitHub release. The tag version must match the app assembly version, file version, and changelog section.
+
+The release package contains the Release `win-x64` single-file executable and its required native libraries.
+
+For local packaging, use the following command:
 
 ```powershell
 cd Arbiter.App
-dotnet publish -r win-x64 -c Release -p:PublishSingleFile=true --self-contained false
+dotnet publish -r win-x64 -c Release --no-self-contained -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
 ```
 
 You can use the platform of your choice, but the `win-x64` target is recommended.

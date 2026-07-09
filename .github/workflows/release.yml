@@ -1,0 +1,119 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and release
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out tag
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Validate release version
+        id: release
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $tag = $env:RELEASE_TAG
+          if ($tag -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
+              throw "Release tag '$tag' must use the v1.2.3 format"
+          }
+
+          $version = $Matches.version
+          $projectPath = "Arbiter.App/Arbiter.App.csproj"
+          $assemblyVersion = (Select-Xml -Path $projectPath -XPath "/Project/PropertyGroup/AssemblyVersion").Node.InnerText
+          $fileVersion = (Select-Xml -Path $projectPath -XPath "/Project/PropertyGroup/FileVersion").Node.InnerText
+
+          if ($assemblyVersion -ne $version -or $fileVersion -ne $version) {
+              throw "Release tag '$tag' does not match AssemblyVersion '$assemblyVersion' and FileVersion '$fileVersion'"
+          }
+
+          $changelog = Get-Content "CHANGELOG.md" -Raw
+          $escapedVersion = [Regex]::Escape($version)
+          $match = [Regex]::Match($changelog, "(?ms)^## \[$escapedVersion\].*?(?=^## \[|\z)")
+          if (!$match.Success) {
+              throw "CHANGELOG.md does not contain a release section for $version"
+          }
+
+          $notesPath = Join-Path $env:RUNNER_TEMP "release-notes.md"
+          $match.Value.Trim() | Set-Content $notesPath -Encoding utf8
+
+          "version=$version" | Out-File $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "notes_path=$notesPath" | Out-File $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Restore
+        run: dotnet restore Arbiter.sln
+
+      - name: Test Release build
+        run: dotnet test Arbiter.Net.Tests/Arbiter.Net.Tests.csproj --configuration Release --no-restore
+
+      - name: Publish Release binaries
+        shell: pwsh
+        run: |
+          dotnet publish Arbiter.App/Arbiter.App.csproj `
+              --runtime win-x64 `
+              --configuration Release `
+              -p:PublishSingleFile=true `
+              -p:DebugType=None `
+              -p:DebugSymbols=false `
+              --no-self-contained `
+              --output "$env:RUNNER_TEMP/publish"
+
+      - name: Create release package
+        id: package
+        shell: pwsh
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          $publishDirectory = Join-Path $env:RUNNER_TEMP "publish"
+          $packageDirectory = Join-Path $env:RUNNER_TEMP "package"
+          $requiredFiles = @(
+              "Arbiter.exe",
+              "av_libglesv2.dll",
+              "libHarfBuzzSharp.dll",
+              "libSkiaSharp.dll"
+          )
+
+          New-Item -ItemType Directory -Path $packageDirectory -Force | Out-Null
+          foreach ($filename in $requiredFiles) {
+              $sourcePath = Join-Path $publishDirectory $filename
+              if (!(Test-Path -LiteralPath $sourcePath)) {
+                  throw "Published output is missing $filename"
+              }
+
+              Copy-Item -LiteralPath $sourcePath -Destination $packageDirectory
+          }
+
+          $archivePath = Join-Path $env:RUNNER_TEMP "Arbiter-$env:RELEASE_VERSION.zip"
+          Compress-Archive -Path (Join-Path $packageDirectory "*") -DestinationPath $archivePath -CompressionLevel Optimal
+
+          "archive_path=$archivePath" | Out-File $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_NOTES: ${{ steps.release.outputs.notes_path }}
+          RELEASE_ARCHIVE: ${{ steps.package.outputs.archive_path }}
+        run: |
+          gh release create $env:RELEASE_TAG $env:RELEASE_ARCHIVE `
+              --verify-tag `
+              --latest `
+              --title "$env:RELEASE_TAG Release" `
+              --notes-file $env:RELEASE_NOTES
