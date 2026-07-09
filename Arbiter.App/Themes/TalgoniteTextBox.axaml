@@ -230,8 +230,12 @@
     </Style>
 
     <Style Selector="TextBox.copy-selection-feedback">
+        <Setter Property="Background" Value="{StaticResource Talgonite.Editor.Background}"/>
         <Setter Property="Transitions">
             <Transitions>
+                <BrushTransition Property="Background"
+                                 Duration="{StaticResource Talgonite.TextBox.CopyFeedbackDuration}"
+                                 Easing="QuadraticEaseInOut"/>
                 <BrushTransition Property="SelectionBrush"
                                  Duration="{StaticResource Talgonite.TextBox.CopyFeedbackDuration}"
                                  Easing="QuadraticEaseInOut"/>
@@ -239,8 +243,12 @@
         </Setter>
     </Style>
 
-    <Style Selector="TextBox.copy-selection-feedback.copied">
+    <Style Selector="TextBox.copy-selection-feedback.selection-copied">
         <Setter Property="SelectionBrush" Value="{StaticResource Talgonite.TextBox.CopyFeedbackSelectionBackground}"/>
+    </Style>
+
+    <Style Selector="TextBox.copy-selection-feedback.all-copied">
+        <Setter Property="Background" Value="{StaticResource Talgonite.TextBox.CopyFeedbackBackground}"/>
     </Style>
     
     <!-- Read-only Style -->

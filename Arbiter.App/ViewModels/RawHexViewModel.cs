@@ -376,12 +376,7 @@ public partial class RawHexViewModel : ViewModelBase
 
     private void ShowCopyFeedback(string fieldName)
     {
-        CopyFeedbackField = fieldName switch
-        {
-            "hex-selection" or "hex-all" => "hex",
-            "ascii-selection" or "ascii-all" => "ascii",
-            _ => fieldName
-        };
+        CopyFeedbackField = fieldName;
 
         var version = ++_copyFeedbackVersion;
         DispatcherTimer.RunOnce(() =>

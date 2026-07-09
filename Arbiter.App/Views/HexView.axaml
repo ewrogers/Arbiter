@@ -119,7 +119,8 @@
                  SelectionEnd="{Binding HexSelectionEnd, Mode=OneWay}"
                  ClearSelectionOnLostFocus="False"
                  Classes="editor read-only copy-selection-feedback"
-                 Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=hex}"
+                 Classes.selection-copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=hex-selection}"
+                 Classes.all-copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=hex-all}"
                  FontSize="16"
                  Focusable="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -149,7 +150,8 @@
                  SelectionEnd="{Binding TextSelectionEnd, Mode=TwoWay}"
                  ClearSelectionOnLostFocus="False"
                  Classes="editor read-only copy-selection-feedback"
-                 Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=ascii}"
+                 Classes.selection-copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=ascii-selection}"
+                 Classes.all-copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=ascii-all}"
                  FontSize="16"
                  Focusable="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
