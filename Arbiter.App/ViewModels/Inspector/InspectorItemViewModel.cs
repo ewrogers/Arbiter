@@ -42,7 +42,7 @@ public abstract partial class InspectorItemViewModel : ViewModelBase
             {
                 IsCopyFeedbackActive = false;
             }
-        }, TimeSpan.FromMilliseconds(500));
+        }, TimeSpan.FromMilliseconds(350));
     }
 
     protected abstract string? GetCopyableValue();

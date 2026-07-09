@@ -390,7 +390,7 @@ public partial class RawHexViewModel : ViewModelBase
             {
                 CopyFeedbackField = null;
             }
-        }, TimeSpan.FromMilliseconds(500));
+        }, TimeSpan.FromMilliseconds(350));
     }
 
     private static string GetSelectedText(string? value, int selectionStart, int selectionEnd)
