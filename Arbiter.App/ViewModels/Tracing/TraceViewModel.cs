@@ -100,6 +100,7 @@ public partial class TraceViewModel : ViewModelBase
         SelectedPackets.CollectionChanged += OnSelectedPacketsCollectionChanged;
 
         FilterParameters.PropertyChanged += OnFilterParametersChanged;
+        FilterParameters.Clients.CollectionChanged += OnFilterClientsCollectionChanged;
         SearchParameters.PropertyChanged += OnSearchParametersChanged;
     }
 

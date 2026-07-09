@@ -37,9 +37,18 @@ public partial class TraceViewModel
             : null;
 
     public bool HasSearchResults => SearchResultCount > 0;
+    public bool IsSearchActive => SearchParameters.SelectedCommand?.Value is not null;
+
+    [RelayCommand]
+    private void ToggleSearchBar()
+    {
+        ShowSearchBar = !ShowSearchBar;
+    }
 
     private void OnSearchParametersChanged(object? sender, PropertyChangedEventArgs e)
     {
+        OnPropertyChanged(nameof(IsSearchActive));
+
         // Do not filter on this, wait for actual command byte to change
         if (e.PropertyName == nameof(SearchParameters.SelectedCommand))
         {

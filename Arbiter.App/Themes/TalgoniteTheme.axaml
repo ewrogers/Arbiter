@@ -237,6 +237,9 @@
             <SolidColorBrush x:Key="Talgonite.TextBox.HoverBorderBrush" Color="#4d535d"/>
             <SolidColorBrush x:Key="Talgonite.TextBox.FocusBorderBrush" Color="#81b8f5"/>
             <SolidColorBrush x:Key="Talgonite.TextBox.ErrorBorderBrush" Color="#ed6a5e"/>
+            <SolidColorBrush x:Key="Talgonite.TextBox.CopyFeedbackBackground" Color="#29394b"/>
+            <SolidColorBrush x:Key="Talgonite.TextBox.CopyFeedbackSelectionBackground" Color="#805b8fc8"/>
+            <x:TimeSpan x:Key="Talgonite.TextBox.CopyFeedbackDuration">0:0:0.150</x:TimeSpan>
             
             <!-- ToggleButton Resources -->
             <SolidColorBrush x:Key="Talgonite.ToggleButton.Background" Color="#373d49"/>

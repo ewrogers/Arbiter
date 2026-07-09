@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Arbiter.App.Collections;
@@ -20,10 +21,18 @@ public partial class TraceViewModel
 
     public FilteredObservableCollection<TracePacketViewModel> FilteredPackets { get; }
     public TraceFilterViewModel FilterParameters { get; } = new();
+    public bool IsFilterActive => FilterParameters.Commands.Any(command => !command.IsSelected) ||
+                                  FilterParameters.Clients.Any(client => !client.IsSelected);
 
     private void OnFilterParametersChanged(object? sender, PropertyChangedEventArgs e)
     {
+        OnPropertyChanged(nameof(IsFilterActive));
         RequestFilterRefresh();
+    }
+
+    private void OnFilterClientsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(IsFilterActive));
     }
 
     private void RequestFilterRefresh()

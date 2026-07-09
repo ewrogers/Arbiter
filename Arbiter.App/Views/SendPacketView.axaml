@@ -201,12 +201,28 @@
                         AcceptsTab="False"
                         IsEnabled="{Binding !IsSending}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="selection" />
+                        <KeyBinding Gesture="Ctrl+A" Command="{Binding SelectAllCommand}" />
+                        <KeyBinding Gesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}" />
+                        <KeyBinding Gesture="Ctrl+X" Command="{Binding CutSelectionCommand}" />
+                        <KeyBinding Gesture="Ctrl+OemQuestion" Command="{Binding CommentSelectionCommand}" />
+                        <KeyBinding Gesture="Ctrl+Shift+OemQuestion" Command="{Binding UncommentSelectionCommand}" />
+                    </TextBox.KeyBindings>
                     <TextBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Copy Selection" Command="{Binding CopyToClipboardCommand}" CommandParameter="selection"/>
+                            <MenuItem Header="Copy Selection" InputGesture="Ctrl+C"
+                                      Command="{Binding CopyToClipboardCommand}" CommandParameter="selection"/>
                             <MenuItem Header="Copy All" Command="{Binding CopyToClipboardCommand}" CommandParameter="all"/>
+                            <MenuItem Header="Cut Selection" InputGesture="Ctrl+X" Command="{Binding CutSelectionCommand}"/>
                             <Separator/>
-                            <MenuItem Header="Paste" Command="{Binding PasteFromClipboardCommand}"/>
+                            <MenuItem Header="Paste" InputGesture="Ctrl+V" Command="{Binding PasteFromClipboardCommand}"/>
+                            <MenuItem Header="Select All" InputGesture="Ctrl+A" Command="{Binding SelectAllCommand}"/>
+                            <Separator/>
+                            <MenuItem Header="Comment Selection" InputGesture="Ctrl+OemQuestion"
+                                      Command="{Binding CommentSelectionCommand}"/>
+                            <MenuItem Header="Uncomment Selection" InputGesture="Ctrl+Shift+OemQuestion"
+                                      Command="{Binding UncommentSelectionCommand}"/>
                             <Separator/>
                             <MenuItem Header="Clear All" Command="{Binding ClearAllCommand}"/>
                         </ContextMenu>

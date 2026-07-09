@@ -7,10 +7,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Arbiter.App.Views.InspectorListView"
              x:DataType="vm:InspectorListViewModel">
-    <UserControl.Resources>
-        <SolidColorBrush x:Key="Talgonite.InspectorList.Background" Color="#1e2228"/>
-    </UserControl.Resources>
-    
     <StackPanel>
         <Grid ColumnSpacing="4">
             <Grid.ColumnDefinitions>
@@ -26,15 +22,20 @@
                      Text="{Binding Count}"
                      TextAlignment="Right"
                      Watermark="&lt;empty&gt;"
-                     Classes="read-only"
-                     Background="{StaticResource Talgonite.InspectorList.Background}"
+                     Classes="read-only copy-feedback"
+                     Classes.copied="{Binding IsCopyFeedbackActive}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      Margin="0,0,4,0"
                      Height="40" MinWidth="50" MaxWidth="100"
+                     Focusable="True"
                      HorizontalAlignment="Right">
+                <TextBox.KeyBindings>
+                    <KeyBinding Gesture="Ctrl+C" Command="{Binding CopyToClipboardCommand}" CommandParameter="count" />
+                </TextBox.KeyBindings>
                 <TextBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy Value" Command="{Binding CopyToClipboardCommand}" CommandParameter="count"/>
+                        <MenuItem Header="Copy Value" InputGesture="Ctrl+C"
+                                  Command="{Binding CopyToClipboardCommand}" CommandParameter="count"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
