@@ -169,12 +169,16 @@ public partial class MainWindowViewModel : ViewModelBase
         ApplySettings();
     }
 
-    private void ApplySettings()
+    private void ApplySettings(bool applyTraceDefaults = false)
     {
         Proxy.ApplyDebugFilters(Settings.Debug, Settings.MessageFilters);
         ClientManager.ApplySettings(Settings.Debug);
         
         Trace.MaxTraceHistory = Settings.TraceMaxHistory;
+        Trace.ConfigureDefaultCommandFilters(
+            Settings.TraceDefaultClientCommands,
+            Settings.TraceDefaultServerCommands,
+            applyTraceDefaults);
         EntityManager.SortOrder = Settings.EntitySorting;
     }
 }

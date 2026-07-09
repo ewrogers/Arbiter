@@ -22,6 +22,8 @@ public class ArbiterSettings : ICloneable
     public bool TraceOnStartup { get; set; }
     public bool TraceAutosave { get; set; }
     public int TraceMaxHistory { get; set; } = 1000;
+    public List<byte>? TraceDefaultClientCommands { get; set; }
+    public List<byte>? TraceDefaultServerCommands { get; set; }
 
     public DebugSettings Debug { get; set; } = new();
 
@@ -47,6 +49,8 @@ public class ArbiterSettings : ICloneable
         TraceOnStartup = TraceOnStartup,
         TraceAutosave = TraceAutosave,
         TraceMaxHistory = Math.Clamp(TraceMaxHistory, 10, 1_000_000),
+        TraceDefaultClientCommands = TraceDefaultClientCommands is null ? null : [.. TraceDefaultClientCommands],
+        TraceDefaultServerCommands = TraceDefaultServerCommands is null ? null : [.. TraceDefaultServerCommands],
         Debug = Debug.Clone() as DebugSettings ?? new DebugSettings(),
         StartupLocation = StartupLocation?.Clone() as WindowRect,
         LeftPanel = LeftPanel?.Clone() as InterfacePanelState,

@@ -12,7 +12,7 @@ public partial class MainWindowViewModel
         Settings = await _settingsService.LoadFromFileAsync();
         LaunchClientCommand.NotifyCanExecuteChanged();
 
-        ApplySettings();
+        ApplySettings(applyTraceDefaults: true);
         
         RestoreWindowPosition();
         RestoreLayout();

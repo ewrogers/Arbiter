@@ -203,7 +203,7 @@
                 BorderBrush="{StaticResource Talgonite.Window.TitleBorderBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="0,4"
-                Height="50">
+                MinHeight="50">
             <WrapPanel ItemSpacing="4" VerticalAlignment="Center">
                 <!-- Bar Icon -->
                 <Border Padding="12,4"
@@ -261,9 +261,18 @@
                             FontWeight="Bold"
                             Content="ALL"
                             Padding="8,2"/>
+
+                    <Button Command="{Binding ApplyDefaultCommandFiltersCommand}"
+                            Classes="toolbar"
+                            ToolTip.Tip="Restores the default packet commands configured in Settings."
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Content="DEFAULT"
+                            Padding="8,2"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Spacing="4">
+                <StackPanel Orientation="Horizontal" Spacing="4"
+                            IsVisible="{Binding HasMultipleFilterClients}">
                     <!-- Character Filter -->
                     <Label Content="Clients"
                            VerticalAlignment="Center">
