@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Arbiter.App.ViewModels.Player"
+             xmlns:controls="using:Arbiter.App.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
              x:Class="Arbiter.App.Views.PlayerSpellbookView"
              x:DataType="vm:PlayerSpellbookViewModel">
@@ -13,33 +14,18 @@
     <UserControl.DataTemplates>
         <DataTemplate DataType="vm:PlayerSpellSlotViewModel">
             <Border Width="48" Height="48"
+                            Classes="sprite-slot"
                             Background="Transparent"
                             BorderBrush="{StaticResource Talgonite.Border.HighlightBrush}"
                             BorderThickness="1"
                             ToolTip.Placement="Pointer"
                             IsEnabled="{Binding !IsEmpty}">
-                        <Grid>
-                            <Border Background="{StaticResource Talgonite.Border.ShadowBrush}"
-                                    IsVisible="{Binding IsEmpty}"/>
-                            <!-- Slot Number -->
-                            <TextBlock Text="{Binding RelativeSlot}"
-                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                       FontSize="12"
-                                       Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"
-                                       Margin="4,2"/>
-                   
-                            <!-- Sprite Number -->
-                            <TextBlock Text="{Binding Sprite}"
-                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                       FontSize="16"
-                                       Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       IsVisible="{Binding !IsEmpty}"/>
-
-                        </Grid>
+                        <controls:SpritePresenter Source="{Binding SpriteImage}"
+                                                  SlotText="{Binding RelativeSlot}"
+                                                  FallbackText="{Binding SpriteFallbackText}"
+                                                  IsEmpty="{Binding IsEmpty}"
+                                                  IsCooldownActive="{Binding HasCooldown}"
+                                                  CooldownText="{Binding CooldownText}"/>
                         <!-- Tooltip -->
                         <ToolTip.Tip>
                             <Border Padding="4">
@@ -47,6 +33,12 @@
                                           RowSpacing="4" ColumnSpacing="8"
                                           MinWidth="200">
                                         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                            <!-- Icon -->
+                                            <controls:SpritePresenter Width="36" Height="36"
+                                                                      Source="{Binding SpriteImage}"
+                                                                      FallbackText="{Binding SpriteFallbackText}"
+                                                                      IsEmpty="{Binding IsEmpty}"/>
+
                                             <!-- Name -->
                                             <TextBlock Text="{Binding Name}"
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
@@ -117,11 +109,10 @@
                                                    FontSize="14"
                                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                    VerticalAlignment="Center"
-                                                   IsVisible="{Binding HasCooldown}">
+                                                   IsVisible="{Binding HasCooldownDuration}">
                                             <Span>
                                                 <Run Text="Cooldown:" FontWeight="SemiBold"/>
-                                                <Run Text="{Binding Cooldown.TotalSeconds, StringFormat={}{0}}"/>
-                                                <Run Text="seconds"/>
+                                                <Run Text="{Binding CooldownDurationText}"/>
                                             </Span>
                                         </TextBlock>
                                         

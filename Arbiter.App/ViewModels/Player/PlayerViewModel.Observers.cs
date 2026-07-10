@@ -145,6 +145,7 @@ public partial class PlayerViewModel
         MaxHealth = message.MaxHealth ?? MaxHealth;
         CurrentMana = message.Mana ?? CurrentMana;
         MaxMana = message.MaxMana ?? MaxMana;
+        Gold = message.Gold ?? Gold;
     }
 
     #endregion
@@ -292,13 +293,6 @@ public partial class PlayerViewModel
     {
         var duration = TimeSpan.FromSeconds(message.Seconds);
 
-        if (message.AbilityType == AbilityType.Skill)
-        {
-            Skills.UpdateCooldown(message.Slot, duration);
-        }
-        else if (message.AbilityType == AbilityType.Spell)
-        {
-            Spells.UpdateCooldown(message.Slot, duration);
-        }
+        SetCooldown(message.AbilityType, message.Slot, duration);
     }
 }

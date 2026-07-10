@@ -1,5 +1,6 @@
 ﻿using System;
 using Arbiter.App.Models.Player;
+using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Player;
 using Arbiter.Net;
 using Arbiter.Net.Client.Messages;
@@ -19,29 +20,51 @@ public partial class ClientViewModel : ViewModelBase
     public required string Name { get; set; }
 
     private readonly ProxyConnection _connection;
+    private bool _isSubscribed;
 
     public ProxyConnection Connection => _connection;
     
     public PlayerViewModel Player { get; }
 
     public ClientViewModel(ProxyConnection connection, PlayerState player)
+        : this(connection, player, NullGameSpriteService.Instance, TimeProvider.System)
+    {
+    }
+
+    public ClientViewModel(
+        ProxyConnection connection,
+        PlayerState player,
+        IGameSpriteService spriteService,
+        TimeProvider timeProvider)
     {
         _connection = connection;
-        Player = new PlayerViewModel(player);
+        Player = new PlayerViewModel(player, spriteService, timeProvider);
     }
 
     public event EventHandler? BringToFrontRequested;
 
     public void Subscribe()
     {
+        if (_isSubscribed)
+        {
+            return;
+        }
+
         RegisterFilters();
         Player.Subscribe(_connection);
+        _isSubscribed = true;
     }
 
     public void Unsubscribe()
     {
+        if (!_isSubscribed)
+        {
+            return;
+        }
+
         Player.Unsubscribe();
         UnregisterFilters();
+        _isSubscribed = false;
     }
 
     public void SendBarMessage(string message, WorldMessageType messageType = WorldMessageType.BarMessage)

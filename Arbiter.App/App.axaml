@@ -7,6 +7,9 @@
              
     <Application.Styles>
         <StyleInclude Source="/Themes/TalgoniteStyles.axaml"/>
+        <Style Selector="Border.sprite-slot:pointerover">
+            <Setter Property="BorderBrush" Value="White"/>
+        </Style>
     </Application.Styles>
     
     <Application.Resources>

@@ -10,6 +10,7 @@ public partial class MainWindowViewModel
     internal async Task OnOpened()
     {
         Settings = await _settingsService.LoadFromFileAsync();
+        await _gameSpriteService.LoadAsync(Settings.ClientExecutablePath);
         LaunchClientCommand.NotifyCanExecuteChanged();
 
         ApplySettings(applyTraceDefaults: true);
