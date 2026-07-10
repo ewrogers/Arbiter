@@ -6,6 +6,7 @@ using Arbiter.App.Models.Settings;
 using Arbiter.App.Services.Client;
 using Arbiter.App.Services.Dialogs;
 using Arbiter.App.Services.Settings;
+using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Client;
 using Arbiter.App.ViewModels.Dialogs;
 using Arbiter.App.ViewModels.Entities;
@@ -32,6 +33,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IDialogService _dialogService;
     private readonly IGameClientService _gameClientService;
     private readonly ISettingsService _settingsService;
+    private readonly IGameSpriteService _gameSpriteService;
     private readonly Window _mainWindow;
 
     [ObservableProperty] private string _title = "Arbiter";
@@ -58,6 +60,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _dialogService = serviceProvider.GetRequiredService<IDialogService>();
         _gameClientService = serviceProvider.GetRequiredService<IGameClientService>();
         _settingsService = serviceProvider.GetRequiredService<ISettingsService>();
+        _gameSpriteService = serviceProvider.GetRequiredService<IGameSpriteService>();
         _mainWindow = mainWindow;
 
         ClientManager = serviceProvider.GetRequiredService<ClientManagerViewModel>();
@@ -164,6 +167,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Settings.SettingsPanelIndex = vm.SelectedTabIndex;
         
         await _settingsService.SaveToFileAsync(Settings);
+        await _gameSpriteService.LoadAsync(Settings.ClientExecutablePath);
         LaunchClientCommand.NotifyCanExecuteChanged();
 
         ApplySettings();

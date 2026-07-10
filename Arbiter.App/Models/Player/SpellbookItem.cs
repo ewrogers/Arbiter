@@ -12,7 +12,8 @@ public sealed class SpellbookItem
     public int MaxLevel { get; init; }
     public int CastLines { get; init; }
     public string? Prompt { get; init; }
-    public TimeSpan Cooldown { get; set; }
+    public TimeSpan CooldownDuration { get; set; }
+    public DateTimeOffset? CooldownUntil { get; set; }
     public bool IsVirtual { get; init; }
     public Action<SpellCastParameters>? OnCast { get; init; }
 

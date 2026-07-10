@@ -8,7 +8,8 @@ public sealed class SkillbookItem
     public required string Name { get; init; }
     public int CurrentLevel { get; init; }
     public int MaxLevel { get; init; }
-    public TimeSpan Cooldown { get; set; }
+    public TimeSpan CooldownDuration { get; set; }
+    public DateTimeOffset? CooldownUntil { get; set; }
     public bool IsVirtual { get; init; }
     public Action? OnUse { get; init; }
 

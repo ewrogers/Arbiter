@@ -1,6 +1,9 @@
-﻿using System;
+using System;
 using Arbiter.App.Models.Player;
+using Arbiter.App.Services.Sprites;
 using Arbiter.Net.Proxy;
+using Arbiter.Net.Types;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Arbiter.App.ViewModels.Player;
@@ -8,6 +11,9 @@ namespace Arbiter.App.ViewModels.Player;
 public partial class PlayerViewModel : ViewModelBase
 {
     private readonly PlayerState _player;
+    private readonly IGameSpriteService _spriteService;
+    private readonly DispatcherTimer _cooldownTimer;
+    private bool _isSpriteServiceSubscribed;
 
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsLoggedIn))]
     private long? _entityId;
@@ -54,6 +60,8 @@ public partial class PlayerViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(FormatedManaText))]
     private long _maxMana;
 
+    [ObservableProperty] private uint _gold;
+
     public bool IsLoggedIn => EntityId is not null;
 
     public string MapPosition => MapX.HasValue && MapY.HasValue ? $"{MapX}, {MapY}" : "?, ?";
@@ -96,24 +104,95 @@ public partial class PlayerViewModel : ViewModelBase
     public PlayerSpellbookViewModel Spells { get; }
 
     public PlayerViewModel(PlayerState player)
+        : this(player, NullGameSpriteService.Instance, TimeProvider.System)
+    {
+    }
+
+    public PlayerViewModel(
+        PlayerState player,
+        IGameSpriteService spriteService,
+        TimeProvider timeProvider)
     {
         _player = player;
+        _spriteService = spriteService;
+        _cooldownTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(250)
+        };
+        _cooldownTimer.Tick += OnCooldownTimerTick;
         
-        Inventory = new PlayerInventoryViewModel(player.Inventory);
-        Skills = new PlayerSkillbookViewModel(player.Skills);
-        Spells = new PlayerSpellbookViewModel(player.Spells);
+        Inventory = new PlayerInventoryViewModel(player.Inventory, spriteService);
+        Skills = new PlayerSkillbookViewModel(player.Skills, spriteService, timeProvider);
+        Spells = new PlayerSpellbookViewModel(player.Spells, spriteService, timeProvider);
     }
 
     public void Subscribe(ProxyConnection connection)
     {
         AddObservers(connection);
         AddVirtualFilters(connection);
+
+        if (!_isSpriteServiceSubscribed)
+        {
+            _spriteService.SpritesChanged += OnSpritesChanged;
+            _isSpriteServiceSubscribed = true;
+        }
     }
 
     public void Unsubscribe()
     {
+        _cooldownTimer.Stop();
+        if (_isSpriteServiceSubscribed)
+        {
+            _spriteService.SpritesChanged -= OnSpritesChanged;
+            _isSpriteServiceSubscribed = false;
+        }
+
         RemoveObservers();
         RemoveVirtualFilters();
+    }
+
+    private void SetCooldown(AbilityType abilityType, int slot, TimeSpan duration)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => SetCooldown(abilityType, slot, duration));
+            return;
+        }
+
+        var isActive = abilityType switch
+        {
+            AbilityType.Skill => Skills.UpdateCooldown(slot, duration),
+            AbilityType.Spell => Spells.UpdateCooldown(slot, duration),
+            _ => false
+        };
+
+        if (isActive && !_cooldownTimer.IsEnabled)
+        {
+            _cooldownTimer.Start();
+        }
+    }
+
+    private void OnCooldownTimerTick(object? sender, EventArgs e)
+    {
+        var hasSkillCooldowns = Skills.TickCooldowns();
+        var hasSpellCooldowns = Spells.TickCooldowns();
+        if (!hasSkillCooldowns && !hasSpellCooldowns)
+        {
+            _cooldownTimer.Stop();
+        }
+    }
+
+    private void OnSpritesChanged(object? sender, EventArgs e)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => OnSpritesChanged(sender, e));
+            return;
+        }
+
+        Inventory.RefreshSprites();
+        Skills.RefreshSprites();
+        Spells.RefreshSprites();
     }
 
     // Forward all property changes to the player model
@@ -129,6 +208,11 @@ public partial class PlayerViewModel : ViewModelBase
     partial void OnMaxHealthChanged(long value) => _player.MaxHealth = value;
     partial void OnCurrentManaChanged(long value) => _player.CurrentMana = value;
     partial void OnMaxManaChanged(long value) => _player.MaxMana = value;
+    partial void OnGoldChanged(uint value)
+    {
+        _player.Gold = value;
+        Inventory.SetGold(value);
+    }
 
     private static string FormatHealthManaValue(long value)
     {

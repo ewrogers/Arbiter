@@ -9,6 +9,7 @@ using Arbiter.App.Models.Settings;
 using Arbiter.App.Services.Client;
 using Arbiter.App.Services.Entities;
 using Arbiter.App.Services.Players;
+using Arbiter.App.Services.Sprites;
 using Arbiter.Net.Proxy;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -21,6 +22,8 @@ public partial class ClientManagerViewModel : ViewModelBase
     private readonly IGameClientService _gameClientService;
     private readonly IPlayerService _playerService;
     private readonly IEntityStore _entityStore;
+    private readonly IGameSpriteService _spriteService;
+    private readonly TimeProvider _timeProvider;
     private readonly ConcurrentDictionary<long, ClientViewModel> _clients = [];
     
     private DebugSettings? _debugSettings;
@@ -40,12 +43,15 @@ public partial class ClientManagerViewModel : ViewModelBase
     public event Action<ClientViewModel>? ClientDisconnected;
 
     public ClientManagerViewModel(ProxyServer proxyServer, IGameClientService gameClientService,
-        IPlayerService playerService, IEntityStore entityStore)
+        IPlayerService playerService, IEntityStore entityStore, IGameSpriteService spriteService,
+        TimeProvider timeProvider)
     {
         _proxyServer = proxyServer;
         _gameClientService = gameClientService;
         _playerService = playerService;
         _entityStore = entityStore;
+        _spriteService = spriteService;
+        _timeProvider = timeProvider;
 
         _proxyServer.ClientAuthenticated += OnClientAuthenticated;
         _proxyServer.ClientLoggedIn += OnClientLoggedIn;
@@ -80,7 +86,7 @@ public partial class ClientManagerViewModel : ViewModelBase
     {
         var connection = e.Connection;
         var state = new PlayerState(connection.Id, connection.Name);
-        var client = new ClientViewModel(connection, state)
+        var client = new ClientViewModel(connection, state, _spriteService, _timeProvider)
             { Id = connection.Id, Name = connection.Name ?? string.Empty };
 
         // Start listening for packets and updating state
@@ -145,8 +151,6 @@ public partial class ClientManagerViewModel : ViewModelBase
     private void OnClientDisconnected(object? sender, ProxyConnectionEventArgs e)
     {
         var client = Clients.FirstOrDefault(c => c.Id == e.Connection.Id);
-        client?.Unsubscribe();
-
         if (client is not null)
         {
             CleanupClient(client);
@@ -158,6 +162,7 @@ public partial class ClientManagerViewModel : ViewModelBase
 
     private void CleanupClient(ClientViewModel client)
     {
+        client.Unsubscribe();
         SetClientWindowTitle(client, "Darkages");
         client.BringToFrontRequested -= OnClientBringToFront;
 

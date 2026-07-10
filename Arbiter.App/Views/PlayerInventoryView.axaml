@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Arbiter.App.ViewModels.Player"
+             xmlns:controls="using:Arbiter.App.Controls"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="320"
              x:Class="Arbiter.App.Views.PlayerInventoryView"
              x:DataType="vm:PlayerInventoryViewModel">
@@ -33,40 +34,32 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border Width="48" Height="48"
+                            Classes="sprite-slot"
                             Background="Transparent"
                             BorderBrush="{StaticResource Talgonite.Border.HighlightBrush}"
                             BorderThickness="1"
                             ToolTip.Placement="Pointer"
                             IsEnabled="{Binding !IsEmpty}">
-                        <Grid>
-                            <Border Background="{StaticResource Talgonite.Border.ShadowBrush}"
-                                    IsVisible="{Binding IsEmpty}"/>
-                            <!-- Slot Number -->
-                            <TextBlock Text="{Binding Slot}"
-                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                       FontSize="12"
-                                       Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"
-                                       Margin="4,2"/>
-                   
-                            <!-- Sprite Number -->
-                            <TextBlock Text="{Binding Sprite}"
-                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                       FontSize="16"
-                                       Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       IsVisible="{Binding !IsEmpty}"/>
-
-                        </Grid>
+                        <controls:SpritePresenter Source="{Binding SpriteImage}"
+                                                  SlotText="{Binding Slot}"
+                                                  FallbackText="{Binding SpriteFallbackText}"
+                                                  IsEmpty="{Binding IsEmpty}"
+                                                  DetailText="{Binding DetailText}"
+                                                  SpriteStretchDirection="DownOnly"/>
                         <!-- Tooltip -->
                         <ToolTip.Tip>
                             <Border Padding="4">
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
                                           RowSpacing="4" ColumnSpacing="8"
                                           MinWidth="200">
                                         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                            <!-- Icon -->
+                                            <controls:SpritePresenter Width="36" Height="36"
+                                                                      Source="{Binding SpriteImage}"
+                                                                      FallbackText="{Binding SpriteFallbackText}"
+                                                                      IsEmpty="{Binding IsEmpty}"
+                                                                      SpriteStretchDirection="DownOnly"/>
+
                                             <!-- Name -->
                                             <TextBlock Text="{Binding Name}"
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
@@ -76,12 +69,12 @@
                                                        VerticalAlignment="Center"/>
                                             
                                             <!-- Quantity -->
-                                            <TextBlock Text="{Binding Quantity, StringFormat={}[{0}]}"
+                                            <TextBlock Text="{Binding QuantityDisplayText}"
                                                        Foreground="{StaticResource Talgonite.Color.LightGray}"
                                                        FontSize="16"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                        VerticalAlignment="Center"
-                                                       IsVisible="{Binding IsStackable}"/>
+                                                       IsVisible="{Binding ShowsQuantity}"/>
                                         </StackPanel>
 
                                         
@@ -107,7 +100,7 @@
                                                    VerticalAlignment="Center"/>
                                         
                                         <!-- Durability -->
-                                        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Foreground="{StaticResource Talgonite.Color.LightBlue}"
                                                    FontSize="14"
                                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
@@ -122,13 +115,22 @@
                                         </TextBlock>
                                         
                                         <!-- Virtual Item -->
-                                        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="Virtual Item"
                                                    Foreground="{StaticResource Talgonite.Color.LightYellow}"
                                                    FontSize="14"
                                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                    VerticalAlignment="Center"
                                                    IsVisible="{Binding IsVirtual}"/>
+
+                                        <!-- Gold -->
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding GoldAmountText}"
+                                                   Foreground="{StaticResource Talgonite.Color.LightYellow}"
+                                                   FontSize="14"
+                                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding IsGold}"/>
                                     </Grid>
                                 </Border>
                         </ToolTip.Tip>

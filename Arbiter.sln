@@ -12,6 +12,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.Net.Tests", "Arbite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.App.Tests", "Arbiter.App.Tests\Arbiter.App.Tests.csproj", "{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.IO", "Arbiter.IO\Arbiter.IO.csproj", "{9C34BC00-F82E-41FC-B5DE-66A5B882606A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.IO.Tests", "Arbiter.IO.Tests\Arbiter.IO.Tests.csproj", "{7E64804D-50EF-4389-A196-C01367DD0B50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.Imaging", "Arbiter.Imaging\Arbiter.Imaging.csproj", "{50E15A04-CBA3-477B-9AA0-3814ACFC75A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.Imaging.Tests", "Arbiter.Imaging.Tests\Arbiter.Imaging.Tests.csproj", "{E41806B7-9312-45BE-B3AF-82F2D50BF1D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +50,21 @@ Global
 		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C34BC00-F82E-41FC-B5DE-66A5B882606A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C34BC00-F82E-41FC-B5DE-66A5B882606A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C34BC00-F82E-41FC-B5DE-66A5B882606A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C34BC00-F82E-41FC-B5DE-66A5B882606A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E64804D-50EF-4389-A196-C01367DD0B50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E64804D-50EF-4389-A196-C01367DD0B50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E64804D-50EF-4389-A196-C01367DD0B50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E64804D-50EF-4389-A196-C01367DD0B50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50E15A04-CBA3-477B-9AA0-3814ACFC75A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E15A04-CBA3-477B-9AA0-3814ACFC75A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E15A04-CBA3-477B-9AA0-3814ACFC75A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E15A04-CBA3-477B-9AA0-3814ACFC75A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41806B7-9312-45BE-B3AF-82F2D50BF1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41806B7-9312-45BE-B3AF-82F2D50BF1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41806B7-9312-45BE-B3AF-82F2D50BF1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41806B7-9312-45BE-B3AF-82F2D50BF1D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

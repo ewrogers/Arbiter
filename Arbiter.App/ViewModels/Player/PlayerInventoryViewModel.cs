@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using Arbiter.App.Collections;
 using Arbiter.App.Models.Player;
+using Arbiter.App.Services.Sprites;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -10,26 +10,49 @@ namespace Arbiter.App.ViewModels.Player;
 
 public partial class PlayerInventoryViewModel : ViewModelBase
 {
+    public const int GoldSlot = PlayerState.MaxInventorySlots;
+
     private readonly ISlottedCollection<InventoryItem> _inventory;
+    private readonly IGameSpriteService _spriteService;
 
     [ObservableProperty] private PlayerInventorySlotViewModel? _selectedItem;
 
     public ObservableCollection<PlayerInventorySlotViewModel> InventorySlots { get; } = [];
 
     public PlayerInventoryViewModel(ISlottedCollection<InventoryItem> inventory)
+        : this(inventory, NullGameSpriteService.Instance)
+    {
+    }
+
+    public PlayerInventoryViewModel(
+        ISlottedCollection<InventoryItem> inventory,
+        IGameSpriteService spriteService)
     {
         _inventory = inventory;
+        _spriteService = spriteService;
 
         for (var i = 0; i < inventory.Capacity; i++)
         {
-            InventorySlots.Add(new PlayerInventorySlotViewModel(i + 1));
+            var slot = i + 1;
+            InventorySlots.Add(slot == GoldSlot ? CreateGoldSlot(0) : CreateSlot(slot));
         }
 
         _inventory.ItemAdded += OnItemAdded;
         _inventory.ItemRemoved += OnItemRemoved;
     }
     
-    public int? GetFirstEmptySlot() => _inventory.GetFirstEmptySlot();
+    public int? GetFirstEmptySlot()
+    {
+        foreach (var slot in _inventory.GetEmptySlots())
+        {
+            if (slot < GoldSlot)
+            {
+                return slot;
+            }
+        }
+
+        return null;
+    }
 
     public bool HasItem(string name) => GetItem(name, out _);
 
@@ -64,9 +87,28 @@ public partial class PlayerInventoryViewModel : ViewModelBase
     public void ClearSlot(int slot)
         => _inventory.ClearSlot(slot);
 
+    public void SetGold(uint gold)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => SetGold(gold));
+            return;
+        }
+
+        InventorySlots[GoldSlot - 1] = CreateGoldSlot(gold);
+    }
+
+    public void RefreshSprites()
+    {
+        foreach (var slot in InventorySlots)
+        {
+            slot.RefreshSprite();
+        }
+    }
+
     private void OnItemAdded(Slotted<InventoryItem> item)
     {
-        if (item.Slot < 1 || item.Slot > _inventory.Capacity)
+        if (item.Slot < 1 || item.Slot >= GoldSlot)
         {
             return;
         }
@@ -77,12 +119,12 @@ public partial class PlayerInventoryViewModel : ViewModelBase
             return;
         }
 
-        InventorySlots[item.Slot - 1] = new PlayerInventorySlotViewModel(item.Slot, item.Value);
+        InventorySlots[item.Slot - 1] = CreateSlot(item.Slot, item.Value);
     }
 
     private void OnItemRemoved(Slotted<InventoryItem> item)
     {
-        if (item.Slot < 1 || item.Slot > _inventory.Capacity)
+        if (item.Slot < 1 || item.Slot >= GoldSlot)
         {
             return;
         }
@@ -93,6 +135,12 @@ public partial class PlayerInventoryViewModel : ViewModelBase
             return;
         }
 
-        InventorySlots[item.Slot - 1] = new PlayerInventorySlotViewModel(item.Slot);
+        InventorySlots[item.Slot - 1] = CreateSlot(item.Slot);
     }
+
+    private PlayerInventorySlotViewModel CreateSlot(int slot, InventoryItem? item = null) =>
+        new(slot, item, _spriteService);
+
+    private PlayerInventorySlotViewModel CreateGoldSlot(uint gold) =>
+        PlayerInventorySlotViewModel.CreateGold(GoldSlot, gold, _spriteService);
 }

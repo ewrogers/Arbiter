@@ -29,6 +29,7 @@ public sealed class PlayerState
     public long MaxHealth { get; set; }
     public long CurrentMana { get; set; }
     public long MaxMana { get; set; }
+    public uint Gold { get; set; }
 
     public ISlottedCollection<InventoryItem> Inventory { get; } =
         new ConcurrentSlottedCollection<InventoryItem>(MaxInventorySlots);

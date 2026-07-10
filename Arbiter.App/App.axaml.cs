@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
+using System;
 using System.Linq;
 using Arbiter.App.Logging;
 using Arbiter.App.Mappings;
@@ -10,6 +11,7 @@ using Arbiter.App.Services.Entities;
 using Arbiter.App.Services.Input;
 using Arbiter.App.Services.Players;
 using Arbiter.App.Services.Settings;
+using Arbiter.App.Services.Sprites;
 using Arbiter.App.Services.Tracing;
 using Avalonia.Markup.Xaml;
 using Arbiter.App.ViewModels;
@@ -103,6 +105,8 @@ public class App : Application
         services.AddSingleton<InspectorViewModelFactory>();
         services.AddSingleton<ProxyServer>();
         services.AddSingleton<IPlayerService, PlayerService>();
+        services.AddSingleton<IGameSpriteService, GameSpriteService>();
+        services.AddSingleton(TimeProvider.System);
         
         // Transients
         services.AddTransient<IDialogService, DialogService>();

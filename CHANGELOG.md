@@ -9,12 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add reusable IO and imaging libraries for reading game data archives, decoding EPF and palette data, resolving item dyes, and building sprite atlases
+- Render full-color inventory sprites and grayscale skill and spell sprites from the configured game client's data archives, with numeric fallbacks when sprites cannot be resolved
+- Reserve inventory slot 60 for the player's gold bag and show the current gold count in its tooltip
+- Show blue-tinted skill and spell sprites with centered, compact countdowns while cooldowns are active
 - Configure default client and server packet filters that apply on startup and can be restored while tracing
 - Search traces with an inline query language supporting implicit criteria, boolean operators and grouping, command lists and ranges, regular expressions, case control for text searches while character names remain case-insensitive, validation help, and in-packet match highlighting
 
 ### Changed
 
 - Hide the trace client filter when only one client is present
+- Keep inventory sprites centered at their natural size instead of scaling them up to fill their slots
+- Show item, skill, and spell icons to the left of their names in tooltips
+- Show item quantities greater than one as bottom-aligned `(xN)` labels and format gold as a comma-separated yellow tooltip line
+- Improve slot readability with translucent slot-number backgrounds and white borders on mouseover
+- Treat every cooldown packet as authoritative, replacing the active deadline and latest reported duration while keeping the tooltip duration separate from the ticking countdown
 
 ## [1.8.2] - 2026-07-09
 

@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:Arbiter.App.Controls"
+             x:Class="Arbiter.App.Controls.SpritePresenter"
+             x:Name="Root"
+             x:DataType="controls:SpritePresenter"
+             x:CompileBindings="False">
+    <UserControl.Styles>
+        <Style Selector="Border.cooldown-frame">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        <Style Selector="Border.cooldown-frame.active">
+            <Setter Property="BorderBrush" Value="{StaticResource Talgonite.Color.LightBlue}"/>
+        </Style>
+        <Style Selector="TextBlock.fallback.active">
+            <Setter Property="Foreground" Value="{StaticResource Talgonite.Color.LightBlue}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="{StaticResource Talgonite.Border.ShadowBrush}"
+                IsVisible="{Binding #Root.IsEmpty}"/>
+
+        <Image Source="{Binding #Root.Source}"
+               IsVisible="{Binding #Root.Source, Converter={x:Static ObjectConverters.IsNotNull}}"
+               Stretch="Uniform"
+               StretchDirection="{Binding #Root.SpriteStretchDirection}"
+               Margin="2"
+               RenderOptions.BitmapInterpolationMode="None"/>
+
+        <TextBlock Text="{Binding #Root.FallbackText}"
+                   Classes="fallback"
+                   Classes.active="{Binding #Root.IsCooldownActive}"
+                   IsVisible="{Binding #Root.Source, Converter={x:Static ObjectConverters.IsNull}}"
+                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                   FontSize="14"
+                   Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <Border Classes="cooldown-frame"
+                Classes.active="{Binding #Root.IsCooldownActive}"
+                BorderThickness="1"
+                IsHitTestVisible="False"/>
+
+        <Border Background="#B0000000"
+                Padding="3,1"
+                CornerRadius="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsVisible="{Binding #Root.IsCooldownActive}">
+            <TextBlock Text="{Binding #Root.CooldownText}"
+                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                       FontSize="15"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Talgonite.Color.LightBlue}"/>
+        </Border>
+
+        <Border Background="#B0000000"
+                Padding="2,0"
+                CornerRadius="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="2"
+                IsVisible="{Binding #Root.DetailText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding #Root.DetailText}"
+                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                       FontSize="10"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Talgonite.TextBlock.Foreground}"/>
+        </Border>
+
+        <Border Background="#78000000"
+                Padding="2,0"
+                CornerRadius="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="2"
+                IsVisible="{Binding #Root.SlotText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding #Root.SlotText}"
+                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Talgonite.TextBlock.Foreground}"/>
+        </Border>
+    </Grid>
+</UserControl>
