@@ -1,17 +1,21 @@
-﻿using Arbiter.App.Models.Entities;
+using Arbiter.App.Models.Entities;
+using Arbiter.App.Services.Sprites;
 using Arbiter.Net.Types;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Arbiter.App.ViewModels.Entities;
 
 public partial class EntityViewModel : ViewModelBase
 {
+    private readonly IGameSpriteService _spriteService;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Flags), nameof(Id), nameof(Name), nameof(TypeName), nameof(TypeShorthand),
-        nameof(NameOrTypeName), nameof(Sprite), nameof(MapId), nameof(MapName), nameof(X), nameof(Y), nameof(Position),
-        nameof(IsHidden), nameof(IsGhost))]
+        nameof(NameOrTypeName), nameof(Sprite), nameof(SpriteColor), nameof(SpriteImage), nameof(SpriteFallbackText),
+        nameof(MapId), nameof(MapName), nameof(X), nameof(Y), nameof(Position), nameof(IsHidden), nameof(IsGhost))]
     [NotifyPropertyChangedFor(nameof(IsPlayer), nameof(IsMonster), nameof(IsMundane), nameof(IsItem),
-        nameof(IsReactor))]
+        nameof(IsReactor), nameof(IsCreature), nameof(ShowsSpritePreview))]
     private GameEntity _entity;
 
     [ObservableProperty] private double _opacity = 1;
@@ -45,6 +49,13 @@ public partial class EntityViewModel : ViewModelBase
     };
 
     public ushort Sprite => Entity.Sprite ?? 0;
+    public byte SpriteColor => Entity.Color ?? 0;
+    public IImage? SpriteImage => IsItem
+        ? _spriteService.GetItem(Sprite, SpriteColor)
+        : IsCreature
+            ? _spriteService.GetCreature(Sprite)
+            : null;
+    public string SpriteFallbackText => ShowsSpritePreview ? $"#{Sprite}" : string.Empty;
     public int MapId => Entity.MapId ?? 0;
     public string MapName => Entity.MapName ?? "Unknown Map";
     public int X => Entity.X;
@@ -61,9 +72,19 @@ public partial class EntityViewModel : ViewModelBase
     public bool IsMundane => Flags.HasFlag(EntityFlags.Mundane);
     public bool IsItem => Flags.HasFlag(EntityFlags.Item);
     public bool IsReactor => Flags.HasFlag(EntityFlags.Reactor);
+    public bool IsCreature => IsMonster || IsMundane;
+    public bool ShowsSpritePreview => IsCreature || IsItem;
 
     public EntityViewModel(GameEntity entity)
+        : this(entity, NullGameSpriteService.Instance)
+    {
+    }
+
+    public EntityViewModel(GameEntity entity, IGameSpriteService spriteService)
     {
         Entity = entity;
+        _spriteService = spriteService;
     }
+
+    public void RefreshSprite() => OnPropertyChanged(nameof(SpriteImage));
 }

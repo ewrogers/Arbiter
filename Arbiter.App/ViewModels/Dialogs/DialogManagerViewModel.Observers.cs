@@ -47,7 +47,7 @@ public partial class DialogManagerViewModel
     private void SetActiveDialogForClient(long clientId, DialogViewModel? dialog)
         => _activeDialogs.AddOrUpdate(clientId, dialog, (_, _) => dialog);
 
-    private static DialogViewModel? BuildDialogView(ServerShowDialogMessage message)
+    private DialogViewModel? BuildDialogView(ServerShowDialogMessage message)
     {
         if (message.DialogType == DialogType.CloseDialog)
         {
@@ -55,12 +55,14 @@ public partial class DialogManagerViewModel
         }
         
         var name = !string.IsNullOrWhiteSpace(message.Name) ? message.Name : message.EntityType.ToString();
-        var dialog = new DialogViewModel
+        var dialog = new DialogViewModel(_spriteService)
         {
             Name = name,
             EntityId = message.EntityId,
             EntityType = message.EntityType,
             Sprite = message.Sprite,
+            SpriteType = message.SpriteType,
+            Color = message.Color,
             PursuitId = message.PursuitId,
             StepId = message.StepId,
             Content = message.Content,
@@ -91,15 +93,17 @@ public partial class DialogManagerViewModel
         return dialog;
     }
 
-    private static DialogViewModel BuildDialogView(ServerShowDialogMenuMessage message)
+    private DialogViewModel BuildDialogView(ServerShowDialogMenuMessage message)
     {
         var name = !string.IsNullOrWhiteSpace(message.Name) ? message.Name : message.EntityType.ToString();
-        var dialog = new DialogViewModel
+        var dialog = new DialogViewModel(_spriteService)
         {
             Name = name,
             EntityId = message.EntityId,
             EntityType = message.EntityType,
             Sprite = message.Sprite,
+            SpriteType = message.SpriteType,
+            Color = message.Color,
             PursuitId = message.PursuitId,
             Content = message.Content,
             CanNavigateTop = true

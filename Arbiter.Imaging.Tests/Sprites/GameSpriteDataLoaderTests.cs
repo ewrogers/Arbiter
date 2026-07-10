@@ -36,6 +36,7 @@ public sealed class GameSpriteDataLoaderTests
             Assert.That(data.SkillsOnCooldown, Is.Not.Null);
             Assert.That(data.Spells, Is.Null);
             Assert.That(data.Items, Is.Null);
+            Assert.That(data.Creatures, Is.Not.Null);
             Assert.That(data.Issues.Select(issue => issue.Category), Is.EquivalentTo(new[] { "spells", "items" }));
         });
     }

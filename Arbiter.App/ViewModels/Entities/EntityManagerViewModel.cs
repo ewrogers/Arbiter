@@ -5,6 +5,7 @@ using Arbiter.App.Collections;
 using Arbiter.App.Models.Entities;
 using Arbiter.App.Services.Entities;
 using Arbiter.App.Services.Players;
+using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Client;
 using Arbiter.Net.Proxy;
 using Avalonia.Threading;
@@ -17,6 +18,7 @@ public partial class EntityManagerViewModel : ViewModelBase
 {
     private readonly IEntityStore _entityStore;
     private readonly IPlayerService _playerService;
+    private readonly IGameSpriteService _spriteService;
     private readonly ObservableCollection<EntityViewModel> _allEntities = [];
 
     private long _indexCounter = 1;
@@ -33,10 +35,12 @@ public partial class EntityManagerViewModel : ViewModelBase
     {
         _entityStore = serviceProvider.GetRequiredService<IEntityStore>();
         _playerService = serviceProvider.GetRequiredService<IPlayerService>();
+        _spriteService = serviceProvider.GetRequiredService<IGameSpriteService>();
 
         _entityStore.EntityAdded += OnEntityAdded;
         _entityStore.EntityUpdated += OnEntityUpdated;
         _entityStore.EntityRemoved += OnEntityRemoved;
+        _spriteService.SpritesChanged += OnSpritesChanged;
 
         FilteredEntities = new FilteredObservableCollection<EntityViewModel>(_allEntities, MatchesFilter);
 
@@ -64,7 +68,7 @@ public partial class EntityManagerViewModel : ViewModelBase
             return;
         }
 
-        RefreshFilterPreservingSelection();
+        ReconcileFilter();
     }
 
     private void OnClientSelected(ClientViewModel? client)
@@ -81,7 +85,7 @@ public partial class EntityManagerViewModel : ViewModelBase
         }
 
         var sortIndex = ++_indexCounter;
-        var vm = new EntityViewModel(entity)
+        var vm = new EntityViewModel(entity, _spriteService)
         {
             SortIndex = sortIndex
         };
@@ -144,15 +148,19 @@ public partial class EntityManagerViewModel : ViewModelBase
         _allEntities.Remove(vm);
     }
 
-    private void UpdateFiltered(EntityViewModel vm)
+    private void OnSpritesChanged(object? sender, EventArgs e)
     {
-        if (!MatchesFilter(vm))
+        if (!Dispatcher.UIThread.CheckAccess())
         {
-            FilteredEntities.Remove(vm);
+            Dispatcher.UIThread.Post(() => OnSpritesChanged(sender, e));
+            return;
         }
-        else if (!FilteredEntities.Contains(vm))
+
+        foreach (var entity in _allEntities)
         {
-            FilteredEntities.Add(vm);
+            entity.RefreshSprite();
         }
     }
+
+    private void UpdateFiltered(EntityViewModel vm) => FilteredEntities.ReconcileItem(vm);
 }

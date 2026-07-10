@@ -5,6 +5,7 @@ public readonly record struct GameEntity
     public long Id { get; init; }
     public EntityFlags Flags { get; init; }
     public ushort? Sprite { get; init; }
+    public byte? Color { get; init; }
     public string? Name { get; init; }
 
     // Location where the entity was last seen

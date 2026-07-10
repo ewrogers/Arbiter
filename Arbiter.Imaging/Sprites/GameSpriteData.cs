@@ -7,6 +7,7 @@ public sealed class GameSpriteData
     public SpriteAtlas? Spells { get; }
     public SpriteAtlas? SpellsOnCooldown { get; }
     public ItemSpriteAtlasCollection? Items { get; }
+    public CreatureSpriteLoader Creatures { get; }
     public IReadOnlyList<GameSpriteLoadIssue> Issues { get; }
 
     internal GameSpriteData(
@@ -15,6 +16,7 @@ public sealed class GameSpriteData
         SpriteAtlas? spells,
         SpriteAtlas? spellsOnCooldown,
         ItemSpriteAtlasCollection? items,
+        CreatureSpriteLoader creatures,
         IReadOnlyList<GameSpriteLoadIssue> issues)
     {
         Skills = skills;
@@ -22,6 +24,7 @@ public sealed class GameSpriteData
         Spells = spells;
         SpellsOnCooldown = spellsOnCooldown;
         Items = items;
+        Creatures = creatures;
         Issues = issues;
     }
 }

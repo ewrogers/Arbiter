@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Arbiter.App.Collections;
 using Arbiter.App.Models.Entities;
 using Arbiter.App.Threading;
@@ -27,22 +26,22 @@ public partial class EntityManagerViewModel
     public FilteredObservableCollection<EntityViewModel> FilteredEntities { get; }
 
     partial void OnFilterModeChanged(EntityFilterMode oldValue, EntityFilterMode newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     partial void OnIncludePlayersChanged(bool oldValue, bool newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     partial void OnIncludeNpcsChanged(bool oldValue, bool newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     partial void OnIncludeMonstersChanged(bool oldValue, bool newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     partial void OnIncludeItemsChanged(bool oldValue, bool newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     partial void OnIncludeReactorsChanged(bool oldValue, bool newValue) =>
-        _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+        _filterDebouncer.Execute(ReconcileFilter);
 
     private bool MatchesFilter(EntityViewModel entity)
     {
@@ -84,22 +83,5 @@ public partial class EntityManagerViewModel
         return isWithinRange && typeAllowed;
     }
 
-    private void RefreshFilterPreservingSelection()
-    {
-        // Remember selection by IDs
-        var selectedIds = SelectedEntities.Select(e => e.Id).ToHashSet();
-        FilteredEntities.Refresh();
-        if (selectedIds.Count == 0)
-        {
-            return;
-        }
-
-        // Restore selection for items still present
-        var toSelect = FilteredEntities.Where(vm => selectedIds.Contains(vm.Id)).ToList();
-        SelectedEntities.Clear();
-        foreach (var vm in toSelect)
-        {
-            SelectedEntities.Add(vm);
-        }
-    }
+    private void ReconcileFilter() => FilteredEntities.Reconcile();
 }

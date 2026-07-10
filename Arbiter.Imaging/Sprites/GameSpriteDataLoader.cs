@@ -36,7 +36,14 @@ public static class GameSpriteDataLoader
             issues.Add(new GameSpriteLoadIssue("items", exception));
         }
 
-        return new GameSpriteData(skills, skillsOnCooldown, spells, spellsOnCooldown, items, issues);
+        return new GameSpriteData(
+            skills,
+            skillsOnCooldown,
+            spells,
+            spellsOnCooldown,
+            items,
+            new CreatureSpriteLoader(catalog),
+            issues);
     }
 
     private static (SpriteAtlas? Normal, SpriteAtlas? Cooldown) LoadAbility(

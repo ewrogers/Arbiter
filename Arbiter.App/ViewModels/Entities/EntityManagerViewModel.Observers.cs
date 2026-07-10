@@ -79,6 +79,7 @@ public partial class EntityManagerViewModel
                 Id = entity.Id,
                 Name = name,
                 Sprite = entity.Sprite,
+                Color = entity is ServerItemEntity item ? (byte)item.Color : null,
                 MapId = player?.MapId,
                 MapName = player?.MapName,
                 X = entity.X,
@@ -290,11 +291,6 @@ public partial class EntityManagerViewModel
         };
 
         _entityStore.TrySetEntityLocation(message.EntityId, newX, newY);
-
-        if (SelectedClient is not null && FilterMode is not EntityFilterMode.All)
-        {
-            _filterDebouncer.Execute(RefreshFilterPreservingSelection);
-        }
     }
 
     private void OnSelfWalkMessage(ProxyConnection connection, ServerWalkResponseMessage message, object? parameter)
@@ -332,7 +328,7 @@ public partial class EntityManagerViewModel
 
         if (SelectedClient is not null)
         {
-            _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+            _filterDebouncer.Execute(ReconcileFilter);
         }
     }
 
@@ -340,7 +336,7 @@ public partial class EntityManagerViewModel
     {
         if (SelectedClient is not null && FilterMode is not EntityFilterMode.All)
         {
-            _filterDebouncer.Execute(RefreshFilterPreservingSelection);
+            _filterDebouncer.Execute(ReconcileFilter);
         }
     }
 
