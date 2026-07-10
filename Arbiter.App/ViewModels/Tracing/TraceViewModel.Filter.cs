@@ -43,7 +43,11 @@ public partial class TraceViewModel
     private void RequestFilterRefresh()
     {
         // This is debounced to avoid excessive refreshing when multiple changes are made rapidly
-        _filterRefreshDebouncer.Execute(() => { FilteredPackets.Refresh(); });
+        _filterRefreshDebouncer.Execute(() =>
+        {
+            FilteredPackets.Refresh();
+            RefreshSearchResults();
+        });
     }
 
     private bool MatchesFilter(TracePacketViewModel vm)

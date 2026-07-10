@@ -156,6 +156,7 @@ public partial class TraceViewModel : ViewModelBase
         if (e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Reset)
         {
             PruneClientsNotInPackets();
+            RefreshSearchResults();
         }
     }
 
@@ -175,15 +176,19 @@ public partial class TraceViewModel : ViewModelBase
         var nextIndex = Interlocked.Increment(ref _indexCounter);
         vm.Index = nextIndex;
 
-        var matchesSearch = MatchesSearch(vm);
-        if (matchesSearch)
-        {
-            AddSearchResultIndex(_allPackets.Count);
-        }
-
-        vm.Opacity = matchesSearch ? 1 : 0.5;
+        var query = SearchParameters.Query;
+        var searchMatch = MatchSearch(vm, query);
+        ApplySearchMatch(vm, searchMatch);
 
         _allPackets.Add(vm);
+        if (!query.IsEmpty && searchMatch.IsMatch)
+        {
+            var filteredIndex = FilteredPackets.IndexOf(vm);
+            if (filteredIndex >= 0)
+            {
+                AddSearchResultIndex(filteredIndex);
+            }
+        }
         FilterParameters.TryAddClient(vm.ClientName ?? string.Empty);
         IsDirty = true;
 

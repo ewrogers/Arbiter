@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Configure default client and server packet filters that apply on startup and can be restored while tracing
+- Search traces with an inline query language supporting implicit criteria, boolean operators and grouping, command lists and ranges, regular expressions, case control for text searches while character names remain case-insensitive, validation help, and in-packet match highlighting
 
 ### Changed
 

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="using:Arbiter.App.Controls"
              xmlns:converters="using:Arbiter.App.Converters"
              xmlns:vm="using:Arbiter.App.ViewModels.Tracing"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,6 +11,8 @@
     <UserControl.Resources>
         <SolidColorBrush x:Key="Talgonite.TracePacket.TimestampForeground" Color="#717479"/>
         <SolidColorBrush x:Key="Talgonite.TracePacket.ClientNameForeground" Color="#e0e0e0"/>
+        <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightBackground" Color="#806893c2"/>
+        <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightForeground" Color="#ffffff"/>
     
         <Geometry x:Key="Talgonite.TracePacket.LeftCaret">M 6,1 L 2,4 L 6,7 Z</Geometry>
         <Geometry x:Key="Talgonite.TracePacket.RightCaret">M 2,1 L 6,4 L 2,7 Z</Geometry>
@@ -73,12 +76,16 @@
                                FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                Foreground="{Binding #CommandNameText.Foreground}"/>
                     
-                    <TextBlock Grid.Column="1" Name="PayloadText"
-                               Text="{Binding DisplayValue}"
-                               TextWrapping="NoWrap"
-                               TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                               Foreground="{Binding FilterAction, Converter={x:Static converters:PacketFilterColorConverter.Converter}}"/>
+                    <controls:HighlightedHexTextBlock Grid.Column="1"
+                                                      Name="PayloadText"
+                                                      SourceText="{Binding DisplayValue}"
+                                                      Highlights="{Binding DisplaySearchHighlights}"
+                                                      HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
+                                                      HighlightForeground="{StaticResource Talgonite.TracePacket.SearchHighlightForeground}"
+                                                      TextWrapping="NoWrap"
+                                                      TextTrimming="CharacterEllipsis"
+                                                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                      Foreground="{Binding FilterAction, Converter={x:Static converters:PacketFilterColorConverter.Converter}}"/>
                 </Grid>
             </Grid>
         </Border>

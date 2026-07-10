@@ -28,6 +28,22 @@
         <Style Selector="ToggleButton.trace-state:not(.active):checked /template/ Border#SelectionBorder">
             <Setter Property="BorderBrush" Value="{StaticResource Talgonite.ToggleButton.SegmentBorderBrush}" />
         </Style>
+        <Style Selector="TextBox.query-error /template/ Border#Border">
+            <Setter Property="BorderBrush" Value="{StaticResource Talgonite.TextBox.ErrorBorderBrush}"/>
+        </Style>
+        <Style Selector="Border.query-help:pointerover">
+            <Setter Property="BorderBrush" Value="{StaticResource Talgonite.Color.LightGray}"/>
+        </Style>
+        <Style Selector="ToggleButton.query-case">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontFamily" Value="{StaticResource Talgonite.Font.Monospace}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
     </UserControl.Styles>
 
     <UserControl.KeyBindings>
@@ -323,79 +339,227 @@
                 BorderBrush="{StaticResource Talgonite.Window.TitleBorderBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="0,4"
-                Height="50">
-            <WrapPanel ItemSpacing="4" VerticalAlignment="Center">
+                MinHeight="50">
+            <Grid ColumnDefinitions="48,Auto,460,40,24,Auto,*"
+                  RowDefinitions="40,Auto"
+                  ColumnSpacing="4">
                 <!-- Bar Icon -->
-                <Border Padding="12,4"
+                <Border Grid.Row="0" Grid.Column="0"
                         BorderBrush="{StaticResource Talgonite.Border.DividerBrush}"
                         BorderThickness="0,0,1,0">
                     <Path Width="16" Height="16"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
                           Stroke="{StaticResource Talgonite.TextBlock.DimForeground}"
                           Data="{StaticResource Talgonite.Icon.SearchMagnify}"/>
                 </Border>
-                
-                <!-- Command Search -->
-                <Label Content="Command"
-                       ToolTip.Tip="Searches for packets matching the command hex code."
-                       VerticalAlignment="Center" />
-                <ComboBox ItemsSource="{Binding SearchParameters.Commands}"
-                          SelectedItem="{Binding SearchParameters.SelectedCommand}"
-                          IsTextSearchEnabled="True"
-                          FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                          FontSize="16"
-                          MaxDropDownHeight="400"
-                          Width="300"
-                          HorizontalContentAlignment="Stretch">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch" Margin="8,2">
-                                <TextBlock Grid.Column="0"
-                                           Text="{Binding DisplayName}"
-                                           Foreground="{Binding Direction, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
-                                           FontSize="14"
-                                           VerticalAlignment="Center"/>
-                                <Border Grid.Column="1" IsVisible="{Binding Value, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <TextBlock Text="{Binding Value, StringFormat={}0x{0:X2}}"
-                                               Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
-                                               FontSize="14"
-                                               VerticalAlignment="Center"/>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    <ComboBox.SelectionBoxItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
-                                <TextBlock Grid.Column="0"
-                                           Text="{Binding DisplayName}"
-                                           TextTrimming="CharacterEllipsis"
-                                           Foreground="{Binding Direction, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
-                                           FontSize="16"
-                                           VerticalAlignment="Center"/>
-                                <Border Grid.Column="1" IsVisible="{Binding Value, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <TextBlock Text="{Binding Value, StringFormat={}0x{0:X2}}"
-                                               Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
-                                               FontSize="16"
-                                               VerticalAlignment="Center"/>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ComboBox.SelectionBoxItemTemplate>
-                </ComboBox>
-                
-                <StackPanel Orientation="Horizontal" Spacing="4"
+
+                    <Label Grid.Row="0" Grid.Column="1" Content="Query" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="2"
+                             Name="SearchQueryTextBox"
+                             Text="{Binding SearchParameters.QueryText, Mode=TwoWay}"
+                             c:QuerySyntax.IsEnabled="True"
+                             Classes.query-error="{Binding SearchParameters.HasQueryError}"
+                             Watermark="Enter search query..."
+                             FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                             FontSize="15"
+                             Height="40">
+                        <TextBox.KeyBindings>
+                            <KeyBinding Gesture="Enter" Command="{Binding GotoNextSearchResultCommand}"/>
+                            <KeyBinding Gesture="Shift+Enter" Command="{Binding GotoPreviousSearchResultCommand}"/>
+                        </TextBox.KeyBindings>
+                        <TextBox.InnerRightContent>
+                            <Border Width="28" VerticalAlignment="Center">
+                                <Button Command="{Binding SearchParameters.ClearCommand}"
+                                        Classes="clear"
+                                        VerticalAlignment="Center"
+                                        IsVisible="{Binding SearchParameters.HasQueryText}"
+                                        ToolTip.Tip="Clears the search query.">
+                                    <Path Width="8" Height="8"
+                                          Stretch="Uniform"
+                                          Stroke="{Binding $parent[Button].Foreground}"
+                                          Data="{StaticResource Talgonite.Icon.CrossX}"/>
+                                </Button>
+                            </Border>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+
+                    <ToggleButton Grid.Row="0" Grid.Column="3"
+                                  IsChecked="{Binding SearchParameters.IsTextCaseSensitive, Mode=TwoWay}"
+                                  Classes="outline query-case"
+                                  ToolTip.Tip="Toggles case sensitivity for text and regex searches."
+                                  ToolTip.ShowDelay="250">
+                        <TextBlock Text="aA"
+                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform Y="2"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </ToggleButton>
+
+                    <Border Grid.Row="0" Grid.Column="4"
+                            Classes="query-help"
+                            Width="22" Height="22"
+                            CornerRadius="11"
+                            BorderThickness="1"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource Talgonite.TextBlock.DimForeground}"
+                            Cursor="Help"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ToolTip.ShowDelay="250"
+                            ToolTip.Placement="Bottom">
+                        <Path Width="4" Height="12"
+                              Fill="{Binding $parent[Border].BorderBrush}"
+                              Stretch="Uniform"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="{StaticResource Talgonite.Icon.Information}">
+                            <Path.RenderTransform>
+                                <TranslateTransform X="1"/>
+                            </Path.RenderTransform>
+                        </Path>
+                        <ToolTip.Tip>
+                            <ScrollViewer Width="520"
+                                          MaxHeight="460"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="Packet Query Syntax"
+                                                   Foreground="{StaticResource Talgonite.Color.White}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"/>
+                                        <TextBlock Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                   TextWrapping="Wrap">
+                                            <Run Text="Separate predicates with spaces or commas. Client and server predicates are alternatives by default; other predicates narrow the results. Use "/><Run Text="AND" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=", "/><Run Text="OR" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=", or "/><Run Text="NOT" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=" only to override that logic. AND is evaluated before OR; parentheses set the grouping."/>
+                                        </TextBlock>
+
+                                        <Grid ColumnDefinitions="Auto,*"
+                                              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                              ColumnSpacing="12"
+                                              RowSpacing="4">
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Logic"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                       TextWrapping="Wrap">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightGray}">(</Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">server</Run><Run>=13 </Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">OR</Run><Run> </Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">client</Run><Run>=45-47</Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightGray}">)</Run><Run> </Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">AND NOT text</Run><Run>=error</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">server</Run><Run>!=12</Run>
+                                            </TextBlock>
+
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Commands"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">client</Run><Run>=45-47|Heartbeat</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">server</Run><Run>=05,15|HealthBar</Run>
+                                            </TextBlock>
+
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Payload"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">data</Run><Run>=65 01 01</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">raw</Run><Run>=AA 00 04 13</Run>
+                                            </TextBlock>
+
+                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Text"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="3" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">text</Run><Run>=Test</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">text</Run><Run>=&quot;hello world&quot;</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">text</Run><Run>=/error|warning/</Run>
+                                            </TextBlock>
+
+                                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Client name"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="4" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">name</Run><Run>=CharacterName</Run>
+                                                <LineBreak/>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">name</Run><Run>=/^silo.*$/</Run>
+                                            </TextBlock>
+
+                                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Sequence"
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Grid.Row="5" Grid.Column="1"
+                                                       Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">sequence</Run><Run>=02|04-08</Run>
+                                            </TextBlock>
+                                        </Grid>
+
+                                        <Border Classes="divider-h"/>
+                                        <TextBlock Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                                   TextWrapping="Wrap">
+                                            <Run>Command and sequence lists can mix individual values and ascending ranges separated by commas or |. For example, 05,12-15,19 is valid, while 17-11 is not.</Run>
+                                        </TextBlock>
+                                        <TextBlock Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                                   TextWrapping="Wrap">
+                                            <Run>Numeric values are hexadecimal. Unquoted text and names cannot contain spaces. Text and text regex searches follow the aA case toggle and use ASCII; case sensitivity is on by default. Character names are always case-insensitive. Regex values use /pattern/ and do not accept flags.</Run>
+                                        </TextBlock>
+                                    </StackPanel>
+                            </ScrollViewer>
+                        </ToolTip.Tip>
+                    </Border>
+
+                    <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
+                                Orientation="Horizontal"
+                                Spacing="6"
+                                Margin="0,3,0,0"
+                                IsVisible="{Binding SearchParameters.HasQueryError}">
+                        <Grid Width="18" Height="16" VerticalAlignment="Center">
+                            <Path Fill="{StaticResource Talgonite.Color.LightRed}"
+                                  Stretch="Uniform"
+                                  Data="{StaticResource Talgonite.Icon.WarningLevel}"/>
+                            <TextBlock Text="!"
+                                       Foreground="{StaticResource Talgonite.TextBox.Background}"
+                                       FontSize="10"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="0,2,0,0"/>
+                        </Grid>
+                        <TextBlock Text="{Binding SearchParameters.QueryErrorText}"
+                                   Foreground="{StaticResource Talgonite.Color.LightRed}"
+                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                   FontSize="12"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="460"
+                                   VerticalAlignment="Center"
+                                   ToolTip.Tip="{Binding SearchParameters.QueryErrorText}"/>
+                    </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="5"
+                            Orientation="Horizontal" Spacing="4"
                             IsVisible="{Binding ShowSearchResults}"
                             Height="40">
-                    
-                    <!-- Clear Button -->
-                    <Button Command="{Binding SearchParameters.ClearCommand}"
-                            Classes="toolbar destructive"
-                            ToolTip.Tip="Clears the search criteria.">
-                        <Path Width="16" Height="16"
-                              Stroke="{Binding $parent[Button].Foreground}"
-                              Data="{StaticResource Talgonite.Icon.CrossX}"/>
-                    </Button>
-                    
                     <!-- Result count -->
                     <TextBlock Text="{Binding FormattedSearchResultsText, FallbackValue=no matches}"
                                TextAlignment="Center"
@@ -427,7 +591,8 @@
                         </Button>
                     </StackPanel>
                 </StackPanel>
-            </WrapPanel>
+
+            </Grid>
         </Border>
 
         <!-- Trace List -->

@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Arbiter.App.Controls">
     <!-- TextBox Previews -->
     <Design.PreviewWith>
         <Border Background="{StaticResource Talgonite.Window.Background}" Padding="20">
@@ -40,7 +41,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="CornerRadius" Value="2"/>
-        <Setter Property="Padding" Value="0,4"/>
+        <Setter Property="Padding" Value="0,5,0,3"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True"/>
@@ -65,7 +66,7 @@
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             
                             <!-- Left content -->
-                            <ContentPresenter Grid.Row="1" Grid.Column="0"
+                            <ContentPresenter Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                                               Content="{TemplateBinding InnerLeftContent}"
                                               VerticalAlignment="Stretch"
                                               VerticalContentAlignment="Center"/>
@@ -83,7 +84,7 @@
                                        Text="{TemplateBinding Watermark}"
                                        Foreground="{StaticResource Talgonite.TextBox.WatermarkForeground}"
                                        FontSize="14"
-                                       Margin="0,4">
+                                       Margin="0,5,0,3">
                                 <TextBlock.IsVisible>
                                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                                         <Binding Path="$parent[TextBox].UseFloatingWatermark"/>
@@ -108,7 +109,7 @@
                                                    Foreground="{StaticResource Talgonite.TextBox.WatermarkForeground}"
                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                   Margin="0,4">
+                                                   Margin="0,5,0,3">
                                             <TextBlock.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                                                     <Binding Path="#PART_TextPresenter.PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
@@ -117,23 +118,26 @@
                                             </TextBlock.IsVisible>
                                         </TextBlock>
                                         
-                                        <TextPresenter Name="PART_TextPresenter"
-                                                       Text="{TemplateBinding Text, Mode=TwoWay}"
-                                                       TextAlignment="{TemplateBinding TextAlignment}"
-                                                       TextWrapping="{TemplateBinding TextWrapping}"
-                                                       LineHeight="{TemplateBinding LineHeight}"
-                                                       CaretBrush="{TemplateBinding CaretBrush}"
-                                                       CaretIndex="{TemplateBinding CaretIndex}"
-                                                       CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-                                                       SelectionBrush="{TemplateBinding SelectionBrush}"
-                                                       SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                                       SelectionStart="{TemplateBinding SelectionStart}"
-                                                       SelectionEnd="{TemplateBinding SelectionEnd}"
-                                                       RevealPassword="{TemplateBinding RevealPassword}"
-                                                       PasswordChar="{TemplateBinding PasswordChar}"
-                                                       Margin="0,4"
-                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        <controls:QuerySyntaxTextPresenter Name="PART_TextPresenter"
+                                                                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                                                                           TextAlignment="{TemplateBinding TextAlignment}"
+                                                                           TextWrapping="{TemplateBinding TextWrapping}"
+                                                                           LineHeight="{TemplateBinding LineHeight}"
+                                                                           CaretBrush="{TemplateBinding CaretBrush}"
+                                                                           CaretIndex="{TemplateBinding CaretIndex}"
+                                                                           CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                                                           SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                                                           SelectionStart="{TemplateBinding SelectionStart}"
+                                                                           SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                                           RevealPassword="{TemplateBinding RevealPassword}"
+                                                                           PasswordChar="{TemplateBinding PasswordChar}"
+                                                                           IsQuerySyntaxEnabled="{Binding $parent[TextBox].(controls:QuerySyntax.IsEnabled)}"
+                                                                           KeywordBrush="{StaticResource Talgonite.Color.LightBlue}"
+                                                                           GroupingBrush="{StaticResource Talgonite.Color.LightGray}"
+                                                                           Margin="0,5,0,3"
+                                                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                     </Panel>
                                     
                                     <ScrollViewer.Styles>
@@ -152,7 +156,7 @@
                             </Border>
                             
                             <!-- Right content -->
-                            <ContentPresenter Grid.Row="1" Grid.Column="4"
+                            <ContentPresenter Grid.Row="0" Grid.RowSpan="2" Grid.Column="4"
                                               Content="{TemplateBinding InnerRightContent}"
                                               VerticalAlignment="Stretch"
                                               VerticalContentAlignment="Center"/>
@@ -269,8 +273,22 @@
     <Style Selector="TextBox Button.clear">
         <Setter Property="Width" Value="24"/>
         <Setter Property="Height" Value="24"/>
-        <Setter Property="Padding" Value="8,4"/>
-        <Setter Property="Margin" Value="0,0,2,0"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Talgonite.TextBlock.DimForeground}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="2"/>
+    </Style>
+
+    <Style Selector="TextBox Button.clear:pointerover">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Talgonite.Color.LightRed}"/>
+    </Style>
+
+    <Style Selector="TextBox Button.clear:pressed">
+        <Setter Property="Background" Value="{StaticResource Talgonite.Button.PressedBackground}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
     
     <!-- Reveal Style -->

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Arbiter.App.Models.Tracing;
+using Arbiter.App.Models.Tracing.Queries;
 using Arbiter.Net;
 using Arbiter.Net.Client;
 using Arbiter.Net.Filters;
@@ -19,10 +21,16 @@ public partial class TracePacketViewModel(
 
     [ObservableProperty] private long _index;
 
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    [NotifyPropertyChangedFor(nameof(DisplaySearchHighlights))]
     private PacketDisplayMode _displayMode = PacketDisplayMode.Decrypted;
 
     [ObservableProperty] private double _opacity = 1;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplaySearchHighlights))]
+    private IReadOnlyList<TraceQueryHighlight> _searchHighlights = [];
 
     [ObservableProperty] private string? _clientName = clientName;
 
@@ -55,6 +63,7 @@ public partial class TracePacketViewModel(
     public DateTime Timestamp { get; private init; } = DateTime.Now;
     public NetworkPacket EncryptedPacket { get; } = encrypted;
     public NetworkPacket DecryptedPacket { get; } = decrypted;
+    public byte[] RawData { get; } = encrypted.ToArray();
 
     public NetworkPacket? FilteredPacket { get; } = filterResult?.Output;
     public NetworkFilterAction FilterAction { get; } = filterResult?.Action ?? NetworkFilterAction.Allow;
@@ -66,6 +75,12 @@ public partial class TracePacketViewModel(
         PacketDisplayMode.Decrypted => WasReplaced && FormattedFiltered is not null ? FormattedFiltered : FormattedDecrypted,
         _ => FormattedEncrypted
     };
+
+    public IReadOnlyList<TraceQueryHighlight> DisplaySearchHighlights => SearchHighlights
+        .Where(highlight => highlight.Source == (DisplayMode == PacketDisplayMode.Raw
+            ? TraceQueryHighlightSource.Raw
+            : TraceQueryHighlightSource.Data))
+        .ToList();
 
     public bool IsClient => DecryptedPacket is ClientPacket;
     public bool IsServer => DecryptedPacket is ServerPacket;

@@ -146,6 +146,12 @@
     <Geometry x:Key="Talgonite.Icon.InfoLevel">
         M1,1 L15,1 L15,15 L1,15 Z
     </Geometry>
+
+    <!-- Information Glyph -->
+    <Geometry x:Key="Talgonite.Icon.Information">
+        M7,2 L9,2 L9,4 L7,4 Z
+        M7,6 L9,6 L9,14 L7,14 Z
+    </Geometry>
     
     <!-- Debug Diamond Icon -->
     <Geometry x:Key="Talgonite.Icon.DebugLevel">
