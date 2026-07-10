@@ -396,6 +396,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     private async Task LoadSettingsAsync()
     {
         Settings = await _settingsService.LoadFromFileAsync();
+        InitializeTraceDefaultCommands();
     }
 
     private string GetHumanizedFilterCount()
@@ -462,6 +463,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     private void HandleResetDefaults()
     {
         Settings = new ArbiterSettings();
+        InitializeTraceDefaultCommands();
         HasChanges = true;
     }
 

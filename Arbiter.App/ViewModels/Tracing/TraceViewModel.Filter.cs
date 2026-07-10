@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -16,11 +17,14 @@ namespace Arbiter.App.ViewModels.Tracing;
 public partial class TraceViewModel
 {
     private readonly Debouncer _filterRefreshDebouncer = new(TimeSpan.FromMilliseconds(50), Dispatcher.UIThread);
+    private HashSet<byte>? _defaultClientCommands;
+    private HashSet<byte>? _defaultServerCommands;
 
     [ObservableProperty] private bool _showFilterBar;
 
     public FilteredObservableCollection<TracePacketViewModel> FilteredPackets { get; }
     public TraceFilterViewModel FilterParameters { get; } = new();
+    public bool HasMultipleFilterClients => FilterParameters.Clients.Count > 1;
     public bool IsFilterActive => FilterParameters.Commands.Any(command => !command.IsSelected) ||
                                   FilterParameters.Clients.Any(client => !client.IsSelected);
 
@@ -32,6 +36,7 @@ public partial class TraceViewModel
 
     private void OnFilterClientsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        OnPropertyChanged(nameof(HasMultipleFilterClients));
         OnPropertyChanged(nameof(IsFilterActive));
     }
 
@@ -77,6 +82,36 @@ public partial class TraceViewModel
         }
 
         return true;
+    }
+
+    public void ConfigureDefaultCommandFilters(
+        IEnumerable<byte>? defaultClientCommands,
+        IEnumerable<byte>? defaultServerCommands,
+        bool applyDefaults)
+    {
+        _defaultClientCommands = defaultClientCommands?.ToHashSet();
+        _defaultServerCommands = defaultServerCommands?.ToHashSet();
+
+        if (applyDefaults)
+        {
+            ApplyDefaultCommandFilters();
+        }
+    }
+
+    [RelayCommand]
+    private void ApplyDefaultCommandFilters()
+    {
+        foreach (var command in FilterParameters.Commands)
+        {
+            command.IsSelected = command switch
+            {
+                { Direction: PacketDirection.Client, Value: not null } =>
+                    _defaultClientCommands?.Contains(command.Value.Value) ?? true,
+                { Direction: PacketDirection.Server, Value: not null } =>
+                    _defaultServerCommands?.Contains(command.Value.Value) ?? true,
+                _ => true
+            };
+        }
     }
 
     [RelayCommand]

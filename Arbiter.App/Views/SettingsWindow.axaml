@@ -3,15 +3,24 @@
                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                           xmlns:controls="using:Arbiter.App.Controls"
+                          xmlns:converters="using:Arbiter.App.Converters"
+                          xmlns:models="using:Arbiter.App.Models.Tracing"
                           xmlns:vm="using:Arbiter.App.ViewModels"
+                          xmlns:tracing="using:Arbiter.App.ViewModels.Tracing"
                           mc:Ignorable="d"
                           x:Class="Arbiter.App.Views.SettingsWindow"
                           x:DataType="vm:SettingsViewModel"
                           Title="Settings"
-                          Width="720" Height="560"
+                          Width="720" Height="640"
                           CanResize="False"
                           WindowStartupLocation="CenterOwner"
                           ShowInTaskbar="False">
+    <controls:TalgoniteWindow.Styles>
+        <Style Selector="CheckBox.trace-default:checked /template/ Path#CheckGlyph">
+            <Setter Property="Stroke" Value="{StaticResource Talgonite.ComboBox.Foreground}"/>
+        </Style>
+    </controls:TalgoniteWindow.Styles>
+
     <controls:TalgoniteWindow.TitleBarContent>
         <DockPanel>
             <Button Command="{Binding HandleResetDefaultsCommand}"
@@ -121,9 +130,8 @@
             
             <!-- Tracing Settings Tab -->
             <TabItem Header="Tracing">
-                <StackPanel Spacing="4" Margin="4">
+                <Grid RowDefinitions="Auto,Auto,*" RowSpacing="8" Margin="4">
                     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="4">
-                        <!-- Autosave traces -->
                         <Label Grid.Row="0" Grid.Column="0"
                                Content="Max Trace History"
                                ToolTip.Tip="The maximum number of trace packets to store in memory.&#x0a;Beyond this limit, the oldest packets will be discarded."/>
@@ -151,7 +159,131 @@
                         <ToggleSwitch Grid.Row="2" Grid.Column="1"
                                       IsChecked="{Binding TraceAutosave}"/>
                     </Grid>
-                </StackPanel>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="4,0">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Default Packet Filters" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBlock Text="Commands selected here are applied when Arbiter starts and restored by DEFAULT."
+                                       Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="8" Margin="4,0,4,4">
+                        <Grid Grid.Column="0"
+                              Background="{StaticResource Talgonite.Window.Background}">
+                            <Border Classes="sunken-shadow" CornerRadius="4" ZIndex="100"/>
+                            <Border Classes="sunken-highlight" CornerRadius="4" ZIndex="100"/>
+                            <Grid RowDefinitions="Auto,*" RowSpacing="6" Margin="10">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4">
+                                    <TextBlock Grid.Column="0"
+                                               Text="Client"
+                                               Foreground="{Binding Source={x:Static models:PacketDirection.Client}, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding SelectAllDefaultClientCommandsCommand}"
+                                            Classes="outline"
+                                            Content="ALL"
+                                            FontSize="12"
+                                            Padding="6,0"/>
+                                    <Button Grid.Column="2"
+                                            Command="{Binding SelectNoDefaultClientCommandsCommand}"
+                                            Classes="outline"
+                                            Content="NONE"
+                                            FontSize="12"
+                                            Padding="6,0"/>
+                                </Grid>
+
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding TraceDefaultClientCommands}"
+                                                  Margin="0,0,2,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="tracing:CommandFilterViewModel">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,1">
+                                                    <CheckBox Grid.Column="0"
+                                                              Classes="trace-default"
+                                                              IsChecked="{Binding IsSelected}"
+                                                              VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding DisplayName}"
+                                                               Foreground="{Binding Direction, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
+                                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                               FontSize="13"
+                                                               VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{Binding Value, StringFormat={}0x{0:X2}}"
+                                                               Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
+                                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                               FontSize="12"
+                                                               VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Column="1"
+                              Background="{StaticResource Talgonite.Window.Background}">
+                            <Border Classes="sunken-shadow" CornerRadius="4" ZIndex="100"/>
+                            <Border Classes="sunken-highlight" CornerRadius="4" ZIndex="100"/>
+                            <Grid RowDefinitions="Auto,*" RowSpacing="6" Margin="10">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4">
+                                    <TextBlock Grid.Column="0"
+                                               Text="Server"
+                                               Foreground="{Binding Source={x:Static models:PacketDirection.Server}, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding SelectAllDefaultServerCommandsCommand}"
+                                            Classes="outline"
+                                            Content="ALL"
+                                            FontSize="12"
+                                            Padding="6,0"/>
+                                    <Button Grid.Column="2"
+                                            Command="{Binding SelectNoDefaultServerCommandsCommand}"
+                                            Classes="outline"
+                                            Content="NONE"
+                                            FontSize="12"
+                                            Padding="6,0"/>
+                                </Grid>
+
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding TraceDefaultServerCommands}"
+                                                  Margin="0,0,2,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="tracing:CommandFilterViewModel">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,1">
+                                                    <CheckBox Grid.Column="0"
+                                                              Classes="trace-default"
+                                                              IsChecked="{Binding IsSelected}"
+                                                              VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding DisplayName}"
+                                                               Foreground="{Binding Direction, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
+                                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                               FontSize="13"
+                                                               VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{Binding Value, StringFormat={}0x{0:X2}}"
+                                                               Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
+                                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                               FontSize="12"
+                                                               VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </TabItem>
             
             <!-- Abilities Tab -->
