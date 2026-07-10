@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.Json", "Arbiter.Jso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.Net.Tests", "Arbiter.Net.Tests\Arbiter.Net.Tests.csproj", "{DEB71D62-0C17-40A5-BBC5-5638E1D8F8EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbiter.App.Tests", "Arbiter.App.Tests\Arbiter.App.Tests.csproj", "{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{DEB71D62-0C17-40A5-BBC5-5638E1D8F8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEB71D62-0C17-40A5-BBC5-5638E1D8F8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEB71D62-0C17-40A5-BBC5-5638E1D8F8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B493D3-6F3E-4B3B-8A45-A59F32E4E0F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

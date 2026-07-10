@@ -94,17 +94,8 @@ public partial class TraceViewModel
             return;
         }
 
-        var packet = SelectedPackets[0].DecryptedPacket;
-        
-        switch (packet)
-        {
-            case ClientPacket clientPacket:
-                SearchParameters.SelectCommand(clientPacket.Command);
-                break;
-            case ServerPacket serverPacket:
-                SearchParameters.SelectCommand(serverPacket.Command);
-                break;
-        }
+        var packet = SelectedPackets[0];
+        SearchParameters.SetCommand(packet.Direction, packet.Command);
 
         ShowSearchBar = true;
     }

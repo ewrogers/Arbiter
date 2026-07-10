@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Arbiter.App.Models.Tracing;
-using Arbiter.Net.Client;
-using Arbiter.Net.Server;
+using Arbiter.App.Models.Tracing.Queries;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -11,68 +7,60 @@ namespace Arbiter.App.ViewModels.Tracing;
 
 public partial class TraceSearchViewModel : ViewModelBase
 {
-    [ObservableProperty] private CommandFilterViewModel? _selectedCommand;
+    private TraceQuery _query = TraceQuery.Empty;
 
-    public ObservableCollection<CommandFilterViewModel> Commands { get; } =
-    [
-        // Placeholder 'None' command
-        new(PacketDirection.Auto, "None", null)
-    ];
-    
-    public TraceSearchViewModel()
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasQueryText))]
+    private string _queryText = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasQueryError))]
+    [NotifyPropertyChangedFor(nameof(QueryErrorText))]
+    private TraceQueryDiagnostic? _queryError;
+
+    [ObservableProperty]
+    private bool _isTextCaseSensitive = true;
+
+    public TraceQuery Query
     {
-        InitializeCommands();
-        Clear();
+        get => _query;
+        private set => SetProperty(ref _query, value);
     }
 
-    public void SelectCommand(ClientCommand command)
-    {
-        var matching = Commands.FirstOrDefault(c =>
-            c.Direction == PacketDirection.Client && c.Value == (byte)command);
+    public bool HasQueryError => QueryError is not null;
+    public bool HasQueryText => !string.IsNullOrWhiteSpace(QueryText);
+    public string? QueryErrorText => QueryError?.Message;
 
-        if (matching is not null)
+    partial void OnQueryTextChanged(string value)
+    {
+        ParseQuery(value);
+    }
+
+    partial void OnIsTextCaseSensitiveChanged(bool value)
+    {
+        ParseQuery(QueryText);
+    }
+
+    private void ParseQuery(string value)
+    {
+        var result = TraceQueryParser.Parse(value, IsTextCaseSensitive);
+        QueryError = result.Diagnostic;
+
+        if (result.Query is not null)
         {
-            SelectedCommand = matching;
+            Query = result.Query;
         }
     }
 
-    public void SelectCommand(ServerCommand command)
+    public void SetCommand(PacketDirection direction, byte command)
     {
-        var matching = Commands.FirstOrDefault(c =>
-            c.Direction == PacketDirection.Server && c.Value == (byte)command);
-
-        if (matching is not null)
-        {
-            SelectedCommand = matching;
-        }
+        var field = direction == PacketDirection.Client ? "client" : "server";
+        QueryText = $"{field}={command:X2}";
     }
-    
+
     [RelayCommand]
     public void Clear()
     {
-        SelectedCommand = Commands.FirstOrDefault(command => command.Value is null);
-    }
-
-    private void InitializeCommands()
-    {
-        var clientCommandModels = Enum.GetValues<ClientCommand>()
-            .OrderBy(cmd => cmd == ClientCommand.Unknown ? 1 : 0)
-            .ThenBy(cmd => cmd.ToString())
-            .Select(cmd => new CommandFilterViewModel(cmd));
-
-        var serverCommandModels = Enum.GetValues<ServerCommand>()
-            .OrderBy(cmd => cmd == ServerCommand.Unknown ? 1 : 0)
-            .ThenBy(cmd => cmd.ToString())
-            .Select(cmd => new CommandFilterViewModel(cmd));
-
-        foreach (var vm in clientCommandModels)
-        {
-            Commands.Add(vm);
-        }
-
-        foreach (var vm in serverCommandModels)
-        {
-            Commands.Add(vm);
-        }
+        QueryText = string.Empty;
     }
 }
