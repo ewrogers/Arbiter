@@ -2,11 +2,14 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using Arbiter.App.Extensions;
+using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Client;
 using Arbiter.Net.Proxy;
 using Avalonia;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,7 @@ public partial class DialogManagerViewModel : ViewModelBase
     private readonly ILogger<DialogManagerViewModel> _logger;
     private readonly ProxyServer _proxyServer;
     private readonly ClientManagerViewModel _clientManager;
+    private readonly IGameSpriteService _spriteService;
 
     private readonly ConcurrentDictionary<long, DialogViewModel?> _activeDialogs = [];
 
@@ -34,10 +38,12 @@ public partial class DialogManagerViewModel : ViewModelBase
     {
         _logger = logger;
         _clientManager = serviceProvider.GetRequiredService<ClientManagerViewModel>();
+        _spriteService = serviceProvider.GetRequiredService<IGameSpriteService>();
 
         _clientManager.Clients.CollectionChanged += OnClientsCollectionChanged;
         _clientManager.ClientSelected += OnClientSelected;
         _clientManager.ClientDisconnected += OnClientDisconnected;
+        _spriteService.SpritesChanged += OnSpritesChanged;
 
         _proxyServer = serviceProvider.GetRequiredService<ProxyServer>();
         AddObservers();
@@ -76,6 +82,26 @@ public partial class DialogManagerViewModel : ViewModelBase
         if (ShouldSync)
         {
             ActiveDialog = null;
+        }
+    }
+
+    private void OnSpritesChanged(object? sender, EventArgs e)
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => OnSpritesChanged(sender, e));
+            return;
+        }
+
+        var dialogs = _activeDialogs.Values.OfType<DialogViewModel>().ToHashSet();
+        if (ActiveDialog is not null)
+        {
+            dialogs.Add(ActiveDialog);
+        }
+
+        foreach (var dialog in dialogs)
+        {
+            dialog.RefreshSprite();
         }
     }
 

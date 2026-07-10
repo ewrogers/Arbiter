@@ -15,6 +15,8 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
 {
     private readonly ILogger<GameSpriteService> _logger;
     private readonly SemaphoreSlim _loadGate = new(1, 1);
+    private readonly Dictionary<ushort, AvaloniaSpriteAtlas> _creatureAtlases = [];
+    private readonly HashSet<ushort> _failedCreatureSprites = [];
     private readonly Dictionary<(uint FirstItemId, byte Color), AvaloniaSpriteAtlas> _itemAtlases = [];
     private readonly HashSet<(uint FirstItemId, byte Color)> _failedItemAtlases = [];
 
@@ -23,6 +25,7 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
     private AvaloniaSpriteAtlas? _skillsOnCooldown;
     private AvaloniaSpriteAtlas? _spells;
     private AvaloniaSpriteAtlas? _spellsOnCooldown;
+    private CreatureSpriteLoader? _creatures;
     private string? _loadedDirectory;
 
     public GameSpriteService(ILogger<GameSpriteService> logger)
@@ -108,6 +111,39 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
         return atlas.GetFrame(frameIndex);
     }
 
+    public IImage? GetCreature(ushort sprite)
+    {
+        if (_creatures is null || sprite == 0 || _failedCreatureSprites.Contains(sprite))
+        {
+            return null;
+        }
+
+        if (!_creatureAtlases.TryGetValue(sprite, out var atlas))
+        {
+            try
+            {
+                var source = _creatures.LoadPreview(sprite);
+                if (source is null)
+                {
+                    _failedCreatureSprites.Add(sprite);
+                    return null;
+                }
+
+                atlas = new AvaloniaSpriteAtlas(source);
+                _creatureAtlases.Add(sprite, atlas);
+            }
+            catch (Exception exception) when (exception is ArgumentException or IOException or
+                                               UnauthorizedAccessException or InvalidDataException or OverflowException)
+            {
+                _failedCreatureSprites.Add(sprite);
+                _logger.LogWarning(exception, "Failed to build creature sprite {Sprite}", sprite);
+                return null;
+            }
+        }
+
+        return atlas.GetFrame(0);
+    }
+
     public IImage? GetSkill(ushort sprite, bool isOnCooldown) =>
         (isOnCooldown ? _skillsOnCooldown : _skills)?.GetIcon(sprite);
 
@@ -126,6 +162,7 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
         var oldSkillsOnCooldown = _skillsOnCooldown;
         var oldSpells = _spells;
         var oldSpellsOnCooldown = _spellsOnCooldown;
+        var oldCreatures = _creatureAtlases.Values.ToArray();
         var oldItems = _itemAtlases.Values.ToArray();
 
         _data = data;
@@ -133,6 +170,9 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
         _skillsOnCooldown = CreateAtlas(data?.SkillsOnCooldown, "skills cooldown");
         _spells = CreateAtlas(data?.Spells, "spells");
         _spellsOnCooldown = CreateAtlas(data?.SpellsOnCooldown, "spells cooldown");
+        _creatures = data?.Creatures;
+        _creatureAtlases.Clear();
+        _failedCreatureSprites.Clear();
         _itemAtlases.Clear();
         _failedItemAtlases.Clear();
         _loadedDirectory = directory;
@@ -160,6 +200,11 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
             oldSkillsOnCooldown?.Dispose();
             oldSpells?.Dispose();
             oldSpellsOnCooldown?.Dispose();
+            foreach (var atlas in oldCreatures)
+            {
+                atlas.Dispose();
+            }
+
             foreach (var atlas in oldItems)
             {
                 atlas.Dispose();
@@ -191,11 +236,17 @@ public sealed class GameSpriteService : IGameSpriteService, IDisposable
         _skillsOnCooldown?.Dispose();
         _spells?.Dispose();
         _spellsOnCooldown?.Dispose();
+        foreach (var atlas in _creatureAtlases.Values)
+        {
+            atlas.Dispose();
+        }
+
         foreach (var atlas in _itemAtlases.Values)
         {
             atlas.Dispose();
         }
 
+        _creatureAtlases.Clear();
         _itemAtlases.Clear();
     }
 }

@@ -22,6 +22,7 @@ internal sealed class NullGameSpriteService : IGameSpriteService
     public Task LoadAsync(string clientExecutablePath, CancellationToken cancellationToken = default) =>
         Task.CompletedTask;
 
+    public IImage? GetCreature(ushort sprite) => null;
     public IImage? GetItem(ushort sprite, byte color) => null;
     public IImage? GetSkill(ushort sprite, bool isOnCooldown) => null;
     public IImage? GetSpell(ushort sprite, bool isOnCooldown) => null;

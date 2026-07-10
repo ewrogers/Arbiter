@@ -1,3 +1,5 @@
+using System.Buffers.Binary;
+
 namespace Arbiter.Imaging.Formats;
 
 public sealed class Palette
@@ -22,12 +24,12 @@ public sealed class Palette
 
     public static Palette Parse(ReadOnlySpan<byte> bytes)
     {
-        if (bytes.Length != ByteLength)
+        if (bytes.Length == ByteLength)
         {
-            throw new InvalidDataException($"A palette must contain exactly {ByteLength} bytes.");
+            return new Palette(bytes.ToArray());
         }
 
-        return new Palette(bytes.ToArray());
+        return ParseRiff(bytes);
     }
 
     public void GetColor(byte index, bool useLuminanceAlpha, Span<byte> rgba)
@@ -92,6 +94,63 @@ public sealed class Palette
         var linearLuminance = 0.299 * linearRed + 0.587 * linearGreen + 0.114 * linearBlue;
         var luminance = Math.Pow(linearLuminance, 1.0 / gamma) * 255.0;
         return (byte)Math.Clamp(Math.Round(luminance), byte.MinValue, byte.MaxValue);
+    }
+
+    private static Palette ParseRiff(ReadOnlySpan<byte> bytes)
+    {
+        if (bytes.Length < 12 || !bytes[..4].SequenceEqual("RIFF"u8) ||
+            !bytes.Slice(8, 4).SequenceEqual("PAL "u8))
+        {
+            throw new InvalidDataException(
+                $"A palette must be a {ByteLength}-byte RGB palette or a RIFF PAL file.");
+        }
+
+        var riffLength = checked((int)BinaryPrimitives.ReadUInt32LittleEndian(bytes[4..]) + 8);
+        if (riffLength > bytes.Length)
+        {
+            throw new InvalidDataException("The RIFF palette exceeds the file bounds.");
+        }
+
+        var offset = 12;
+        while (offset <= riffLength - 8)
+        {
+            var chunkName = bytes.Slice(offset, 4);
+            var chunkLength = checked((int)BinaryPrimitives.ReadUInt32LittleEndian(bytes[(offset + 4)..]));
+            var chunkOffset = offset + 8;
+            if (chunkOffset > riffLength - chunkLength)
+            {
+                throw new InvalidDataException("A RIFF palette chunk exceeds the file bounds.");
+            }
+
+            if (chunkName.SequenceEqual("data"u8))
+            {
+                if (chunkLength < 4)
+                {
+                    throw new InvalidDataException("The RIFF palette data chunk is incomplete.");
+                }
+
+                var colorCount = BinaryPrimitives.ReadUInt16LittleEndian(bytes[(chunkOffset + 2)..]);
+                var requiredLength = checked(4 + colorCount * 4);
+                if (colorCount > ColorCount || chunkLength < requiredLength)
+                {
+                    throw new InvalidDataException("The RIFF palette contains invalid color data.");
+                }
+
+                var colors = new byte[ByteLength];
+                for (var index = 0; index < colorCount; index++)
+                {
+                    var sourceOffset = chunkOffset + 4 + index * 4;
+                    var targetOffset = index * 3;
+                    bytes.Slice(sourceOffset, 3).CopyTo(colors.AsSpan(targetOffset, 3));
+                }
+
+                return new Palette(colors);
+            }
+
+            offset = checked(chunkOffset + chunkLength + (chunkLength & 1));
+        }
+
+        throw new InvalidDataException("The RIFF palette does not contain a data chunk.");
     }
 }
 

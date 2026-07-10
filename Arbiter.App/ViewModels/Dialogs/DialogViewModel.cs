@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Arbiter.App.Services.Sprites;
 using Arbiter.Net.Types;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -8,9 +10,23 @@ namespace Arbiter.App.ViewModels.Dialogs;
 
 public partial class DialogViewModel : ViewModelBase
 {
+    private readonly IGameSpriteService _spriteService;
+
     [ObservableProperty] private string? _name;
     [ObservableProperty] private string? _content;
-    [ObservableProperty] private int? _sprite;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SpriteImage), nameof(SpriteFallbackText), nameof(HasSprite))]
+    private int? _sprite;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SpriteImage))]
+    private SpriteType _spriteType;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SpriteImage))]
+    private byte? _color;
+
     [ObservableProperty] private long? _entityId;
     [ObservableProperty] private EntityTypeFlags _entityType;
     [ObservableProperty] private int? _pursuitId;
@@ -36,6 +52,26 @@ public partial class DialogViewModel : ViewModelBase
     public ObservableCollection<DialogMenuChoiceViewModel> MenuChoices { get; } = [];
 
     public bool HasMenuChoices => MenuChoices.Count > 0;
+    public bool HasSprite => Sprite.HasValue;
+    public string SpriteFallbackText => Sprite.HasValue ? $"#{Sprite.Value}" : "None";
+    public IImage? SpriteImage
+    {
+        get
+        {
+            if (!Sprite.HasValue || Sprite.Value < ushort.MinValue || Sprite.Value > ushort.MaxValue)
+            {
+                return null;
+            }
+
+            var sprite = (ushort)Sprite.Value;
+            return SpriteType switch
+            {
+                SpriteType.Monster => _spriteService.GetCreature(sprite),
+                SpriteType.Item => _spriteService.GetItem(sprite, Color ?? 0),
+                _ => null
+            };
+        }
+    }
 
     public event EventHandler<DialogEventArgs>? RequestPrevious;
     public event EventHandler<DialogEventArgs>? RequestNext;
@@ -45,9 +81,17 @@ public partial class DialogViewModel : ViewModelBase
     public event EventHandler<DialogEventArgs>? TextInputConfirmed;
 
     public DialogViewModel()
+        : this(NullGameSpriteService.Instance)
     {
+    }
+
+    public DialogViewModel(IGameSpriteService spriteService)
+    {
+        _spriteService = spriteService;
         MenuChoices.CollectionChanged += (_, _) => { OnPropertyChanged(nameof(HasMenuChoices)); };
     }
+
+    public void RefreshSprite() => OnPropertyChanged(nameof(SpriteImage));
 
     [RelayCommand]
     private void SelectMenuChoice(DialogMenuChoiceViewModel viewModel)

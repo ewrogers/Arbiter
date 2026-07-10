@@ -53,6 +53,66 @@ public class FilteredObservableCollection<T> : ObservableCollection<T>, IDisposa
         OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
+    public void Reconcile()
+    {
+        Dispatcher.UIThread.VerifyAccess();
+
+        for (var index = Count - 1; index >= 0; index--)
+        {
+            var item = this[index];
+            if (!_sourceCollection.Contains(item) || !Predicate(item))
+            {
+                RemoveAt(index);
+            }
+        }
+
+        var targetIndex = 0;
+        foreach (var item in _sourceCollection)
+        {
+            if (!Predicate(item))
+            {
+                continue;
+            }
+
+            var currentIndex = IndexOf(item);
+            if (currentIndex < 0)
+            {
+                Insert(targetIndex, item);
+            }
+            else if (currentIndex != targetIndex)
+            {
+                Move(currentIndex, targetIndex);
+            }
+
+            targetIndex++;
+        }
+    }
+
+    public void ReconcileItem(T item)
+    {
+        Dispatcher.UIThread.VerifyAccess();
+
+        var sourceIndex = _sourceCollection.IndexOf(item);
+        var currentIndex = IndexOf(item);
+        if (sourceIndex < 0 || !Predicate(item))
+        {
+            if (currentIndex >= 0)
+            {
+                RemoveAt(currentIndex);
+            }
+
+            return;
+        }
+
+        if (currentIndex >= 0)
+        {
+            return;
+        }
+
+        var targetIndex = Math.Min(GetFilteredIndexForSourceIndex(sourceIndex), Count);
+        Insert(targetIndex, item);
+    }
+
     public IDisposable DeferRefresh()
     {
         Dispatcher.UIThread.VerifyAccess();

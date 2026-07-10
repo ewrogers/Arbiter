@@ -20,4 +20,15 @@ public sealed class PaletteTests
     {
         Assert.That(() => Palette.Parse(new byte[10]), Throws.TypeOf<InvalidDataException>());
     }
+
+    [Test]
+    public void Should_Parse_Windows_Riff_Palettes()
+    {
+        var palette = Palette.Parse(TestImageData.WindowsPalette((7, 12, 34, 56)));
+        Span<byte> rgba = stackalloc byte[4];
+
+        palette.GetColor(7, false, rgba);
+
+        Assert.That(rgba.ToArray(), Is.EqualTo(new byte[] { 12, 34, 56, 255 }));
+    }
 }

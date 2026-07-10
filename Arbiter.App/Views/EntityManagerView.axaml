@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Arbiter.App.ViewModels.Entities"
              xmlns:converters="using:Arbiter.App.Converters"
+             xmlns:controls="using:Arbiter.App.Controls"
              mc:Ignorable="d" d:DesignWidth="340" d:DesignHeight="800"
              x:Class="Arbiter.App.Views.EntityManagerView"
              x:DataType="vm:EntityManagerViewModel">
@@ -135,9 +136,21 @@
                             <!-- Tooltip -->
                             <ToolTip.Tip>
                                 <Border Padding="4">
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
-                                          RowSpacing="4" ColumnSpacing="8"
-                                          MinWidth="200">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                        <controls:SpritePresenter Grid.Column="0"
+                                                                  Width="80"
+                                                                  Height="80"
+                                                                  Source="{Binding SpriteImage}"
+                                                                  FallbackText="{Binding SpriteFallbackText}"
+                                                                  SpriteStretchDirection="DownOnly"
+                                                                  IsVisible="{Binding ShowsSpritePreview}"/>
+
+                                        <Grid Grid.Column="1"
+                                              RowDefinitions="Auto,Auto,Auto,Auto"
+                                              ColumnDefinitions="*,Auto"
+                                              RowSpacing="4"
+                                              ColumnSpacing="8"
+                                              MinWidth="200">
                                         <!-- Name -->
                                         <TextBlock Grid.Row="0" Grid.Column="0"
                                                    Text="{Binding NameOrTypeName}"
@@ -205,6 +218,7 @@
                                                    FontSize="14"
                                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                    VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </ToolTip.Tip>

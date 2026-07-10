@@ -135,6 +135,7 @@ public sealed class EntityStore : IEntityStore
         {
             Name = !string.IsNullOrWhiteSpace(entity.Name) ? entity.Name : existingEntity.Name,
             Sprite = entity.Sprite ?? existingEntity.Sprite,
+            Color = entity.Color ?? existingEntity.Color,
             MapId = entity.MapId ?? existingEntity.MapId,
             MapName = entity.MapName ?? existingEntity.MapName,
             X = entity.X,

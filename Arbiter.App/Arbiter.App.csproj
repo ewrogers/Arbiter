@@ -17,6 +17,9 @@
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
         <AvaloniaResource Include="Themes\**"/>
+        <None Include="..\THIRD-PARTY-NOTICES.md"
+              Link="THIRD-PARTY-NOTICES.md"
+              CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Arbiter.App.ViewModels.Dialogs"
+             xmlns:controls="using:Arbiter.App.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="Arbiter.App.Views.DialogManagerView"
              x:DataType="vm:DialogManagerViewModel">
@@ -65,28 +66,25 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"
                         IsVisible="{Binding ActiveDialog, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={x:False}}">
-                    <StackPanel Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Label Content="Sprite"
-                               FontSize="18"
-                               ToolTip.Tip="The sprite being displayed."
-                               Padding="0"/>
-                        <TextBlock Text="None"
-                                   TextAlignment="Center"
-                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                   VerticalAlignment="Center"
-                                   IsVisible="{Binding ActiveDialog.Sprite, Converter={x:Static ObjectConverters.IsNull}, FallbackValue={x:True}}"/>
-                        <TextBlock Text="{Binding ActiveDialog.Sprite, FallbackValue=None}"
-                                   TextAlignment="Center"
-                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
-                                   VerticalAlignment="Center"
-                                   IsVisible="{Binding ActiveDialog.Sprite, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={x:False}}"/>
-                    </StackPanel>
+                    <Grid>
+                        <controls:SpritePresenter Source="{Binding ActiveDialog.SpriteImage}"
+                                                  FallbackText="{Binding ActiveDialog.SpriteFallbackText, FallbackValue=None}"
+                                                  IsEmpty="{Binding !ActiveDialog.HasSprite, FallbackValue={x:True}}"
+                                                  SpriteStretchDirection="DownOnly"/>
+
+                        <Border Background="#B0000000"
+                                Padding="3,1"
+                                CornerRadius="2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                IsVisible="{Binding ActiveDialog.HasSprite, FallbackValue={x:False}}">
+                            <TextBlock Text="{Binding ActiveDialog.Sprite, StringFormat={}Sprite {0}}"
+                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource Talgonite.TextBlock.Foreground}"/>
+                        </Border>
+                    </Grid>
                 </Border>
                 
                 <!--Text Input -->
@@ -207,7 +205,7 @@
                                        VerticalAlignment="Center"
                                        Margin="0,4,0,0"
                                        IsVisible="{Binding ActiveDialog.EntityId, Converter={x:Static StringConverters.IsNotNullOrEmpty}, FallbackValue={x:Null}}"/>
-                            
+
                             <!-- Pursuit Id -->
                             <TextBlock Grid.Column="3"
                                        Text="{Binding ActiveDialog.PursuitId, StringFormat={}Pursuit {0}, FallbackValue={x:Null}}"
