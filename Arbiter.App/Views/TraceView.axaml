@@ -51,7 +51,7 @@
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveAllCommand}" />
     </UserControl.KeyBindings>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Background="{StaticResource Talgonite.Trace.Background}">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Background="{StaticResource Talgonite.Trace.Background}">
         <!-- Toolbar Area -->
         <Border Grid.Row="0" Padding="4">
             <Grid ColumnDefinitions="Auto,*,Auto">
@@ -142,6 +142,16 @@
 
                 <!-- Right Side Buttons -->
                 <WrapPanel Grid.Column="2" Orientation="Horizontal" ItemSpacing="4" ItemsAlignment="End">
+                    <!-- Toggle Detailed Rows Button -->
+                    <ToggleButton IsChecked="{Binding IsDetailedView}"
+                                  ToolTip.Tip="Toggles detailed packet rows with 16-byte hex and ASCII columns."
+                                  Classes="trace-state outline"
+                                  Classes.active="{Binding IsDetailedView}">
+                        <Path Width="16" Height="16"
+                              Stroke="{Binding $parent[ToggleButton].Foreground}"
+                              Data="{StaticResource Talgonite.Icon.DetailedRows}"/>
+                    </ToggleButton>
+
                     <!-- Toggle Find Button -->
                     <ToggleButton IsChecked="{Binding ShowSearchBar}"
                                   ToolTip.Tip="Shows or hides the search bar."
@@ -588,9 +598,41 @@
             </Grid>
         </Border>
 
+        <!-- Trace Column Header -->
+        <Border Grid.Row="3"
+                Margin="4,0"
+                Padding="4,3"
+                Background="{StaticResource Talgonite.Control.Background}"
+                BorderBrush="{StaticResource Talgonite.Window.TitleBorderBrush}"
+                BorderThickness="0,0,0,1">
+            <Border.Styles>
+                <Style Selector="TextBlock">
+                    <Setter Property="FontFamily" Value="{StaticResource Talgonite.Font.TraceFont}"/>
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="Foreground" Value="{StaticResource Talgonite.TextBlock.DimForeground}"/>
+                </Style>
+            </Border.Styles>
+            <Grid ColumnDefinitions="72,110,170,*" ColumnSpacing="8">
+                <TextBlock Grid.Column="0"
+                           Text="Timestamp"/>
+                <TextBlock Grid.Column="1"
+                           Text="Client"/>
+                <TextBlock Grid.Column="2"
+                           Text="↔ Command"
+                           IsVisible="{Binding !IsDetailedView}"/>
+                <TextBlock Grid.Column="3"
+                           Text="Payload"
+                           IsVisible="{Binding !IsDetailedView}"/>
+                <TextBlock Grid.Column="2"
+                           Grid.ColumnSpan="2"
+                           Text="↔ Command / Payload"
+                           IsVisible="{Binding IsDetailedView}"/>
+            </Grid>
+        </Border>
+
         <!-- Trace List -->
         <ListBox Name="TraceListBox"
-                 Grid.Row="3"
+                 Grid.Row="4"
                  ItemsSource="{Binding FilteredPackets}"
                  SelectedItems="{Binding SelectedPackets}"
                  FontFamily="{StaticResource Talgonite.Font.TraceFont}"

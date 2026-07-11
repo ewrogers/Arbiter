@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.9.1] - 2026-07-10
 
+### Added
+
+- Add compact trace columns and an optional detailed packet view with 16-byte hex rows, printable ASCII, search highlighting, and collapsed empty payloads
+
 ### Changed
 
 - Upgrade Avalonia desktop packages to 12.1.0 and compatible ItemsRepeater and XAML behavior packages for rendering, hit-testing, bitmap, and Windows GPU performance improvements

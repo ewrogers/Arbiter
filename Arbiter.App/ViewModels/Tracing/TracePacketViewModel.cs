@@ -24,15 +24,19 @@ public partial class TracePacketViewModel(
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DisplayValue))]
     [NotifyPropertyChangedFor(nameof(DisplaySearchHighlights))]
+    [NotifyPropertyChangedFor(nameof(DisplayPayloadLines))]
+    [NotifyPropertyChangedFor(nameof(HasDisplayPayload))]
     private PacketDisplayMode _displayMode = PacketDisplayMode.Decrypted;
 
     [ObservableProperty] private double _opacity = 1;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DisplaySearchHighlights))]
+    [NotifyPropertyChangedFor(nameof(DisplayPayloadLines))]
     private IReadOnlyList<TraceQueryHighlight> _searchHighlights = [];
 
     [ObservableProperty] private string? _clientName = clientName;
+    [ObservableProperty] private bool _isDetailedView;
 
     [ObservableProperty]
     private PacketDirection _direction = decrypted is ClientPacket ? PacketDirection.Client : PacketDirection.Server;
@@ -82,8 +86,25 @@ public partial class TracePacketViewModel(
             : TraceQueryHighlightSource.Data))
         .ToList();
 
+    public IReadOnlyList<TracePayloadLine> DisplayPayloadLines =>
+        TracePayloadFormatter.Format(GetDisplayBytes(), DisplaySearchHighlights);
+
+    public bool HasDisplayPayload => !GetDisplayBytes().IsEmpty;
+
     public bool IsClient => DecryptedPacket is ClientPacket;
     public bool IsServer => DecryptedPacket is ServerPacket;
+
+    private ReadOnlySpan<byte> GetDisplayBytes()
+    {
+        if (DisplayMode == PacketDisplayMode.Raw)
+        {
+            return RawData;
+        }
+
+        return WasReplaced && FilteredPacket is not null
+            ? FilteredPacket.Data
+            : DecryptedPacket.Data;
+    }
 
     public TracePacket ToTracePacket()
     {

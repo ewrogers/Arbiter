@@ -1,11 +1,12 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="using:Arbiter.App.Controls"
              xmlns:converters="using:Arbiter.App.Converters"
+             xmlns:models="using:Arbiter.App.Models.Tracing"
              xmlns:vm="using:Arbiter.App.ViewModels.Tracing"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="160"
              x:Class="Arbiter.App.Views.TracePacketView"
              x:DataType="vm:TracePacketViewModel">
     <UserControl.Resources>
@@ -14,69 +15,64 @@
         <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightBackground" Color="#806893c2"/>
         <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightForeground" Color="#ffffff"/>
     
-        <Geometry x:Key="Talgonite.TracePacket.LeftCaret">M 6,1 L 2,4 L 6,7 Z</Geometry>
-        <Geometry x:Key="Talgonite.TracePacket.RightCaret">M 2,1 L 6,4 L 2,7 Z</Geometry>
-    
-        <Geometry x:Key="Talgonite.TracePacket.LeftArrow">M11,4 H4 M4,1 L1,4 L4,7</Geometry>
         <Geometry x:Key="Talgonite.TracePacket.RightArrow">M1,4 H8 M8,1 L11,4 L8,7</Geometry>
+        <Geometry x:Key="Talgonite.TracePacket.LeftArrow">M11,4 H4 M4,1 L1,4 L4,7</Geometry>
     </UserControl.Resources>
     
     <Grid Background="Transparent"
-           Opacity="{Binding Opacity}"
-           HorizontalAlignment="Stretch"
-           Cursor="Hand">
+          Opacity="{Binding Opacity}"
+          HorizontalAlignment="Stretch"
+          Cursor="Hand">
         <Grid.Transitions>
             <Transitions>
                 <DoubleTransition Property="Opacity" Duration="0:0:0.3" Easing="QuadraticEaseInOut"/>
             </Transitions>
         </Grid.Transitions>
-        
+
+        <!-- Compact Layout -->
         <Border Background="Transparent"
                 BorderBrush="{StaticResource Talgonite.Window.TitleBorderBrush}"
                 BorderThickness="0,0,0,1"
-                Padding="4,2">
-            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="4">
-                <!-- Timestamp and Client Name -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
-                    <TextBlock Name="TimestampText"
-                               Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}"
-                               Foreground="{StaticResource Talgonite.TracePacket.TimestampForeground}"/>
-                    
-                    <!-- Client Name -->
-                    <TextBlock Text="{Binding ClientName}"
-                               Foreground="{StaticResource Talgonite.TracePacket.ClientNameForeground}"
-                               IsVisible="{Binding ClientName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
-                </StackPanel>
-                
-                <!-- Direction Arrow and Command Name -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
-                    <Path Width="12" Height="8"
-                          Stroke="{Binding #CommandNameText.Foreground}"
-                          Fill="{Binding #CommandNameText.Foreground}"
-                          Data="{StaticResource Talgonite.TracePacket.RightArrow}"
-                          IsVisible="{Binding IsClient}"/>
-                    <Path Width="12" Height="8"
-                          Stroke="{Binding #CommandNameText.Foreground}"
-                          Fill="{Binding #CommandNameText.Foreground}"
-                          Data="{StaticResource Talgonite.TracePacket.LeftArrow}"
-                          IsVisible="{Binding IsServer}"/>
-                    
-                    <!-- Command Display Name -->
-                    <TextBlock Name="CommandNameText"
-                               Text="{Binding CommandName}"
-                               TextAlignment="Left"
-                               Foreground="{Binding ., Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"/>
-                </StackPanel>
-                
-                <!-- Payload Display -->
+                Padding="4,2"
+                IsVisible="{Binding !IsDetailedView}">
+            <Grid ColumnDefinitions="72,110,170,*" ColumnSpacing="8">
+                <TextBlock Grid.Column="0"
+                           Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}"
+                           Foreground="{StaticResource Talgonite.TracePacket.TimestampForeground}"/>
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding ClientName}"
+                           Foreground="{StaticResource Talgonite.TracePacket.ClientNameForeground}"
+                           TextTrimming="CharacterEllipsis"
+                           IsVisible="{Binding ClientName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
                 <Grid Grid.Column="2" ColumnDefinitions="Auto,*" ColumnSpacing="4">
-                    <TextBlock Grid.Column="0" Name="CommandText"
+                    <Grid Width="12" Height="8" VerticalAlignment="Center">
+                        <Path Width="12" Height="8"
+                              Stroke="{Binding #CompactCommandNameText.Foreground}"
+                              Fill="{Binding #CompactCommandNameText.Foreground}"
+                              Data="{StaticResource Talgonite.TracePacket.RightArrow}"
+                              IsVisible="{Binding IsClient}"/>
+                        <Path Width="12" Height="8"
+                              Stroke="{Binding #CompactCommandNameText.Foreground}"
+                              Fill="{Binding #CompactCommandNameText.Foreground}"
+                              Data="{StaticResource Talgonite.TracePacket.LeftArrow}"
+                              IsVisible="{Binding IsServer}"/>
+                    </Grid>
+                    <TextBlock Name="CompactCommandNameText"
+                               Grid.Column="1"
+                               Text="{Binding CommandName}"
+                               TextTrimming="CharacterEllipsis"
+                               Foreground="{Binding ., Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"/>
+                </Grid>
+
+                <Grid Grid.Column="3" ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                    <TextBlock Grid.Column="0"
                                Text="{Binding Command, StringFormat={}{0:X2}}"
                                FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                               Foreground="{Binding #CommandNameText.Foreground}"/>
-                    
+                               Foreground="{Binding #CompactCommandNameText.Foreground}"/>
+
                     <controls:HighlightedHexTextBlock Grid.Column="1"
-                                                      Name="PayloadText"
                                                       SourceText="{Binding DisplayValue}"
                                                       Highlights="{Binding DisplaySearchHighlights}"
                                                       HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
@@ -86,6 +82,88 @@
                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                       Foreground="{Binding FilterAction, Converter={x:Static converters:PacketFilterColorConverter.Converter}}"/>
                 </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Detailed Layout -->
+        <Border Background="Transparent"
+                BorderBrush="{StaticResource Talgonite.Window.TitleBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="4,2"
+                IsVisible="{Binding IsDetailedView}">
+            <Grid ColumnDefinitions="72,110,170,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="8"
+                  RowSpacing="2">
+                <TextBlock Grid.RowSpan="2" Grid.Column="0"
+                           Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}"
+                           Foreground="{StaticResource Talgonite.TracePacket.TimestampForeground}"
+                           VerticalAlignment="Top"/>
+
+                <TextBlock Grid.RowSpan="2" Grid.Column="1"
+                           Text="{Binding ClientName}"
+                           Foreground="{StaticResource Talgonite.TracePacket.ClientNameForeground}"
+                           TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Top"
+                           IsVisible="{Binding ClientName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                <StackPanel Grid.Column="2"
+                            Grid.ColumnSpan="2"
+                            Orientation="Horizontal"
+                            Spacing="4">
+                    <Grid Width="12" Height="8" VerticalAlignment="Center">
+                        <Path Width="12" Height="8"
+                              Stroke="{Binding #DetailedCommandNameText.Foreground}"
+                              Fill="{Binding #DetailedCommandNameText.Foreground}"
+                              Data="{StaticResource Talgonite.TracePacket.RightArrow}"
+                              IsVisible="{Binding IsClient}"/>
+                        <Path Width="12" Height="8"
+                              Stroke="{Binding #DetailedCommandNameText.Foreground}"
+                              Fill="{Binding #DetailedCommandNameText.Foreground}"
+                              Data="{StaticResource Talgonite.TracePacket.LeftArrow}"
+                              IsVisible="{Binding IsServer}"/>
+                    </Grid>
+                    <TextBlock Name="DetailedCommandNameText"
+                               Text="{Binding CommandName}"
+                               Foreground="{Binding ., Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"/>
+                    <TextBlock Text="{Binding Command, StringFormat={}{0:X2}}"
+                               FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                               Foreground="{Binding #DetailedCommandNameText.Foreground}"/>
+                </StackPanel>
+
+                <ItemsControl Grid.Row="1"
+                              Grid.Column="2"
+                              Grid.ColumnSpan="2"
+                              ItemsSource="{Binding DisplayPayloadLines}"
+                              IsVisible="{Binding HasDisplayPayload}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:TracePayloadLine" x:CompileBindings="False">
+                            <Grid ColumnDefinitions="400,*">
+                                <controls:HighlightedHexTextBlock Grid.Column="0"
+                                                                  SourceText="{Binding Hex}"
+                                                                  Highlights="{Binding Highlights}"
+                                                                  HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
+                                                                  HighlightForeground="{StaticResource Talgonite.TracePacket.SearchHighlightForeground}"
+                                                                  FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                                  TextWrapping="NoWrap"
+                                                                  Foreground="{Binding $parent[ItemsControl].DataContext.FilterAction, Converter={x:Static converters:PacketFilterColorConverter.Converter}}"/>
+
+                                <Border Grid.Column="1"
+                                        BorderBrush="{StaticResource Talgonite.Border.DividerBrush}"
+                                        BorderThickness="1,0,0,0"
+                                        Padding="8,0,0,0">
+                                    <controls:HighlightedAsciiTextBlock SourceText="{Binding Ascii}"
+                                                                        Highlights="{Binding Highlights}"
+                                                                        HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
+                                                                        HighlightForeground="{StaticResource Talgonite.TracePacket.SearchHighlightForeground}"
+                                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}"
+                                                                        TextWrapping="NoWrap"
+                                                                        Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </Border>
     </Grid>

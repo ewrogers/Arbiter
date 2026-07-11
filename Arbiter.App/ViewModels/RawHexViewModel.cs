@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Buffers;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Arbiter.App.Extensions;
+using Arbiter.App.Models;
 using Arbiter.App.ViewModels.Tracing;
 using Arbiter.Net.Client;
 using Arbiter.Net.Server;
@@ -270,38 +269,7 @@ public partial class RawHexViewModel : ViewModelBase
 
     private string GetAsciiText()
     {
-        if (_payload is null)
-        {
-            return string.Empty;
-        }
-        
-        var buffer = ArrayPool<char>.Shared.Rent(_payload.Length + 1);
-
-        try
-        {
-            var decodedLength = Encoding.ASCII.GetChars(_payload, buffer);
-            if (decodedLength < 1)
-            {
-                return string.Empty;
-            }
-
-            for (var i = 0; i < decodedLength; i++)
-            {
-                buffer[i] = buffer[i] switch
-                {
-                    var c when char.IsLetterOrDigit(c) => c,
-                    var c when char.IsPunctuation(c) => c,
-                    var c when char.IsSymbol(c) => c,
-                    _ => '.'
-                };
-            }
-
-            return new string(buffer, 0, decodedLength);
-        }
-        finally
-        {
-            ArrayPool<char>.Shared.Return(buffer);
-        }
+        return _payload is null ? string.Empty : ByteDisplayFormatter.ToAscii(_payload);
     }
 
     [RelayCommand]

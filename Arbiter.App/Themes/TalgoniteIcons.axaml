@@ -93,6 +93,15 @@
     <Geometry x:Key="Talgonite.Icon.FilterFunnel">
         M0,0 H16 L10,8 V16 H6 V8 Z H16 Z
     </Geometry>
+
+    <!-- Detailed Rows Icon -->
+    <Geometry x:Key="Talgonite.Icon.DetailedRows">
+        M1,1 H15 V4 H1 Z
+        M1,7 H9 M11,7 H15
+        M1,11 H9 M11,11 H15
+        M1,15 H9 M11,15 H15
+        M10,5 V16
+    </Geometry>
     
     <!-- Clear Text Icon -->
     <Geometry x:Key="Talgonite.Icon.ClearText">
