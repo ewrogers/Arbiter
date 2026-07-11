@@ -180,7 +180,7 @@ I personally use JetBrains Rider for development, but any editor should work as 
 
 ## Packaging 📦
 
-Pushing a version tag such as `v1.8.2` automatically builds, tests, packages, and publishes the matching GitHub release. The tag version must match the app assembly version, file version, and changelog section.
+Pushing a version tag such as `v1.8.2` automatically builds, tests, packages, and publishes the matching GitHub release. The tag version must match the app version, assembly version, file version, and changelog section.
 
 The release package contains the Release `win-x64` single-file executable and its required native libraries.
 

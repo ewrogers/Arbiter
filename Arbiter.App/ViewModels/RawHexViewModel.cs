@@ -8,6 +8,7 @@ using Arbiter.App.ViewModels.Tracing;
 using Arbiter.Net.Client;
 using Arbiter.Net.Server;
 using Avalonia;
+using Avalonia.Input.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

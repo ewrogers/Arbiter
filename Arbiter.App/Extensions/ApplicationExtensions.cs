@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
-using Avalonia.VisualTree;
 
 namespace Arbiter.App.Extensions;
 
@@ -17,8 +16,8 @@ public static class ApplicationExtensions
 
         if (app.ApplicationLifetime is ISingleViewApplicationLifetime singleView)
         {
-            var visualRoot = singleView.MainView?.GetVisualRoot();
-            if (visualRoot is TopLevel topLevel)
+            var topLevel = TopLevel.GetTopLevel(singleView.MainView);
+            if (topLevel is not null)
             {
                 return topLevel.Clipboard;
             }

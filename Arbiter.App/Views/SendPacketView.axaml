@@ -107,7 +107,7 @@
                         <NumericUpDown Minimum="-1"
                                        Maximum="10000"
                                        Value="{Binding LoopCount}"
-                                       Watermark="&lt;times&gt;"
+                                       PlaceholderText="&lt;times&gt;"
                                        TextAlignment="Center"
                                        MaxWidth="80"
                                        FontFamily="{StaticResource Talgonite.Font.Monospace}"

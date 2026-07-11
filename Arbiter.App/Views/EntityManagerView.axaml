@@ -18,7 +18,7 @@
             <!-- Search Text -->
             <TextBox Grid.Row="0"
                      Text="{Binding SearchText}"
-                     Watermark="Search for entity.."
+                     PlaceholderText="Search for entity.."
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      FontSize="16">
                 <TextBox.InnerLeftContent>

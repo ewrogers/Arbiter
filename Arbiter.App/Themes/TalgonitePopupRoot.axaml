@@ -7,15 +7,15 @@
             <ControlTemplate>
                 <LayoutTransformControl LayoutTransform="{TemplateBinding Transform}">
                     <Panel Background="Transparent">
-                        <Border Name="PART_TransparencyFallback">
-                            <VisualLayerManager IsPopup="True">
-                                <ContentPresenter Name="PART_ContentPresenter"
-                                                  Content="{TemplateBinding Content}"
-                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                  Background="{TemplateBinding Background}"
-                                                  Padding="{TemplateBinding Padding}"/>
-                            </VisualLayerManager>
-                        </Border>
+                        <Border Name="PART_TransparencyFallback"
+                                IsHitTestVisible="False"/>
+                        <VisualLayerManager Name="PART_VisualLayerManager">
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Background="{TemplateBinding Background}"
+                                              Padding="{TemplateBinding Padding}"/>
+                        </VisualLayerManager>
                     </Panel>
                 </LayoutTransformControl>
             </ControlTemplate>

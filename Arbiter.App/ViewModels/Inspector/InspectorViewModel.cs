@@ -6,6 +6,7 @@ using Arbiter.App.Extensions;
 using Arbiter.App.ViewModels.Tracing;
 using Arbiter.Json.Converters;
 using Avalonia;
+using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;

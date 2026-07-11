@@ -21,7 +21,7 @@
         <TextBox Grid.Row="0" Grid.Column="1"
                  Text="{Binding FormattedValue}"
                  TextAlignment="Right"
-                 Watermark="&lt;unset&gt;"
+                 PlaceholderText="&lt;unset&gt;"
                  PasswordChar="{Binding PasswordCharacter}"
                  RevealPassword="{Binding IsRevealed}"
                  Classes="read-only copy-feedback"

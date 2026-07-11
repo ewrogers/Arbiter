@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.1] - 2026-07-10
+
+### Changed
+
+- Upgrade Avalonia desktop packages to 12.1.0 and compatible ItemsRepeater and XAML behavior packages for rendering, hit-testing, bitmap, and Windows GPU performance improvements
+- Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
+
+### Fixed
+
+- Preserve custom title-bar controls, native window dragging, and edge resizing with Avalonia 12 window decorations
+- Keep cooldown countdown updates on the Avalonia UI dispatcher under the new multiple-dispatcher behavior
+- Align Windows product version metadata with the app assembly and file versions
+
 ## [1.9.0] - 2026-07-10
 
 ### Added

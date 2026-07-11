@@ -360,7 +360,7 @@
                              Text="{Binding SearchParameters.QueryText, Mode=TwoWay}"
                              c:QuerySyntax.IsEnabled="True"
                              Classes.query-error="{Binding SearchParameters.HasQueryError}"
-                             Watermark="Enter search query..."
+                             PlaceholderText="Enter search query..."
                              FontFamily="{StaticResource Talgonite.Font.Monospace}"
                              FontSize="15"
                              Height="40">

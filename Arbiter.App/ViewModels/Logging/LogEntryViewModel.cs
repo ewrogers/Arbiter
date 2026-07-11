@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Arbiter.App.Extensions;
 using Arbiter.App.Logging;
 using Avalonia;
+using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 

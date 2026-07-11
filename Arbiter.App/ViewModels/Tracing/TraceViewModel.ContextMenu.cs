@@ -6,6 +6,7 @@ using Arbiter.App.Models.Tracing;
 using Arbiter.Net.Client;
 using Arbiter.Net.Server;
 using Avalonia;
+using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Arbiter.App.ViewModels.Tracing;

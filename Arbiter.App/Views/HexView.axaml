@@ -30,7 +30,7 @@
                        ToolTip.Tip="Command code of the packet (as hex)."/>
                 <TextBox Text="{Binding FormattedCommand, Mode=OneWay}"
                          TextAlignment="Right"
-                         Watermark="--"
+                         PlaceholderText="--"
                          Classes="read-only copy-feedback"
                          Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=command}"
                          FontFamily="{StaticResource Talgonite.Font.Monospace}"
@@ -55,7 +55,7 @@
                        ToolTip.Tip="Incremental sequence number of the packet (as hex)."/>
                 <TextBox Text="{Binding FormattedSequence, Mode=OneWay}"
                          TextAlignment="Right"
-                         Watermark="--"
+                         PlaceholderText="--"
                          Classes="read-only copy-feedback"
                          Classes.copied="{Binding CopyFeedbackField, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=sequence}"
                          FontFamily="{StaticResource Talgonite.Font.Monospace}"

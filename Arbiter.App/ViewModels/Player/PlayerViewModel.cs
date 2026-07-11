@@ -115,7 +115,7 @@ public partial class PlayerViewModel : ViewModelBase
     {
         _player = player;
         _spriteService = spriteService;
-        _cooldownTimer = new DispatcherTimer
+        _cooldownTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher.UIThread)
         {
             Interval = TimeSpan.FromMilliseconds(250)
         };
