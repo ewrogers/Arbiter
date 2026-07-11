@@ -93,6 +93,13 @@
     <Geometry x:Key="Talgonite.Icon.FilterFunnel">
         M0,0 H16 L10,8 V16 H6 V8 Z H16 Z
     </Geometry>
+
+    <!-- Detailed List Icon -->
+    <Geometry x:Key="Talgonite.Icon.DetailedList">
+        M2,2 H4 V4 H2 Z M6,3 H15
+        M2,7 H4 V9 H2 Z M6,8 H15
+        M2,12 H4 V14 H2 Z M6,13 H15
+    </Geometry>
     
     <!-- Clear Text Icon -->
     <Geometry x:Key="Talgonite.Icon.ClearText">
@@ -147,10 +154,11 @@
         M1,1 L15,1 L15,15 L1,15 Z
     </Geometry>
 
-    <!-- Information Glyph -->
-    <Geometry x:Key="Talgonite.Icon.Information">
-        M7,2 L9,2 L9,4 L7,4 Z
-        M7,6 L9,6 L9,14 L7,14 Z
+    <!-- Question Mark Glyph -->
+    <Geometry x:Key="Talgonite.Icon.Question">
+        M4,5 C4,2.791 5.791,1 8,1 C10.209,1 12,2.791 12,5
+        C12,7.5 8,8 8,11
+        M8,14 L8,14.1
     </Geometry>
     
     <!-- Debug Diamond Icon -->

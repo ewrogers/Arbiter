@@ -80,9 +80,9 @@ public class QuerySyntaxTextPresenter : TextPresenter
                 span.Length,
                 new GenericTextRunProperties(
                     typeface,
-                    FontFeatures,
                     fontSize,
-                    foregroundBrush: brush)));
+                    foregroundBrush: brush,
+                    fontFeatures: FontFeatures)));
         }
 
         var selectionStart = Math.Min(SelectionStart, SelectionEnd);
@@ -94,15 +94,14 @@ public class QuerySyntaxTextPresenter : TextPresenter
                 selectionLength,
                 new GenericTextRunProperties(
                     typeface,
-                    FontFeatures,
                     fontSize,
-                    foregroundBrush: SelectionForegroundBrush)));
+                    foregroundBrush: SelectionForegroundBrush,
+                    fontFeatures: FontFeatures)));
         }
 
         return new TextLayout(
             text,
             typeface,
-            FontFeatures,
             fontSize,
             foreground,
             TextAlignment,
@@ -112,7 +111,8 @@ public class QuerySyntaxTextPresenter : TextPresenter
             textStyleOverrides: overrides,
             flowDirection: FlowDirection,
             lineHeight: LineHeight,
-            letterSpacing: LetterSpacing);
+            letterSpacing: LetterSpacing,
+            fontFeatures: FontFeatures);
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

@@ -14,7 +14,6 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource Talgonite.Label.Foreground}"/>
         <Setter Property="FontFamily" Value="{StaticResource Talgonite.Font.InterfaceFont}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="CornerRadius" Value="0"/>

@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.1] - 2026-07-11
+
+### Added
+
+- Add compact trace columns and a detailed packet view with hex rows starting at 16 bytes, printable ASCII, search highlighting, and collapsed empty payloads
+- Normalize pasted hexadecimal and decimal values in the Send editor into padded byte or number-token syntax
+- Remember the compact or detailed trace view preference between application sessions
+- Add an in-app Send syntax reference beside the packet editor
+- Decode and inspect server `StatPoints` packet `0x3D` with its button-flash flag and available point count
+
+### Changed
+
+- Upgrade Avalonia desktop packages to 12.1.0 and compatible ItemsRepeater and XAML behavior packages for rendering, hit-testing, bitmap, and Windows GPU performance improvements
+- Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
+- Default traces to detailed rows and case-insensitive text search, align 12-character client names, label unauthenticated connections, and use warning colors for search highlights
+- Expand detailed trace rows in eight-byte increments when horizontal space permits and use a darker search-highlight background
+- Blend trace search matches inline with yellow text and background only, without borders or added spacing
+- Show hand cursors for interactive inventory, skill, spell, and dialog controls
+- Reorganize the README with concise references for trace search queries and packet Send syntax
+- Use centered question-mark help badges after the Query editor and before the Send action
+- Consolidate the DALib attribution and MIT license into the packaged README instead of a standalone notices file
+
+### Fixed
+
+- Preserve custom title-bar controls, native window dragging, and edge resizing with Avalonia 12 window decorations
+- Restore normal font weight throughout the interface after the Avalonia 12 typography changes
+- Keep cooldown countdown updates on the Avalonia UI dispatcher under the new multiple-dispatcher behavior
+- Align Windows product version metadata with the app assembly and file versions
+- Use authenticated character names in traces before map entry, defer detailed trace content updates while dragging the scroll thumb around large packets, and recognize unprefixed pasted hex values containing A-F
+- Correct server packet `0x1F` from `MapChanged` with a two-byte result to `WeatherChanged` with one-byte weather flags
+
 ## [1.9.0] - 2026-07-10
 
 ### Added

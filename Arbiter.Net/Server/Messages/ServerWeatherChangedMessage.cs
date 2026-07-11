@@ -1,24 +1,24 @@
-﻿using Arbiter.Net.Annotations;
+using Arbiter.Net.Annotations;
 using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapChanged)]
-public class ServerMapChangedMessage : ServerMessage
+[NetworkCommand(ServerCommand.WeatherChanged)]
+public class ServerWeatherChangedMessage : ServerMessage
 {
-    public ushort Result { get; set; }
+    public byte WeatherFlags { get; set; }
 
     public override void Deserialize(NetworkPacketReader reader)
     {
         base.Deserialize(reader);
-        
-        Result = reader.ReadUInt16();
+
+        WeatherFlags = reader.ReadByte();
     }
 
     public override void Serialize(ref NetworkPacketBuilder builder)
     {
         base.Serialize(ref builder);
 
-        builder.AppendUInt16(Result);
+        builder.AppendByte(WeatherFlags);
     }
 }

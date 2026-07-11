@@ -62,7 +62,6 @@
                       Stroke="{Binding $parent[Button].Foreground}"
                       Data="{StaticResource Talgonite.Icon.RefreshArrows}"/>
                 <TextBlock Text="Calculate"
-                           FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            Margin="8,2"/>
             </StackPanel>
@@ -85,7 +84,6 @@
                           Stroke="{Binding $parent[Button].Foreground}"
                           Data="{StaticResource Talgonite.Icon.CrossX}"/>
                     <TextBlock Text="Cancel"
-                               FontWeight="SemiBold"
                                VerticalAlignment="Center"
                                Margin="8,2"/>
                 </StackPanel>
@@ -103,7 +101,7 @@
                      FontSize="16"
                      Text="{Binding InputText}"
                      TextWrapping="Wrap"
-                     Watermark="Enter text here..."
+                     PlaceholderText="Enter text here..."
                      AcceptsReturn="True"
                      AcceptsTab="True"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -121,7 +119,7 @@
                      FontSize="16"
                      Text="{Binding InputBytesText}"
                      TextWrapping="Wrap"
-                     Watermark="Enter raw hex values here..."
+                     PlaceholderText="Enter raw hex values here..."
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </Grid>
@@ -136,7 +134,7 @@
                      Classes="read-only"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"
                      FontSize="14"
-                     Watermark="Select a file.."
+                     PlaceholderText="Select a file.."
                      Height="50"
                      IsEnabled="{Binding !IsCalculating}">
                 <TextBox.InnerRightContent>

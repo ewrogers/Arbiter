@@ -27,7 +27,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
         RegisterServerLightLevelMapping(registry);
         RegisterServerLoginNoticeMapping(registry);
         RegisterServerLoginResultMapping(registry);
-        RegisterServerMapChangedMapping(registry);
+        RegisterServerWeatherChangedMapping(registry);
         RegisterServerMapChangingMapping(registry);
         RegisterServerMapDoorMapping(registry);
         RegisterServerMapInfoMapping(registry);
@@ -58,6 +58,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
         RegisterServerShowNotepadMapping(registry);
         RegisterServerShowSpinnerMapping(registry);
         RegisterServerShowUserMapping(registry);
+        RegisterServerStatPointsMapping(registry);
         RegisterServerStatusEffectMapping(registry);
         RegisterServerSwitchPaneMapping(registry);
         RegisterServerSyncTicksMapping(registry);
@@ -363,12 +364,12 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
         });
     }
     
-    private static void RegisterServerMapChangedMapping(InspectorMappingRegistry registry)
+    private static void RegisterServerWeatherChangedMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapChangedMessage>(b =>
+        registry.Register<ServerWeatherChangedMessage>(b =>
         {
-            b.Section("Map")
-                .Property(m => m.Result, p => p.ToolTip("Result of the map change."));
+            b.Section("Weather")
+                .Property(m => m.WeatherFlags, p => p.ShowHex().ToolTip("Active weather effect flags."));
         });
     }
 
@@ -831,6 +832,17 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
                 .Property(m => m.MonsterSprite, p => p.ToolTip("Sprite to display the user as a monster."))
                 .Property(m => m.MonsterUnknown)
                 .IsExpanded(m => m.HeadSprite == 0xFFFF);
+        });
+    }
+
+    private static void RegisterServerStatPointsMapping(InspectorMappingRegistry registry)
+    {
+        registry.Register<ServerStatPointsMessage>(b =>
+        {
+            b.Section("Stat Points")
+                .Property(m => m.FlashButtons,
+                    p => p.ToolTip("Whether the stat buttons should play their flash animation."))
+                .Property(m => m.StatPoints, p => p.ToolTip("Number of available stat points."));
         });
     }
 

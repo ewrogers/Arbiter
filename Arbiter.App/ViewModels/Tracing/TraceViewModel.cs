@@ -41,6 +41,7 @@ public partial class TraceViewModel : ViewModelBase
 
     private long _indexCounter = 1;
     private bool _isEmpty = true;
+    private bool _isDetailedView = true;
     private PacketDisplayMode _packetDisplayMode = PacketDisplayMode.Decrypted;
 
     [ObservableProperty] private int _maxTraceHistory;
@@ -58,6 +59,23 @@ public partial class TraceViewModel : ViewModelBase
     public ObservableCollection<TraceClientViewModel> TraceClients { get; } = [new("All Clients")];
 
     public bool IsEmpty => _isEmpty;
+
+    public bool IsDetailedView
+    {
+        get => _isDetailedView;
+        set
+        {
+            if (!SetProperty(ref _isDetailedView, value))
+            {
+                return;
+            }
+
+            foreach (var packet in _allPackets)
+            {
+                packet.IsDetailedView = value;
+            }
+        }
+    }
 
     public bool ShowRawPackets
     {
@@ -175,6 +193,7 @@ public partial class TraceViewModel : ViewModelBase
         // Set the index before adding to the collection so that the index is correct when the collection is sorted
         var nextIndex = Interlocked.Increment(ref _indexCounter);
         vm.Index = nextIndex;
+        vm.IsDetailedView = IsDetailedView;
 
         var query = SearchParameters.Query;
         var searchMatch = MatchSearch(vm, query);
@@ -189,7 +208,7 @@ public partial class TraceViewModel : ViewModelBase
                 AddSearchResultIndex(filteredIndex);
             }
         }
-        FilterParameters.TryAddClient(vm.ClientName ?? string.Empty);
+        FilterParameters.TryAddClient(vm.DisplayClientName ?? string.Empty);
         IsDirty = true;
 
         while (pruneHistory && _allPackets.Count > MaxTraceHistory)

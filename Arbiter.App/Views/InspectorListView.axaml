@@ -21,7 +21,7 @@
             <TextBox Grid.Column="1"
                      Text="{Binding Count}"
                      TextAlignment="Right"
-                     Watermark="&lt;empty&gt;"
+                     PlaceholderText="&lt;empty&gt;"
                      Classes="read-only copy-feedback"
                      Classes.copied="{Binding IsCopyFeedbackActive}"
                      FontFamily="{StaticResource Talgonite.Font.Monospace}"

@@ -5,7 +5,7 @@
     <Design.PreviewWith>
         <Border Background="{StaticResource Talgonite.Window.Background}" Padding="20">
             <StackPanel Spacing="16">
-                <TextBox Width="300" Watermark="Enter text..."/>
+                <TextBox Width="300" PlaceholderText="Enter text..."/>
                 <TextBox Width="300" Text="The quick brown fox jumps over the lazy dog."/>
                 <TextBox Width="300" Text="The quick brown fox jumps over the lazy dog." IsEnabled="False"/>
                 <TextBox Width="300" Text="The quick brown fox jumps over the lazy dog.">
@@ -81,7 +81,7 @@
                             <!-- Floating Watermark -->
                             <TextBlock Name="FloatingWatermark"
                                        Grid.Row="0" Grid.Column="2"
-                                       Text="{TemplateBinding Watermark}"
+                                       Text="{TemplateBinding PlaceholderText}"
                                        Foreground="{StaticResource Talgonite.TextBox.WatermarkForeground}"
                                        FontSize="14"
                                        Margin="0,5,0,3">
@@ -103,7 +103,7 @@
                                               VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
                                     <Panel>
                                         <TextBlock Name="Watermark"
-                                                   Text="{TemplateBinding Watermark}"
+                                                   Text="{TemplateBinding PlaceholderText}"
                                                    TextAlignment="{TemplateBinding TextAlignment}"
                                                    TextWrapping="{TemplateBinding TextWrapping}"
                                                    Foreground="{StaticResource Talgonite.TextBox.WatermarkForeground}"

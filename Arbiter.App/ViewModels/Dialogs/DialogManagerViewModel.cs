@@ -9,6 +9,7 @@ using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Client;
 using Arbiter.Net.Proxy;
 using Avalonia;
+using Avalonia.Input.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

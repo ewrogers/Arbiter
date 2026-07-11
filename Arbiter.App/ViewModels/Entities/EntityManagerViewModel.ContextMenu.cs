@@ -7,6 +7,7 @@ using Arbiter.App.Models.Entities;
 using Arbiter.Net.Client.Messages;
 using Arbiter.Net.Types;
 using Avalonia;
+using Avalonia.Input.Platform;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Arbiter.App.ViewModels.Entities;

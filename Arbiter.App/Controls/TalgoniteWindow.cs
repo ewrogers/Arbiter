@@ -3,15 +3,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Media;
 
 namespace Arbiter.App.Controls;
 
-[PseudoClasses(":dragging", ":maximized")]
+[PseudoClasses(":maximized")]
 public class TalgoniteWindow : Window
 {
-    private Control? _titleBar;
     private Button? _minimizeButton;
     private Button? _maximizeButton;
     private Button? _closeButton;
@@ -67,16 +65,6 @@ public class TalgoniteWindow : Window
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        
-        _titleBar = e.NameScope.Find<Control>("PART_TitleBar")!;
-        _titleBar.DoubleTapped += (_, _) => ToggleMaximizedState();
-
-        // Avoid resizing if double-tapping custom content
-        var titleBarContent = e.NameScope.Find<Control>("PART_TitleContent");
-        if (titleBarContent is not null)
-        {
-            titleBarContent.DoubleTapped += (_, tappedEventArgs) => tappedEventArgs.Handled = true;
-        }
 
         _minimizeButton = e.NameScope.Find<Button>("PART_MinimizeButton")!;
         _minimizeButton.Click += (_, _) => WindowState = WindowState.Minimized;
@@ -86,24 +74,6 @@ public class TalgoniteWindow : Window
         
         _closeButton = e.NameScope.Find<Button>("PART_CloseButton")!;
         _closeButton.Click += (_, _) => Close();
-    }
-
-    protected override void OnPointerPressed(PointerPressedEventArgs e)
-    {
-        if (_titleBar?.IsPointerOver is true)
-        {
-            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            {
-                BeginMoveDrag(e);
-                PseudoClasses.Set(":dragging", true);
-            }
-        }
-        else
-        {
-            PseudoClasses.Set(":dragging", false);
-        }
-        
-        base.OnPointerPressed(e);
     }
 
     private void ToggleMaximizedState()

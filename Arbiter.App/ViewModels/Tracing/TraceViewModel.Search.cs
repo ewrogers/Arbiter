@@ -101,7 +101,7 @@ public partial class TraceViewModel
         return query.Match(new TraceQueryContext(
             vm.Direction,
             vm.Command,
-            vm.ClientName,
+            vm.DisplayClientName,
             vm.Sequence,
             data,
             vm.RawData));

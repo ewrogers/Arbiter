@@ -46,7 +46,6 @@
                            TextAlignment="Left"
                            FontFamily="{StaticResource Talgonite.Font.Monospace}"
                            FontSize="24"
-                           FontWeight="SemiBold"
                            Foreground="#e0e0e0"
                            Margin="8,4,8,0"
                            VerticalAlignment="Center"/>
@@ -57,14 +56,12 @@
                                    Text="{Binding InspectedPacket.Direction, FallbackValue=Unknown, StringFormat={}{0} Packet}"
                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                    FontSize="16"
-                                   FontWeight="SemiBold"
                                    Foreground="{Binding InspectedPacket.Direction, Converter={x:Static converters:PacketDirectionColorConverter.Converter}, FallbackValue=White}"
                                    VerticalAlignment="Center"/>
                     
                         <TextBlock Text="{Binding InspectedPacket.Command, FallbackValue=00, StringFormat={}0x{0:X2}}"
                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                    FontSize="16"
-                                   FontWeight="SemiBold"
                                    Foreground="{Binding #DirectionText.Foreground}"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
@@ -78,7 +75,6 @@
                         Classes="toolbar"
                         FontSize="18"
                         FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                        FontWeight="SemiBold"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center">
                     {}

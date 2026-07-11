@@ -17,7 +17,6 @@
                     <TextBlock Text="{ReflectionBinding .}"
                                TextAlignment="Left"
                                VerticalAlignment="Center"
-                               FontWeight="SemiBold"
                                Margin="8,4"/>
                 </DataTemplate>
             </Expander.HeaderTemplate>

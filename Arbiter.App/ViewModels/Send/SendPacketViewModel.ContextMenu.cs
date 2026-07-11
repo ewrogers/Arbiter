@@ -76,7 +76,7 @@ public partial class SendPacketViewModel
         if (newText is not null)
         {
             var (selectionStart, selectionEnd) = GetSelectionRange();
-            ReplaceRange(selectionStart, selectionEnd, newText);
+            ReplaceRange(selectionStart, selectionEnd, SendPasteFormatter.Format(newText));
         }
     }
 

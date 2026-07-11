@@ -44,7 +44,6 @@
                             <TextBlock Text="{Binding $parent[Button], Converter={x:Static converters:HotKeyConverter.GestureText}, StringFormat={}[{0}]}"
                                        Foreground="{StaticResource Talgonite.ToolTip.HotKeyForeground}"
                                        FontFamily="{StaticResource Talgonite.ToolTip.HotKeyFont}"
-                                       FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
                         </Border>
                     </WrapPanel>

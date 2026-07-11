@@ -76,7 +76,6 @@
                     <TextBlock Grid.Column="0"
                                Text="HP"
                                FontSize="14"
-                               FontWeight="SemiBold"
                                Foreground="{StaticResource Talgonite.Client.TextForeground}"
                                Margin="0,0,4,0"/>
 
@@ -100,7 +99,6 @@
                     <TextBlock Grid.Column="0"
                                Text="MP"
                                FontSize="14"
-                               FontWeight="SemiBold"
                                Foreground="{StaticResource Talgonite.Client.TextForeground}"
                                Margin="0,0,4,0"/>
 

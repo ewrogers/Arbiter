@@ -18,7 +18,6 @@
     <Style Selector="Run.hotkey">
         <Setter Property="Foreground" Value="{StaticResource Talgonite.ToolTip.HotKeyForeground}"/>
         <Setter Property="FontFamily" Value="{StaticResource Talgonite.ToolTip.HotKeyFont}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="BaselineAlignment" Value="Center"/>
     </Style>
 </Styles>

@@ -21,7 +21,7 @@
         <TextBox Grid.Row="0" Grid.Column="1"
                  Text="{Binding FormattedValue}"
                  TextAlignment="Right"
-                 Watermark="&lt;unset&gt;"
+                 PlaceholderText="&lt;unset&gt;"
                  PasswordChar="{Binding PasswordCharacter}"
                  RevealPassword="{Binding IsRevealed}"
                  Classes="read-only copy-feedback"
@@ -47,12 +47,10 @@
                         <TextBlock Text="Dec"
                                    TextAlignment="Center"
                                    FontSize="14"
-                                   FontWeight="SemiBold"
                                    IsVisible="{Binding !$parent[ToggleButton].IsChecked}"/>
                         <TextBlock Text="Hex"
                                    TextAlignment="Center"
                                    FontSize="14"
-                                   FontWeight="SemiBold"
                                    IsVisible="{Binding $parent[ToggleButton].IsChecked}"/>
                     </Panel>
                 </ToggleButton>

@@ -5,10 +5,10 @@
         <Border Background="{StaticResource Talgonite.Control.Background}"
                 Padding="20">
             <StackPanel Spacing="16">
-                <NumericUpDown Watermark="Value?" MinWidth="100"/>
+                <NumericUpDown PlaceholderText="Value?" MinWidth="100"/>
                 <NumericUpDown Value="42" MinWidth="100"/>
                 <NumericUpDown Value="99" ShowButtonSpinner="True" MinWidth="100"/>
-                <NumericUpDown Watermark="Disabled" IsEnabled="False" MinWidth="100"/>
+                <NumericUpDown PlaceholderText="Disabled" IsEnabled="False" MinWidth="100"/>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -46,7 +46,7 @@
                                          Text="{TemplateBinding Text}"
                                          TextAlignment="{TemplateBinding TextAlignment}"
                                          TextWrapping="NoWrap"
-                                         Watermark="{TemplateBinding Watermark}"
+                                         PlaceholderText="{TemplateBinding PlaceholderText}"
                                          Background="{TemplateBinding Background}"
                                          BorderThickness="0"
                                          CornerRadius="{TemplateBinding CornerRadius}"

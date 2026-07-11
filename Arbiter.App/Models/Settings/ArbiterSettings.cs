@@ -21,6 +21,7 @@ public class ArbiterSettings : ICloneable
 
     public bool TraceOnStartup { get; set; }
     public bool TraceAutosave { get; set; }
+    public bool TraceDetailedView { get; set; } = true;
     public int TraceMaxHistory { get; set; } = 1000;
     public List<byte>? TraceDefaultClientCommands { get; set; }
     public List<byte>? TraceDefaultServerCommands { get; set; }
@@ -48,6 +49,7 @@ public class ArbiterSettings : ICloneable
         RemoteServerPort = RemoteServerPort,
         TraceOnStartup = TraceOnStartup,
         TraceAutosave = TraceAutosave,
+        TraceDetailedView = TraceDetailedView,
         TraceMaxHistory = Math.Clamp(TraceMaxHistory, 10, 1_000_000),
         TraceDefaultClientCommands = TraceDefaultClientCommands is null ? null : [.. TraceDefaultClientCommands],
         TraceDefaultServerCommands = TraceDefaultServerCommands is null ? null : [.. TraceDefaultServerCommands],

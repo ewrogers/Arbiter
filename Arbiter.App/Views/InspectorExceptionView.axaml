@@ -40,7 +40,6 @@
                            TextAlignment="Center"
                            Foreground="{StaticResource Talgonite.Inspector.ErrorBrush}"
                            FontSize="20"
-                           FontWeight="SemiBold"
                            FontFamily="{StaticResource Talgonite.Font.Monospace}"/>
                 
                 <!-- Exception Message -->

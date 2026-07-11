@@ -12,7 +12,7 @@ namespace Arbiter.App.ViewModels.Tracing;
 public partial class TraceViewModel
 {
     private sealed record QueuedTracePacket(long Generation, NetworkPacket Encrypted, NetworkPacket Decrypted,
-        NetworkFilterResult? FilterResult, string? ClientName, PacketDisplayMode DisplayMode);
+        NetworkFilterResult? FilterResult, string? ClientName, int ConnectionId, PacketDisplayMode DisplayMode);
 
     private readonly DispatcherBatchQueue<QueuedTracePacket> _packetQueue;
     private long _packetGeneration;
@@ -27,7 +27,8 @@ public partial class TraceViewModel
         }
 
         // Ignore packets from other clients if a client is selected
-        var name = e.Connection.Name;
+        var connection = e.Connection;
+        var name = connection.Name;
         if (!string.IsNullOrWhiteSpace(TraceClientName) &&
             !string.Equals(TraceClientName, name, StringComparison.OrdinalIgnoreCase))
         {
@@ -35,7 +36,7 @@ public partial class TraceViewModel
         }
 
         _packetQueue.Enqueue(new QueuedTracePacket(generation, e.Encrypted, e.Decrypted, e.FilterResult,
-            name, _packetDisplayMode));
+            name, connection.Id, _packetDisplayMode));
     }
 
     private void ApplyPacketBatch(IReadOnlyList<QueuedTracePacket> packets)
@@ -49,7 +50,7 @@ public partial class TraceViewModel
             }
 
             var vm = new TracePacketViewModel(queued.Encrypted, queued.Decrypted, queued.FilterResult,
-                queued.ClientName)
+                queued.ClientName, queued.ConnectionId)
             {
                 DisplayMode = queued.DisplayMode
             };

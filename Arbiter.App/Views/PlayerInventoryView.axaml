@@ -11,6 +11,12 @@
     <Design.DataContext>
         <vm:DesignPlayerInventoryViewModel/>
     </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Styles>
     
     <Grid Background="{StaticResource Talgonite.Control.Background}"
           HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -65,7 +71,6 @@
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
                                                        FontSize="16"
                                                        FontFamily="{StaticResource Talgonite.Font.InterfaceFont}"
-                                                       FontWeight="SemiBold"
                                                        VerticalAlignment="Center"/>
                                             
                                             <!-- Quantity -->

@@ -35,7 +35,6 @@
     <Style Selector="TabItem">
         <Setter Property="Background" Value="{StaticResource Talgonite.TabItem.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource Talgonite.TabItem.Foreground}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="16,8"/>

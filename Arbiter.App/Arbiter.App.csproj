@@ -9,34 +9,30 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <Company>Erik 'SiLo' Rogers</Company>
         <Product>Arbiter</Product>
-        <AssemblyVersion>1.9.0</AssemblyVersion>
-        <FileVersion>1.9.0</FileVersion>
+        <Version>1.9.1</Version>
+        <AssemblyVersion>1.9.1</AssemblyVersion>
+        <FileVersion>1.9.1</FileVersion>
         <ApplicationIcon>Assets\arbiter.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
         <AvaloniaResource Include="Themes\**"/>
-        <None Include="..\THIRD-PARTY-NOTICES.md"
-              Link="THIRD-PARTY-NOTICES.md"
+        <None Include="..\README.md"
+              Link="README.md"
               CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.18" />
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.18">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="Avalonia" Version="12.1.0" />
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
+        <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.9" />
-        <PackageReference Include="Xaml.Behaviors.Interactions" Version="11.3.9.6" />
-        <PackageReference Include="Xaml.Behaviors.Interactions.Custom" Version="11.3.9.6" />
+        <PackageReference Include="Xaml.Behaviors.Interactions" Version="12.0.5" />
+        <PackageReference Include="Xaml.Behaviors.Interactions.Custom" Version="12.0.5" />
     </ItemGroup>
 
     <ItemGroup>
