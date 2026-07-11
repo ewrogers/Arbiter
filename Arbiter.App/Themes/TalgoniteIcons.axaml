@@ -154,10 +154,13 @@
         M1,1 L15,1 L15,15 L1,15 Z
     </Geometry>
 
-    <!-- Information Glyph -->
-    <Geometry x:Key="Talgonite.Icon.Information">
-        M7,2 L9,2 L9,4 L7,4 Z
-        M7,6 L9,6 L9,14 L7,14 Z
+    <!-- Question Mark Glyph -->
+    <Geometry x:Key="Talgonite.Icon.Question">
+        M6,5 C6,3.343 7.343,2 9,2 C10.657,2 12,3.343 12,5
+        C12,6.2 11.3,7.05 10.3,7.75 C9.5,8.3 9,8.8 9,10 L7,10
+        C7,8.1 8,7.2 9.2,6.4 C9.8,6 10,5.6 10,5 C10,4.448 9.552,4 9,4
+        C8.448,4 8,4.448 8,5 Z
+        M7,12 L9,12 L9,14 L7,14 Z
     </Geometry>
     
     <!-- Debug Diamond Icon -->

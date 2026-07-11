@@ -38,16 +38,12 @@
                         VerticalAlignment="Center"
                         ToolTip.ShowDelay="250"
                         ToolTip.Placement="Bottom">
-                    <Path Width="4" Height="12"
+                    <Path Width="8" Height="12"
                           Fill="{Binding $parent[Border].BorderBrush}"
                           Stretch="Uniform"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
-                          Data="{StaticResource Talgonite.Icon.Information}">
-                        <Path.RenderTransform>
-                            <TranslateTransform X="1"/>
-                        </Path.RenderTransform>
-                    </Path>
+                          Data="{StaticResource Talgonite.Icon.Question}"/>
                     <ToolTip.Tip>
                         <ScrollViewer Width="520"
                                       MaxHeight="460"

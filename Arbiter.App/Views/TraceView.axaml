@@ -351,7 +351,7 @@
                 BorderThickness="0,1,0,0"
                 Padding="0,4"
                 MinHeight="50">
-            <Grid ColumnDefinitions="48,Auto,460,40,24,Auto,*"
+            <Grid ColumnDefinitions="48,Auto,24,460,40,Auto,*"
                   RowDefinitions="40,Auto"
                   ColumnSpacing="4">
                 <!-- Bar Icon -->
@@ -366,7 +366,7 @@
                 </Border>
 
                     <Label Grid.Row="0" Grid.Column="1" Content="Query" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="2"
+                    <TextBox Grid.Row="0" Grid.Column="3"
                              Name="SearchQueryTextBox"
                              Text="{Binding SearchParameters.QueryText, Mode=TwoWay}"
                              c:QuerySyntax.IsEnabled="True"
@@ -395,7 +395,7 @@
                         </TextBox.InnerRightContent>
                     </TextBox>
 
-                    <ToggleButton Grid.Row="0" Grid.Column="3"
+                    <ToggleButton Grid.Row="0" Grid.Column="4"
                                   IsChecked="{Binding SearchParameters.IsTextCaseSensitive, Mode=TwoWay}"
                                   Classes="outline query-case"
                                   ToolTip.Tip="Toggles case sensitivity for text and regex searches."
@@ -412,7 +412,7 @@
                         </TextBlock>
                     </ToggleButton>
 
-                    <Border Grid.Row="0" Grid.Column="4"
+                    <Border Grid.Row="0" Grid.Column="2"
                             Classes="query-help"
                             Width="22" Height="22"
                             CornerRadius="11"
@@ -424,16 +424,12 @@
                             VerticalAlignment="Center"
                             ToolTip.ShowDelay="250"
                             ToolTip.Placement="Bottom">
-                        <Path Width="4" Height="12"
+                        <Path Width="8" Height="12"
                               Fill="{Binding $parent[Border].BorderBrush}"
                               Stretch="Uniform"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
-                              Data="{StaticResource Talgonite.Icon.Information}">
-                            <Path.RenderTransform>
-                                <TranslateTransform X="1"/>
-                            </Path.RenderTransform>
-                        </Path>
+                              Data="{StaticResource Talgonite.Icon.Question}"/>
                         <ToolTip.Tip>
                             <ScrollViewer Width="520"
                                           MaxHeight="460"
@@ -533,7 +529,7 @@
                         </ToolTip.Tip>
                     </Border>
 
-                    <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
+                    <StackPanel Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
                                 Orientation="Horizontal"
                                 Spacing="6"
                                 Margin="0,3,0,0"

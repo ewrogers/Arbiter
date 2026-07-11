@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blend trace search matches inline with yellow text and background only, without borders or added spacing
 - Show hand cursors for interactive inventory, skill, spell, and dialog controls
 - Reorganize the README with concise references for trace search queries and packet Send syntax
+- Use question-mark help badges and place Query syntax help beside its label
 - Consolidate the DALib attribution and MIT license into the packaged README instead of a standalone notices file
 
 ### Fixed
