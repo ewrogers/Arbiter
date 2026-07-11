@@ -351,7 +351,7 @@
                 BorderThickness="0,1,0,0"
                 Padding="0,4"
                 MinHeight="50">
-            <Grid ColumnDefinitions="48,Auto,24,460,40,Auto,*"
+            <Grid ColumnDefinitions="48,Auto,460,24,40,Auto,*"
                   RowDefinitions="40,Auto"
                   ColumnSpacing="4">
                 <!-- Bar Icon -->
@@ -366,7 +366,7 @@
                 </Border>
 
                     <Label Grid.Row="0" Grid.Column="1" Content="Query" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="3"
+                    <TextBox Grid.Row="0" Grid.Column="2"
                              Name="SearchQueryTextBox"
                              Text="{Binding SearchParameters.QueryText, Mode=TwoWay}"
                              c:QuerySyntax.IsEnabled="True"
@@ -412,7 +412,7 @@
                         </TextBlock>
                     </ToggleButton>
 
-                    <Border Grid.Row="0" Grid.Column="2"
+                    <Border Grid.Row="0" Grid.Column="3"
                             Classes="query-help"
                             Width="22" Height="22"
                             CornerRadius="11"
@@ -424,8 +424,12 @@
                             VerticalAlignment="Center"
                             ToolTip.ShowDelay="250"
                             ToolTip.Placement="Bottom">
-                        <Path Width="8" Height="12"
-                              Fill="{Binding $parent[Border].BorderBrush}"
+                        <Path Width="10" Height="14"
+                              Fill="Transparent"
+                              Stroke="{Binding $parent[Border].BorderBrush}"
+                              StrokeThickness="2"
+                              StrokeLineCap="Round"
+                              StrokeJoin="Round"
                               Stretch="Uniform"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
@@ -529,7 +533,7 @@
                         </ToolTip.Tip>
                     </Border>
 
-                    <StackPanel Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
+                    <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"
                                 Orientation="Horizontal"
                                 Spacing="6"
                                 Margin="0,3,0,0"

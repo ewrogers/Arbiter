@@ -24,11 +24,10 @@
            VerticalAlignment="Stretch">
         <Grid RowDefinitions="Auto,*,Auto">
             <!-- Top Toolbar -->
-            <Grid Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8" Margin="0,4">
-                <Border Grid.Column="0"
+            <Grid Row="0" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8" Margin="0,4">
+                <Border Grid.Column="2"
                         Classes="syntax-help"
                         Width="22" Height="22"
-                        Margin="8,0,0,0"
                         CornerRadius="11"
                         BorderThickness="1"
                         Background="Transparent"
@@ -38,8 +37,12 @@
                         VerticalAlignment="Center"
                         ToolTip.ShowDelay="250"
                         ToolTip.Placement="Bottom">
-                    <Path Width="8" Height="12"
-                          Fill="{Binding $parent[Border].BorderBrush}"
+                    <Path Width="10" Height="14"
+                          Fill="Transparent"
+                          Stroke="{Binding $parent[Border].BorderBrush}"
+                          StrokeThickness="2"
+                          StrokeLineCap="Round"
+                          StrokeJoin="Round"
                           Stretch="Uniform"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
@@ -141,7 +144,7 @@
                     </ToolTip.Tip>
                 </Border>
 
-                <WrapPanel Grid.Column="1" Orientation="Horizontal" ItemSpacing="8" LineSpacing="4" VerticalAlignment="Center">
+                <WrapPanel Grid.Column="0" Orientation="Horizontal" ItemSpacing="8" LineSpacing="4" VerticalAlignment="Center">
                     <!-- Delay Dropdown -->
                     <StackPanel Orientation="Horizontal" Spacing="4">
                         <Label Content="Delay"
@@ -203,7 +206,7 @@
                     </StackPanel>
                 </WrapPanel>
                 
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <!-- Loop Numeric Input -->
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding LoopEnabled}"
