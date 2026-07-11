@@ -87,7 +87,6 @@
                                                       Highlights="{Binding DisplaySearchHighlights}"
                                                       HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
                                                       HighlightForeground="{StaticResource Talgonite.Color.LightYellow}"
-                                                      HighlightBorderBrush="{StaticResource Talgonite.Color.LightYellow}"
                                                       TextWrapping="NoWrap"
                                                       TextTrimming="CharacterEllipsis"
                                                       FontFamily="{StaticResource Talgonite.Font.Monospace}"
@@ -165,7 +164,6 @@
                                                                   Highlights="{Binding Highlights}"
                                                                   HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
                                                                   HighlightForeground="{StaticResource Talgonite.Color.LightYellow}"
-                                                                  HighlightBorderBrush="{StaticResource Talgonite.Color.LightYellow}"
                                                                   FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                                   TextWrapping="NoWrap"
                                                                   Foreground="{Binding $parent[ItemsControl].DataContext.FilterAction, Converter={x:Static converters:PacketFilterColorConverter.Converter}}"/>
@@ -178,7 +176,6 @@
                                                                         Highlights="{Binding Highlights}"
                                                                         HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
                                                                         HighlightForeground="{StaticResource Talgonite.Color.LightYellow}"
-                                                                        HighlightBorderBrush="{StaticResource Talgonite.Color.LightYellow}"
                                                                         FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                                         TextWrapping="NoWrap"
                                                                         Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"/>

@@ -21,9 +21,6 @@ public abstract class HighlightedByteTextBlock : TextBlock
     public static readonly StyledProperty<IBrush?> HighlightForegroundProperty =
         AvaloniaProperty.Register<HighlightedByteTextBlock, IBrush?>(nameof(HighlightForeground));
 
-    public static readonly StyledProperty<IBrush?> HighlightBorderBrushProperty =
-        AvaloniaProperty.Register<HighlightedByteTextBlock, IBrush?>(nameof(HighlightBorderBrush));
-
     public string? SourceText
     {
         get => GetValue(SourceTextProperty);
@@ -48,12 +45,6 @@ public abstract class HighlightedByteTextBlock : TextBlock
         set => SetValue(HighlightForegroundProperty, value);
     }
 
-    public IBrush? HighlightBorderBrush
-    {
-        get => GetValue(HighlightBorderBrushProperty);
-        set => SetValue(HighlightBorderBrushProperty, value);
-    }
-
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -62,7 +53,6 @@ public abstract class HighlightedByteTextBlock : TextBlock
             change.Property == HighlightsProperty ||
             change.Property == HighlightBackgroundProperty ||
             change.Property == HighlightForegroundProperty ||
-            change.Property == HighlightBorderBrushProperty ||
             change.Property == FontFamilyProperty ||
             change.Property == FontSizeProperty ||
             change.Property == FontStyleProperty ||
@@ -109,36 +99,12 @@ public abstract class HighlightedByteTextBlock : TextBlock
         }
     }
 
-    private InlineUIContainer CreateHighlightInline(string text)
+    private Run CreateHighlightInline(string text)
     {
-        var highlightedText = new TextBlock
-        {
-            Text = text,
-            FontFamily = FontFamily,
-            FontSize = FontSize,
-            FontStyle = FontStyle,
-            FontWeight = FontWeight,
-            FontStretch = FontStretch,
-            LetterSpacing = LetterSpacing,
-            LineHeight = LineHeight,
-            Foreground = HighlightForeground,
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-        };
-
-        var border = new Border
+        return new Run(text)
         {
             Background = HighlightBackground,
-            BorderBrush = HighlightBorderBrush,
-            BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(2),
-            Padding = new Thickness(1, 0),
-            Child = highlightedText,
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-        };
-
-        return new InlineUIContainer(border)
-        {
-            BaselineAlignment = BaselineAlignment.Center
+            Foreground = HighlightForeground,
         };
     }
 

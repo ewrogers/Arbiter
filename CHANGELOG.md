@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
 - Default traces to detailed rows and case-insensitive text search, align 12-character client names, label unauthenticated connections, and use warning colors for search highlights
 - Expand detailed trace rows in eight-byte increments when horizontal space permits and use a darker search-highlight background
+- Blend trace search matches inline with yellow text and background only, without borders or added spacing
 - Show hand cursors for interactive inventory, skill, spell, and dialog controls
 - Consolidate the DALib attribution and MIT license into the packaged README instead of a standalone notices file
 
