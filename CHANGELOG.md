@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize pasted hexadecimal and decimal values in the Send editor into padded byte or number-token syntax
 - Remember the compact or detailed trace view preference between application sessions
 - Add an in-app Send syntax reference beside the packet editor
+- Decode and inspect server `StatPoints` packet `0x3D` with its button-flash flag and available point count
 
 ### Changed
 

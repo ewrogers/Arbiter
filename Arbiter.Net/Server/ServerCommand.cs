@@ -45,6 +45,7 @@ public enum ServerCommand : byte
     StatusEffect = 0x3A,
     Heartbeat = 0x3B,
     MapTransfer = 0x3C,
+    StatPoints = 0x3D,
     SwitchPane = 0x3E,
     Cooldown = 0x3F,
     Exchange = 0x42,
