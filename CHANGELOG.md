@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep cooldown countdown updates on the Avalonia UI dispatcher under the new multiple-dispatcher behavior
 - Align Windows product version metadata with the app assembly and file versions
 - Use authenticated character names in traces before map entry, defer detailed trace content updates while dragging the scroll thumb around large packets, and recognize unprefixed pasted hex values containing A-F
+- Correct server packet `0x1F` from `MapChanged` with a two-byte result to `WeatherChanged` with one-byte weather flags
 
 ## [1.9.0] - 2026-07-10
 

@@ -27,7 +27,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
         RegisterServerLightLevelMapping(registry);
         RegisterServerLoginNoticeMapping(registry);
         RegisterServerLoginResultMapping(registry);
-        RegisterServerMapChangedMapping(registry);
+        RegisterServerWeatherChangedMapping(registry);
         RegisterServerMapChangingMapping(registry);
         RegisterServerMapDoorMapping(registry);
         RegisterServerMapInfoMapping(registry);
@@ -363,12 +363,12 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
         });
     }
     
-    private static void RegisterServerMapChangedMapping(InspectorMappingRegistry registry)
+    private static void RegisterServerWeatherChangedMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapChangedMessage>(b =>
+        registry.Register<ServerWeatherChangedMessage>(b =>
         {
-            b.Section("Map")
-                .Property(m => m.Result, p => p.ToolTip("Result of the map change."));
+            b.Section("Weather")
+                .Property(m => m.WeatherFlags, p => p.ShowHex().ToolTip("Active weather effect flags."));
         });
     }
 

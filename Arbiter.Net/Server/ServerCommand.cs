@@ -25,7 +25,7 @@ public enum ServerCommand : byte
     AnimateEntity = 0x1A,
     ShowNotepad = 0x1B,
     ChangeDay = 0x1E,
-    MapChanged = 0x1F,
+    WeatherChanged = 0x1F,
     LightLevel = 0x20,
     RefreshComplete = 0x22,
     ShowEffect = 0x29,

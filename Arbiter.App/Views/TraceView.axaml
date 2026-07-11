@@ -424,10 +424,10 @@
                             VerticalAlignment="Center"
                             ToolTip.ShowDelay="250"
                             ToolTip.Placement="Bottom">
-                        <Path Width="10" Height="14"
+                        <Path Width="8" Height="12"
                               Fill="Transparent"
                               Stroke="{Binding $parent[Border].BorderBrush}"
-                              StrokeThickness="2"
+                              StrokeThickness="1.75"
                               StrokeLineCap="Round"
                               StrokeJoin="Round"
                               Stretch="Uniform"
