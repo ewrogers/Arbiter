@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add compact trace columns and a detailed packet view with hex rows starting at 16 bytes, printable ASCII, search highlighting, and collapsed empty payloads
 - Normalize pasted hexadecimal and decimal values in the Send editor into padded byte or number-token syntax
 - Remember the compact or detailed trace view preference between application sessions
+- Add an in-app Send syntax reference beside the packet editor
 
 ### Changed
 
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expand detailed trace rows in eight-byte increments when horizontal space permits and use a darker search-highlight background
 - Blend trace search matches inline with yellow text and background only, without borders or added spacing
 - Show hand cursors for interactive inventory, skill, spell, and dialog controls
+- Reorganize the README with concise references for trace search queries and packet Send syntax
 - Consolidate the DALib attribution and MIT license into the packaged README instead of a standalone notices file
 
 ### Fixed

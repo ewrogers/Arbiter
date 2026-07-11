@@ -526,7 +526,7 @@
                                         </TextBlock>
                                         <TextBlock Foreground="{StaticResource Talgonite.Color.LightGray}"
                                                    TextWrapping="Wrap">
-                                            <Run>Numeric values are hexadecimal. Unquoted text and names cannot contain spaces. Text and text regex searches follow the aA case toggle and use ASCII; case sensitivity is on by default. Character names are always case-insensitive. Regex values use /pattern/ and do not accept flags.</Run>
+                                            <Run>Numeric values are hexadecimal. Unquoted text and names cannot contain spaces. Text and text regex searches follow the aA case toggle and use ASCII; case sensitivity is off by default. Character names are always case-insensitive. Regex values use /pattern/ and do not accept flags.</Run>
                                         </TextBlock>
                                     </StackPanel>
                             </ScrollViewer>

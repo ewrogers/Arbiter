@@ -12,6 +12,12 @@
         <SolidColorBrush x:Key="Talgonite.Send.ValidationErrorBackground" Color="#80260e0b"/>
         <SolidColorBrush x:Key="Talgonite.Send.ValidationErrorForeground" Color="#ed6a5e"/>
     </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.syntax-help:pointerover">
+            <Setter Property="BorderBrush" Value="{StaticResource Talgonite.Color.LightGray}"/>
+        </Style>
+    </UserControl.Styles>
     
     <Panel Background="{StaticResource Talgonite.Control.Background}"
            HorizontalAlignment="Stretch"
@@ -19,6 +25,126 @@
         <Grid RowDefinitions="Auto,*,Auto">
             <!-- Top Toolbar -->
             <Grid Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8" Margin="0,4">
+                <Border Grid.Column="0"
+                        Classes="syntax-help"
+                        Width="22" Height="22"
+                        Margin="8,0,0,0"
+                        CornerRadius="11"
+                        BorderThickness="1"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource Talgonite.TextBlock.DimForeground}"
+                        Cursor="Help"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        ToolTip.ShowDelay="250"
+                        ToolTip.Placement="Bottom">
+                    <Path Width="4" Height="12"
+                          Fill="{Binding $parent[Border].BorderBrush}"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="{StaticResource Talgonite.Icon.Information}">
+                        <Path.RenderTransform>
+                            <TranslateTransform X="1"/>
+                        </Path.RenderTransform>
+                    </Path>
+                    <ToolTip.Tip>
+                        <ScrollViewer Width="520"
+                                      MaxHeight="460"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Packet Send Syntax"
+                                           Foreground="{StaticResource Talgonite.Color.White}"
+                                           FontSize="16"/>
+                                <TextBlock Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                           TextWrapping="Wrap">
+                                    <Run>Enter one packet or control command per line. Packets default to the client direction when no prefix is present.</Run>
+                                </TextBlock>
+
+                                <Grid ColumnDefinitions="Auto,*"
+                                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="4">
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Packet"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Text="[&lt;|&gt;] COMMAND [DATA...]"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Direction"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">&gt;</Run><Run> 43 03 00 0A   client (default)</Run>
+                                        <LineBreak/>
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">&lt;</Run><Run> 32 00         server</Run>
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Hex bytes"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="43 03 00 0A 00 08 01"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"/>
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Decimal"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">#100</Run><Run> → 64   </Run>
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">#256</Run><Run> → 01 00</Run>
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="String"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">&quot;hello&quot;</Run><Run> → 05 68 65 6C 6C 6F</Run>
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Entity"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="1"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">@Deoch</Run><Run> → four-byte known entity ID</Run>
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Control"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="6" Grid.Column="1"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}">
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">@wait</Run><Run> 2000   </Run>
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">@disconnect</Run><Run> / </Run>
+                                        <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">@dc</Run>
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Comments"
+                                               Foreground="{StaticResource Talgonite.Color.LightGray}"/>
+                                    <TextBlock Grid.Row="7" Grid.Column="1" Text="# full line   // full line or trailing"
+                                               Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                               FontFamily="{StaticResource Talgonite.Font.Monospace}"/>
+                                </Grid>
+
+                                <Border Classes="divider-h"/>
+                                <TextBlock Foreground="{StaticResource Talgonite.Color.DimWhite}"
+                                           TextWrapping="Wrap">
+                                    <Run>Decimal values use the smallest one-, two-, or four-byte big-endian representation. Quoted ASCII strings include a one-byte length prefix. Entity names are resolved when sent; an unknown name becomes ID zero.</Run>
+                                </TextBlock>
+                                <TextBlock Foreground="{StaticResource Talgonite.Color.LightGray}"
+                                           TextWrapping="Wrap">
+                                    <Run>Scalar paste shortcuts: 0x121 → 01 21, 13BBFF → 13 BB FF, and decimal 12 → #12.</Run>
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </ToolTip.Tip>
+                </Border>
+
                 <WrapPanel Grid.Column="1" Orientation="Horizontal" ItemSpacing="8" LineSpacing="4" VerticalAlignment="Center">
                     <!-- Delay Dropdown -->
                     <StackPanel Orientation="Horizontal" Spacing="4">
