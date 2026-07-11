@@ -138,7 +138,6 @@
                            TextAlignment="Center"
                            Foreground="#83e67a"
                            IsVisible="{Binding IsTestInputAllowed, FallbackValue={x:True}}"
-                           FontWeight="SemiBold"
                            Width="60"
                            VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="2"
@@ -146,7 +145,6 @@
                            TextAlignment="Center"
                            Foreground="#ed6a5e"
                            IsVisible="{Binding IsTestInputFiltered, FallbackValue={x:False}}"
-                           FontWeight="SemiBold"
                            Width="60"
                            VerticalAlignment="Center"/>
             </Grid>

@@ -65,8 +65,7 @@
                     <TextBlock Name="CommandNameText"
                                Text="{Binding CommandName}"
                                TextAlignment="Left"
-                               Foreground="{Binding ., Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
-                               FontWeight="SemiBold"/>
+                               Foreground="{Binding ., Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"/>
                 </StackPanel>
                 
                 <!-- Payload Display -->

@@ -65,7 +65,6 @@
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
                                                        FontSize="16"
                                                        FontFamily="{StaticResource Talgonite.Font.InterfaceFont}"
-                                                       FontWeight="SemiBold"
                                                        VerticalAlignment="Center"/>
                                             
                                             <!-- Quantity -->

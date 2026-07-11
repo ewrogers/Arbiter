@@ -431,8 +431,7 @@
                                     <StackPanel Spacing="6">
                                         <TextBlock Text="Packet Query Syntax"
                                                    Foreground="{StaticResource Talgonite.Color.White}"
-                                                   FontSize="16"
-                                                   FontWeight="SemiBold"/>
+                                                   FontSize="16"/>
                                         <TextBlock Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                    TextWrapping="Wrap">
                                             <Run Text="Separate predicates with spaces or commas. Client and server predicates are alternatives by default; other predicates narrow the results. Use "/><Run Text="AND" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=", "/><Run Text="OR" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=", or "/><Run Text="NOT" Foreground="{StaticResource Talgonite.Color.LightBlue}"/><Run Text=" only to override that logic. AND is evaluated before OR; parentheses set the grouping."/>
@@ -443,8 +442,7 @@
                                               ColumnSpacing="12"
                                               RowSpacing="4">
                                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Logic"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="0" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}"
@@ -460,8 +458,7 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="1" Grid.Column="0" Text="Commands"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="1" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">
@@ -471,8 +468,7 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Payload"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="2" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">
@@ -482,8 +478,7 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="3" Grid.Column="0" Text="Text"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="3" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">
@@ -495,8 +490,7 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="4" Grid.Column="0" Text="Client name"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="4" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">
@@ -506,8 +500,7 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="5" Grid.Column="0" Text="Sequence"
-                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"
-                                                       FontWeight="SemiBold"/>
+                                                       Foreground="{StaticResource Talgonite.Color.LightGray}"/>
                                             <TextBlock Grid.Row="5" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">

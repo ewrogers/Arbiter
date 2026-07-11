@@ -157,7 +157,6 @@
                                                    Foreground="{Binding Flags, Converter={x:Static converters:EntityColorConverter.Converter}}"
                                                    FontSize="16"
                                                    FontFamily="{StaticResource Talgonite.Font.InterfaceFont}"
-                                                   FontWeight="SemiBold"
                                                    VerticalAlignment="Center"/>
                                         
                                         <!-- Entity Id -->
@@ -231,7 +230,6 @@
                                     <TextBlock Text="{Binding TypeShorthand}"
                                                Foreground="{Binding Flags, Converter={x:Static converters:EntityColorConverter.Converter}}"
                                                FontFamily="{StaticResource Talgonite.Font.Monospace}"
-                                               FontWeight="SemiBold"
                                                VerticalAlignment="Center"/>
                                 </Border>
                                 

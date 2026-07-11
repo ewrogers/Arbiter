@@ -43,7 +43,6 @@
                     <TextBlock Text="{Binding FormattedLevel}"
                                FontSize="12"
                                FontFamily="{StaticResource Talgonite.Font.ConsoleFont}"
-                               FontWeight="SemiBold"
                                Foreground="{Binding Path=Level, Converter={x:Static converters:LogLevelBrushConverter.Converter}}"
                                TextAlignment="Center"
                                VerticalAlignment="Center"/>    

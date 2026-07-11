@@ -45,7 +45,6 @@
                         <!-- Progress Text -->
                         <TextBlock Foreground="{StaticResource Talgonite.ProgressBar.TextForeground}"
                                    FontSize="14"
-                                   FontWeight="SemiBold"
                                    Text="{Binding $parent[ProgressBar].Value, StringFormat={}{0:0}%}"
                                    VerticalAlignment="Center"
                                    Margin="4,2">

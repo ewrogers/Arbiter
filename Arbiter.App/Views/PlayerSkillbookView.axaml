@@ -45,7 +45,6 @@
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
                                                        FontSize="16"
                                                        FontFamily="{StaticResource Talgonite.Font.InterfaceFont}"
-                                                       FontWeight="SemiBold"
                                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                         
@@ -92,7 +91,7 @@
                                                    VerticalAlignment="Center"
                                                    IsVisible="{Binding HasCooldownDuration}">
                                             <Span>
-                                                <Run Text="Cooldown:" FontWeight="SemiBold"/>
+                                                <Run Text="Cooldown:"/>
                                                 <Run Text="{Binding CooldownDurationText}"/>
                                             </Span>
                                         </TextBlock>

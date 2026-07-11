@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Preserve custom title-bar controls, native window dragging, and edge resizing with Avalonia 12 window decorations
+- Restore normal font weight throughout the interface after the Avalonia 12 typography changes
 - Keep cooldown countdown updates on the Avalonia UI dispatcher under the new multiple-dispatcher behavior
 - Align Windows product version metadata with the app assembly and file versions
 

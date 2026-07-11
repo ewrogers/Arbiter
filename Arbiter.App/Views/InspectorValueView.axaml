@@ -47,12 +47,10 @@
                         <TextBlock Text="Dec"
                                    TextAlignment="Center"
                                    FontSize="14"
-                                   FontWeight="SemiBold"
                                    IsVisible="{Binding !$parent[ToggleButton].IsChecked}"/>
                         <TextBlock Text="Hex"
                                    TextAlignment="Center"
                                    FontSize="14"
-                                   FontWeight="SemiBold"
                                    IsVisible="{Binding $parent[ToggleButton].IsChecked}"/>
                     </Panel>
                 </ToggleButton>

@@ -162,7 +162,7 @@
 
                     <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="4,0">
                         <StackPanel Grid.Column="0" Spacing="2">
-                            <TextBlock Text="Default Packet Filters" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBlock Text="Default Packet Filters" FontSize="16"/>
                             <TextBlock Text="Commands selected here are applied when Arbiter starts and restored by DEFAULT."
                                        Foreground="{StaticResource Talgonite.TextBlock.DimForeground}"
                                        FontSize="12"
@@ -181,7 +181,6 @@
                                                Text="Client"
                                                Foreground="{Binding Source={x:Static models:PacketDirection.Client}, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
                                                FontSize="15"
-                                               FontWeight="SemiBold"
                                                VerticalAlignment="Center"/>
                                     <Button Grid.Column="1"
                                             Command="{Binding SelectAllDefaultClientCommandsCommand}"
@@ -237,7 +236,6 @@
                                                Text="Server"
                                                Foreground="{Binding Source={x:Static models:PacketDirection.Server}, Converter={x:Static converters:PacketDirectionColorConverter.Converter}}"
                                                FontSize="15"
-                                               FontWeight="SemiBold"
                                                VerticalAlignment="Center"/>
                                     <Button Grid.Column="1"
                                             Command="{Binding SelectAllDefaultServerCommandsCommand}"

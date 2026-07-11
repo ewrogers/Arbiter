@@ -44,7 +44,6 @@
                                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"
                                                        FontSize="16"
                                                        FontFamily="{StaticResource Talgonite.Font.InterfaceFont}"
-                                                       FontWeight="SemiBold"
                                                        VerticalAlignment="Center"/>
                                         </StackPanel>
                                         
@@ -98,7 +97,7 @@
                                                    FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                                    VerticalAlignment="Center">
                                             <Span>
-                                                <Run Text="Cast Time:" FontWeight="SemiBold"/>
+                                                <Run Text="Cast Time:"/>
                                                 <Run Text="{Binding CastLinesText}"/>
                                             </Span>
                                         </TextBlock>
@@ -111,7 +110,7 @@
                                                    VerticalAlignment="Center"
                                                    IsVisible="{Binding HasCooldownDuration}">
                                             <Span>
-                                                <Run Text="Cooldown:" FontWeight="SemiBold"/>
+                                                <Run Text="Cooldown:"/>
                                                 <Run Text="{Binding CooldownDurationText}"/>
                                             </Span>
                                         </TextBlock>

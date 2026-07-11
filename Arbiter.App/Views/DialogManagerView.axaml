@@ -81,7 +81,6 @@
                             <TextBlock Text="{Binding ActiveDialog.Sprite, StringFormat={}Sprite {0}}"
                                        FontFamily="{StaticResource Talgonite.Font.Monospace}"
                                        FontSize="11"
-                                       FontWeight="SemiBold"
                                        Foreground="{StaticResource Talgonite.TextBlock.Foreground}"/>
                         </Border>
                     </Grid>
@@ -192,7 +191,6 @@
                             <TextBlock Grid.Column="0"
                                        Text="{Binding ActiveDialog.Name, FallbackValue={x:Null}}"
                                        FontSize="18"
-                                       FontWeight="SemiBold"
                                        Foreground="{StaticResource Talgonite.Color.LightBlue}"
                                        VerticalAlignment="Center"/>
                             

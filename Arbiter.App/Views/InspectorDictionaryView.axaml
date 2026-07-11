@@ -17,7 +17,6 @@
                     <TextBlock Grid.Column="0"
                                Text="{Binding $parent[Expander].Header}"
                                TextAlignment="Left"
-                               FontWeight="SemiBold"
                                VerticalAlignment="Center"
                                Margin="8,4"/>
                     

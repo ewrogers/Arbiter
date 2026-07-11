@@ -180,13 +180,13 @@
                              Classes="segment segment-left"
                              Height="32" Padding="12,4"
                              GroupName="Base">
-                    <TextBlock FontFamily="{StaticResource Talgonite.Font.ConsoleFont}" FontSize="14" FontWeight="SemiBold" Text="Dec"/>
+                    <TextBlock FontFamily="{StaticResource Talgonite.Font.ConsoleFont}" FontSize="14" Text="Dec"/>
                 </RadioButton>
                 <RadioButton IsChecked="{Binding ShowValuesAsHex, FallbackValue={x:False}}"
                              Classes="segment segment-right"
                              Height="32" Padding="12,4"
                              GroupName="Base">
-                    <TextBlock FontFamily="{StaticResource Talgonite.Font.ConsoleFont}" FontSize="14" FontWeight="SemiBold" Text="Hex"/>
+                    <TextBlock FontFamily="{StaticResource Talgonite.Font.ConsoleFont}" FontSize="14" Text="Hex"/>
                 </RadioButton>
             </StackPanel>
             
