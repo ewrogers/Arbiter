@@ -14,6 +14,8 @@ public class TracePacket
 
     [JsonPropertyName("name")] public string? ClientName { get; set; }
 
+    [JsonPropertyName("connectionId")] public int? ConnectionId { get; set; }
+
     [JsonPropertyName("command")]
     [JsonConverter(typeof(HexNumberConverterFactory))]
     public byte Command { get; set; }

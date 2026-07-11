@@ -71,13 +71,13 @@ public partial class TraceViewModel
             }
         }
 
-        // Filter by client name matches
+        // Filter by character name or the connection label used before login
         if (FilterParameters.Clients.Count > 0)
         {
-            // Unauthenticated clients use the empty string as their name (ex: `connection 1`)
             var nameMatches = FilterParameters.Clients.Any(client =>
                 client.IsSelected &&
-                string.Equals(client.DisplayName, vm.ClientName ?? string.Empty, StringComparison.OrdinalIgnoreCase));
+                string.Equals(client.DisplayName, vm.DisplayClientName ?? string.Empty,
+                    StringComparison.OrdinalIgnoreCase));
 
             if (!nameMatches)
             {
@@ -141,7 +141,7 @@ public partial class TraceViewModel
     {
         // Build case-insensitive set of remaining client names from all packets
         var remaining = _allPackets
-            .Select(p => p.ClientName ?? string.Empty)
+            .Select(p => p.DisplayClientName ?? string.Empty)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 

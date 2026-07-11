@@ -15,7 +15,8 @@ public partial class TracePacketViewModel(
     NetworkPacket encrypted,
     NetworkPacket decrypted,
     NetworkFilterResult? filterResult,
-    string? clientName = null)
+    string? clientName = null,
+    int? connectionId = null)
     : ViewModelBase
 {
 
@@ -35,8 +36,17 @@ public partial class TracePacketViewModel(
     [NotifyPropertyChangedFor(nameof(DisplayPayloadLines))]
     private IReadOnlyList<TraceQueryHighlight> _searchHighlights = [];
 
-    [ObservableProperty] private string? _clientName = clientName;
-    [ObservableProperty] private bool _isDetailedView;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayClientName))]
+    [NotifyPropertyChangedFor(nameof(IsConnectionLabel))]
+    private string? _clientName = clientName;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayClientName))]
+    [NotifyPropertyChangedFor(nameof(IsConnectionLabel))]
+    private int? _connectionId = connectionId;
+
+    [ObservableProperty] private bool _isDetailedView = true;
 
     [ObservableProperty]
     private PacketDirection _direction = decrypted is ClientPacket ? PacketDirection.Client : PacketDirection.Server;
@@ -90,6 +100,10 @@ public partial class TracePacketViewModel(
         TracePayloadFormatter.Format(GetDisplayBytes(), DisplaySearchHighlights);
 
     public bool HasDisplayPayload => !GetDisplayBytes().IsEmpty;
+    public string? DisplayClientName => !string.IsNullOrWhiteSpace(ClientName)
+        ? ClientName
+        : ConnectionId is not null ? $"conn[{ConnectionId}]" : null;
+    public bool IsConnectionLabel => string.IsNullOrWhiteSpace(ClientName) && ConnectionId is not null;
 
     public bool IsClient => DecryptedPacket is ClientPacket;
     public bool IsServer => DecryptedPacket is ServerPacket;
@@ -113,6 +127,7 @@ public partial class TracePacketViewModel(
             Timestamp = Timestamp,
             Direction = Direction,
             ClientName = ClientName,
+            ConnectionId = ConnectionId,
             Command = Command,
             Sequence = Sequence,
             RawData = EncryptedPacket.ToList(),
@@ -179,7 +194,8 @@ public partial class TracePacketViewModel(
             Output = filteredPacket
         };
 
-        return new TracePacketViewModel(encryptedPacket, decryptedPacket, filterResult, tracePacket.ClientName)
+        return new TracePacketViewModel(encryptedPacket, decryptedPacket, filterResult, tracePacket.ClientName,
+            tracePacket.ConnectionId)
         {
             Timestamp = tracePacket.Timestamp,
             DisplayMode = displayMode,

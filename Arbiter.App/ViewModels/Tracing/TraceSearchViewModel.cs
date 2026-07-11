@@ -19,7 +19,7 @@ public partial class TraceSearchViewModel : ViewModelBase
     private TraceQueryDiagnostic? _queryError;
 
     [ObservableProperty]
-    private bool _isTextCaseSensitive = true;
+    private bool _isTextCaseSensitive;
 
     public TraceQuery Query
     {

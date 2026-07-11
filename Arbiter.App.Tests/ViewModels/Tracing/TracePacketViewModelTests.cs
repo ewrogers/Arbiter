@@ -8,6 +8,32 @@ namespace Arbiter.App.Tests.ViewModels.Tracing;
 public sealed class TracePacketViewModelTests
 {
     [Test]
+    public void Should_Display_Dim_Connection_Label_Until_Client_Name_Is_Known()
+    {
+        var packet = new ServerPacket(0x13, []);
+        var viewModel = new TracePacketViewModel(packet, packet, null, connectionId: 7);
+        var restored = TracePacketViewModel.FromTracePacket(
+            viewModel.ToTracePacket(), PacketDisplayMode.Decrypted);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(viewModel.DisplayClientName, Is.EqualTo("conn[7]"));
+            Assert.That(viewModel.IsConnectionLabel, Is.True);
+            Assert.That(viewModel.IsDetailedView, Is.True);
+            Assert.That(viewModel.ToTracePacket().ConnectionId, Is.EqualTo(7));
+            Assert.That(restored.DisplayClientName, Is.EqualTo("conn[7]"));
+        });
+
+        viewModel.ClientName = "TwelveChar12";
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(viewModel.DisplayClientName, Is.EqualTo("TwelveChar12"));
+            Assert.That(viewModel.IsConnectionLabel, Is.False);
+        });
+    }
+
+    [Test]
     public void Should_Collapse_Empty_Data_But_Display_The_Raw_Packet()
     {
         var packet = new ServerPacket(0x13, []);

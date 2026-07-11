@@ -179,19 +179,19 @@ public class TraceQueryParserTests
     }
 
     [Test]
-    public void Should_Default_The_Search_View_Model_To_Case_Sensitive_Text()
+    public void Should_Default_The_Search_View_Model_To_Case_Insensitive_Text()
     {
         var search = new TraceSearchViewModel { QueryText = "text=Test" };
 
         Assert.Multiple(() =>
         {
-            Assert.That(search.IsTextCaseSensitive, Is.True);
-            Assert.That(search.Query.Match(Context(PacketDirection.Server, 0x13, "test")).IsMatch, Is.False);
+            Assert.That(search.IsTextCaseSensitive, Is.False);
+            Assert.That(search.Query.Match(Context(PacketDirection.Server, 0x13, "test")).IsMatch, Is.True);
         });
 
-        search.IsTextCaseSensitive = false;
+        search.IsTextCaseSensitive = true;
 
-        Assert.That(search.Query.Match(Context(PacketDirection.Server, 0x13, "test")).IsMatch, Is.True);
+        Assert.That(search.Query.Match(Context(PacketDirection.Server, 0x13, "test")).IsMatch, Is.False);
     }
 
     [Test]

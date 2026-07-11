@@ -149,7 +149,8 @@
                                   Classes.active="{Binding IsDetailedView}">
                         <Path Width="16" Height="16"
                               Stroke="{Binding $parent[ToggleButton].Foreground}"
-                              Data="{StaticResource Talgonite.Icon.DetailedRows}"/>
+                              Fill="{Binding $parent[ToggleButton].Foreground}"
+                              Data="{StaticResource Talgonite.Icon.DetailedList}"/>
                     </ToggleButton>
 
                     <!-- Toggle Find Button -->
@@ -612,11 +613,12 @@
                     <Setter Property="Foreground" Value="{StaticResource Talgonite.TextBlock.DimForeground}"/>
                 </Style>
             </Border.Styles>
-            <Grid ColumnDefinitions="72,110,170,*" ColumnSpacing="8">
+            <Grid ColumnDefinitions="72,104,170,*" ColumnSpacing="8">
                 <TextBlock Grid.Column="0"
                            Text="Timestamp"/>
                 <TextBlock Grid.Column="1"
-                           Text="Client"/>
+                           Text="Client"
+                           TextAlignment="Right"/>
                 <TextBlock Grid.Column="2"
                            Text="↔ Command"
                            IsVisible="{Binding !IsDetailedView}"/>

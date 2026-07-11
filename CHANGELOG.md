@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade Avalonia desktop packages to 12.1.0 and compatible ItemsRepeater and XAML behavior packages for rendering, hit-testing, bitmap, and Windows GPU performance improvements
 - Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
+- Default traces to detailed rows and case-insensitive text search, align 12-character client names, label unauthenticated connections, and use warning colors for search highlights
 
 ### Fixed
 

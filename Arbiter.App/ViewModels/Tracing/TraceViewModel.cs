@@ -41,7 +41,7 @@ public partial class TraceViewModel : ViewModelBase
 
     private long _indexCounter = 1;
     private bool _isEmpty = true;
-    private bool _isDetailedView;
+    private bool _isDetailedView = true;
     private PacketDisplayMode _packetDisplayMode = PacketDisplayMode.Decrypted;
 
     [ObservableProperty] private int _maxTraceHistory;
@@ -208,7 +208,7 @@ public partial class TraceViewModel : ViewModelBase
                 AddSearchResultIndex(filteredIndex);
             }
         }
-        FilterParameters.TryAddClient(vm.ClientName ?? string.Empty);
+        FilterParameters.TryAddClient(vm.DisplayClientName ?? string.Empty);
         IsDirty = true;
 
         while (pruneHistory && _allPackets.Count > MaxTraceHistory)
