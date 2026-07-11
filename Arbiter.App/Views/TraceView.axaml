@@ -44,12 +44,6 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <Style Selector="ListBox.trace-list.detailed /template/ ScrollViewer#PART_ScrollViewer /template/ ScrollBar#PART_VerticalScrollBar">
-            <Setter Property="ViewportSize" Value="NaN"/>
-        </Style>
-        <Style Selector="ListBox.trace-list.detailed /template/ ScrollViewer#PART_ScrollViewer /template/ ScrollBar#PART_VerticalScrollBar /template/ Thumb#ScrollThumb.vertical">
-            <Setter Property="Height" Value="40"/>
-        </Style>
     </UserControl.Styles>
 
     <UserControl.KeyBindings>
@@ -640,8 +634,6 @@
 
         <!-- Trace List -->
         <ListBox Name="TraceListBox"
-                 Classes="trace-list"
-                 Classes.detailed="{Binding IsDetailedView}"
                  Grid.Row="4"
                  ItemsSource="{Binding FilteredPackets}"
                  SelectedItems="{Binding SelectedPackets}"
@@ -651,6 +643,7 @@
                  SelectionMode="Multiple"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.IsDeferredScrollingEnabled="{Binding IsDetailedView}"
                  behaviors:ScrollToIndexBehavior.ScrollToIndex="{Binding ScrollToIndexRequested}"
                  behaviors:ScrollToEndBehavior.ScrollToEnd="{Binding ScrollToEndRequested}"
                  behaviors:ScrollToEndBehavior.AutoScrollToEnd="True">
