@@ -8,11 +8,13 @@
              xmlns:vm="using:Arbiter.App.ViewModels.Tracing"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="160"
              x:Class="Arbiter.App.Views.TracePacketView"
-             x:DataType="vm:TracePacketViewModel">
+             x:DataType="vm:TracePacketViewModel"
+             FontFamily="{StaticResource Talgonite.Font.TraceFont}"
+             FontSize="{StaticResource Talgonite.FontSize.Trace}">
     <UserControl.Resources>
         <SolidColorBrush x:Key="Talgonite.TracePacket.TimestampForeground" Color="#717479"/>
         <SolidColorBrush x:Key="Talgonite.TracePacket.ClientNameForeground" Color="#e0e0e0"/>
-        <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightBackground" Color="#40fadf79"/>
+        <SolidColorBrush x:Key="Talgonite.TracePacket.SearchHighlightBackground" Color="#20fadf79"/>
     
         <Geometry x:Key="Talgonite.TracePacket.RightArrow">M1,4 H8 M8,1 L11,4 L8,7</Geometry>
         <Geometry x:Key="Talgonite.TracePacket.LeftArrow">M11,4 H4 M4,1 L1,4 L4,7</Geometry>
@@ -34,7 +36,7 @@
                 BorderThickness="0,0,0,1"
                 Padding="4,2"
                 IsVisible="{Binding !IsDetailedView}">
-            <Grid ColumnDefinitions="72,104,170,*" ColumnSpacing="8">
+            <Grid ColumnDefinitions="72,96,170,*" ColumnSpacing="8">
                 <TextBlock Grid.Column="0"
                            Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}"
                            Foreground="{StaticResource Talgonite.TracePacket.TimestampForeground}"/>
@@ -101,7 +103,7 @@
                 BorderThickness="0,0,0,1"
                 Padding="4,2"
                 IsVisible="{Binding IsDetailedView}">
-            <Grid ColumnDefinitions="72,104,170,*"
+            <Grid ColumnDefinitions="72,96,170,*"
                   RowDefinitions="Auto,Auto"
                   ColumnSpacing="8">
                 <TextBlock Grid.RowSpan="2" Grid.Column="0"
@@ -147,7 +149,8 @@
                                Foreground="{Binding #DetailedCommandNameText.Foreground}"/>
                 </StackPanel>
 
-                <ItemsControl Grid.Row="1"
+                <ItemsControl Name="DetailedPayloadList"
+                              Grid.Row="1"
                               Grid.Column="2"
                               Grid.ColumnSpan="2"
                               Margin="0,2,0,0"
@@ -155,9 +158,10 @@
                               IsVisible="{Binding HasDisplayPayload}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:TracePayloadLine" x:CompileBindings="False">
-                            <Grid ColumnDefinitions="400,*">
+                            <Grid ColumnDefinitions="Auto,*">
                                 <controls:HighlightedHexTextBlock Grid.Column="0"
                                                                   SourceText="{Binding Hex}"
+                                                                  Width="{Binding $parent[ItemsControl].DataContext.DetailedHexColumnWidth}"
                                                                   Highlights="{Binding Highlights}"
                                                                   HighlightBackground="{StaticResource Talgonite.TracePacket.SearchHighlightBackground}"
                                                                   HighlightForeground="{StaticResource Talgonite.Color.LightYellow}"

@@ -613,7 +613,7 @@
                     <Setter Property="Foreground" Value="{StaticResource Talgonite.TextBlock.DimForeground}"/>
                 </Style>
             </Border.Styles>
-            <Grid ColumnDefinitions="72,104,170,*" ColumnSpacing="8">
+            <Grid ColumnDefinitions="72,96,170,*" ColumnSpacing="8">
                 <TextBlock Grid.Column="0"
                            Text="Timestamp"/>
                 <TextBlock Grid.Column="1"

@@ -9,13 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add compact trace columns and an optional detailed packet view with 16-byte hex rows, printable ASCII, search highlighting, and collapsed empty payloads
+- Add compact trace columns and a detailed packet view with hex rows starting at 16 bytes, printable ASCII, search highlighting, and collapsed empty payloads
+- Normalize pasted hexadecimal and decimal values in the Send editor into padded byte or number-token syntax
 
 ### Changed
 
 - Upgrade Avalonia desktop packages to 12.1.0 and compatible ItemsRepeater and XAML behavior packages for rendering, hit-testing, bitmap, and Windows GPU performance improvements
 - Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
 - Default traces to detailed rows and case-insensitive text search, align 12-character client names, label unauthenticated connections, and use warning colors for search highlights
+- Expand detailed trace rows in eight-byte increments when horizontal space permits and use a darker search-highlight background
 
 ### Fixed
 

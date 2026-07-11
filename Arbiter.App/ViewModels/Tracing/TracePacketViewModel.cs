@@ -49,6 +49,12 @@ public partial class TracePacketViewModel(
     [ObservableProperty] private bool _isDetailedView = true;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayPayloadLines))]
+    private int _detailedBytesPerLine = TracePayloadFormatter.MinimumBytesPerLine;
+
+    [ObservableProperty] private double _detailedHexColumnWidth = 365;
+
+    [ObservableProperty]
     private PacketDirection _direction = decrypted is ClientPacket ? PacketDirection.Client : PacketDirection.Server;
 
     [ObservableProperty] private byte _command = encrypted.Command;
@@ -97,7 +103,7 @@ public partial class TracePacketViewModel(
         .ToList();
 
     public IReadOnlyList<TracePayloadLine> DisplayPayloadLines =>
-        TracePayloadFormatter.Format(GetDisplayBytes(), DisplaySearchHighlights);
+        TracePayloadFormatter.Format(GetDisplayBytes(), DisplaySearchHighlights, DetailedBytesPerLine);
 
     public bool HasDisplayPayload => !GetDisplayBytes().IsEmpty;
     public string? DisplayClientName => !string.IsNullOrWhiteSpace(ClientName)
