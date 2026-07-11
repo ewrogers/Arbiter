@@ -7,6 +7,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="Arbiter.App.Views.DialogManagerView"
              x:DataType="vm:DialogManagerViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Styles>
     
     <Grid RowDefinitions="Auto,*" RowSpacing="4"
           Background="{StaticResource Talgonite.Control.Background}">

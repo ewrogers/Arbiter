@@ -10,6 +10,12 @@
     <Design.DataContext>
         <vm:DesignPlayerSpellbookViewModel/>
     </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Styles>
     
     <UserControl.DataTemplates>
         <DataTemplate DataType="vm:PlayerSpellSlotViewModel">

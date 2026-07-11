@@ -35,9 +35,8 @@ public partial class TraceViewModel
             return;
         }
 
-        var displayName = connection.IsLoggedIn ? name : null;
         _packetQueue.Enqueue(new QueuedTracePacket(generation, e.Encrypted, e.Decrypted, e.FilterResult,
-            displayName, connection.Id, _packetDisplayMode));
+            name, connection.Id, _packetDisplayMode));
     }
 
     private void ApplyPacketBatch(IReadOnlyList<QueuedTracePacket> packets)

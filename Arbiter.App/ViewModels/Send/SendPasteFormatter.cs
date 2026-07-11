@@ -26,18 +26,29 @@ public static class SendPasteFormatter
     private static bool TryFormatHex(string value, out string formatted)
     {
         formatted = string.Empty;
-        if (!value.StartsWith("0x", StringComparison.OrdinalIgnoreCase) || value.Length == 2)
+        var hasPrefix = value.StartsWith("0x", StringComparison.OrdinalIgnoreCase);
+        var digits = hasPrefix ? value.AsSpan(2) : value.AsSpan();
+        if (digits.IsEmpty)
         {
             return false;
         }
 
-        var digits = value.AsSpan(2);
+        var hasHexLetter = false;
         foreach (var digit in digits)
         {
             if (!char.IsAsciiHexDigit(digit))
             {
                 return false;
             }
+
+            hasHexLetter |= digit is >= 'A' and <= 'F' or >= 'a' and <= 'f';
+        }
+
+        // Unprefixed digit-only values are decimal number tokens. A-F makes the
+        // intent unambiguously hexadecimal, such as 13BBFF.
+        if (!hasPrefix && !hasHexLetter)
+        {
+            return false;
         }
 
         var normalizedDigits = digits.Length % 2 == 0 ? digits.ToString() : $"0{digits}";

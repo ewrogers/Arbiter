@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add compact trace columns and a detailed packet view with hex rows starting at 16 bytes, printable ASCII, search highlighting, and collapsed empty payloads
 - Normalize pasted hexadecimal and decimal values in the Send editor into padded byte or number-token syntax
+- Remember the compact or detailed trace view preference between application sessions
 
 ### Changed
 
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate custom windows, popup templates, text formatting, clipboard access, and placeholder text to Avalonia 12 APIs
 - Default traces to detailed rows and case-insensitive text search, align 12-character client names, label unauthenticated connections, and use warning colors for search highlights
 - Expand detailed trace rows in eight-byte increments when horizontal space permits and use a darker search-highlight background
+- Show hand cursors for interactive inventory, skill, spell, and dialog controls
 - Consolidate the DALib attribution and MIT license into the packaged README instead of a standalone notices file
 
 ### Fixed
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restore normal font weight throughout the interface after the Avalonia 12 typography changes
 - Keep cooldown countdown updates on the Avalonia UI dispatcher under the new multiple-dispatcher behavior
 - Align Windows product version metadata with the app assembly and file versions
+- Use authenticated character names in traces before map entry, keep the detailed trace scroll handle stable around large packets, and recognize unprefixed pasted hex values containing A-F
 
 ## [1.9.0] - 2026-07-10
 

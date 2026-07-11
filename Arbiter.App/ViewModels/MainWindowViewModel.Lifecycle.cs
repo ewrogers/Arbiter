@@ -51,6 +51,7 @@ public partial class MainWindowViewModel
 
         // Update entity sort oder to persist
         Settings.EntitySorting = EntityManager.SortOrder;
+        Settings.TraceDetailedView = Trace.IsDetailedView;
 
         SaveWindowPosition();
         SaveLayout();

@@ -179,6 +179,11 @@ public partial class MainWindowViewModel : ViewModelBase
         ClientManager.ApplySettings(Settings.Debug);
         
         Trace.MaxTraceHistory = Settings.TraceMaxHistory;
+        if (applyTraceDefaults)
+        {
+            Trace.IsDetailedView = Settings.TraceDetailedView;
+        }
+
         Trace.ConfigureDefaultCommandFilters(
             Settings.TraceDefaultClientCommands,
             Settings.TraceDefaultServerCommands,

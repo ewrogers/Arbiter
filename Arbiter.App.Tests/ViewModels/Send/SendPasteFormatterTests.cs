@@ -14,6 +14,15 @@ public sealed class SendPasteFormatterTests
         Assert.That(SendPasteFormatter.Format(input), Is.EqualTo(expected));
     }
 
+    [TestCase("13BBFF", "13 BB FF")]
+    [TestCase("abcdef", "AB CD EF")]
+    [TestCase("ABC", "0A BC")]
+    [TestCase(" FF ", "FF")]
+    public void Should_Format_Unprefixed_Hex_With_Letters_As_Padded_Bytes(string input, string expected)
+    {
+        Assert.That(SendPasteFormatter.Format(input), Is.EqualTo(expected));
+    }
+
     [TestCase("12", "#12")]
     [TestCase("00012", "#12")]
     [TestCase("-12", "#-12")]
