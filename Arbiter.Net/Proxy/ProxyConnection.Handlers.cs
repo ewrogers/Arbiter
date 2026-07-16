@@ -6,8 +6,10 @@ namespace Arbiter.Net.Proxy;
 
 public partial class ProxyConnection
 {
-    private void HandleClientAuthRequest(NetworkPacket packet)
+    private void HandleClientTransferServer(NetworkPacket packet)
     {
+        CompleteTransfer();
+
         var reader = new NetworkPacketReader(packet);
         var seed = reader.ReadByte();
         var keyLength = reader.ReadByte();
@@ -38,8 +40,10 @@ public partial class ProxyConnection
         SetEncryptionParameters(seed, key);
     }
 
-    private void HandleServerRedirect(NetworkPacket packet)
+    private NetworkRedirectEventArgs HandleServerRedirect(NetworkPacket packet)
     {
+        BeginTransfer();
+
         var reader = new NetworkPacketReader(packet);
         var remoteIpAddress = reader.ReadIPv4Address();
         var remotePort = reader.ReadUInt16();
@@ -76,9 +80,8 @@ public partial class ProxyConnection
         Interlocked.Exchange(ref _clientSequence, 0);
         Interlocked.Exchange(ref _serverSequence, 0);
         
-        // Notify the proxy server that the redirect is taking place
         var remoteEndpoint = new IPEndPoint(remoteIpAddress, remotePort);
-        ClientRedirected?.Invoke(this, new NetworkRedirectEventArgs(name, remoteEndpoint));
+        return new NetworkRedirectEventArgs(name, remoteEndpoint);
     }
 
     private void HandleServerSetUserId(NetworkPacket packet)
@@ -114,6 +117,10 @@ public partial class ProxyConnection
         _clientEncryptor.Parameters = encryptionParameters;
         _serverEncryptor.Parameters = encryptionParameters;
     }
+
+    internal void BeginTransfer() => Interlocked.Exchange(ref _isTransferring, 1);
+
+    internal void CompleteTransfer() => Interlocked.Exchange(ref _isTransferring, 0);
 
     private static bool IsValidCharacterName(string name) =>
         !string.IsNullOrWhiteSpace(name) && name.All(char.IsAsciiLetter);

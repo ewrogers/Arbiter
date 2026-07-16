@@ -2,7 +2,7 @@
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.LookAhead)]
+[NetworkCommand(ClientCommand.Look)]
 public class ClientLookAheadMessage : ClientMessage
 {
     // No additional data

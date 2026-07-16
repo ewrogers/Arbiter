@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RaiseStat)]
+[NetworkCommand(ClientCommand.AddStat)]
 public class ClientRaiseStatMessage : ClientMessage
 {
     public CharacterStatFlags Stat { get; set; }

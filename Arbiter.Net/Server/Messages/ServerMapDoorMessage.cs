@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapDoor)]
+[NetworkCommand(ServerCommand.StaticObjectState)]
 public class ServerMapDoorMessage : ServerMessage
 {
     public List<ServerMapDoor> Doors { get; set; } = [];

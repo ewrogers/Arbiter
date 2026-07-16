@@ -9,9 +9,9 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <Company>Erik 'SiLo' Rogers</Company>
         <Product>Arbiter</Product>
-        <Version>1.9.1</Version>
-        <AssemblyVersion>1.9.1</AssemblyVersion>
-        <FileVersion>1.9.1</FileVersion>
+        <Version>1.9.2</Version>
+        <AssemblyVersion>1.9.2</AssemblyVersion>
+        <FileVersion>1.9.2</FileVersion>
         <ApplicationIcon>Assets\arbiter.ico</ApplicationIcon>
     </PropertyGroup>
 

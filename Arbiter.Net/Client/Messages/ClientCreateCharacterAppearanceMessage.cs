@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.CreateCharacterAppearance)]
+[NetworkCommand(ClientCommand.NewUserAppearance)]
 public class ClientCreateCharacterAppearanceMessage : ClientMessage
 {
     public byte HairStyle { get; set; }

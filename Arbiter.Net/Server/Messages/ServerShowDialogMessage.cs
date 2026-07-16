@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowDialog)]
+[NetworkCommand(ServerCommand.PursuitMessage)]
 public class ServerShowDialogMessage : ServerMessage
 {
     public DialogType DialogType { get; set; }

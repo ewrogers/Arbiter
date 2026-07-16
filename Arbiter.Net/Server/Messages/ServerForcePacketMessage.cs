@@ -4,7 +4,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ForcePacket)]
+[NetworkCommand(ServerCommand.Bounce)]
 public class ServerForcePacketMessage : ServerMessage
 {
     public ClientCommand ClientCommand { get; set; }

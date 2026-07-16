@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.LightLevel)]
+[NetworkCommand(ServerCommand.ChangeHour)]
 public class ServerLightLevelMessage : ServerMessage
 {
     public byte TimeOfDay { get; set; }

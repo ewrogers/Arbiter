@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Authenticate)]
+[NetworkCommand(ClientCommand.TransferServer)]
 public class ClientAuthenticateMessage : ClientMessage
 {
     public byte Seed { get; set; }

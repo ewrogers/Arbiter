@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.SwitchPane)]
+[NetworkCommand(ServerCommand.WindowChange)]
 public class ServerSwitchPaneMessage : ServerMessage
 {
     public InterfacePane Pane { get; set; }

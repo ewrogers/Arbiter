@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.Cooldown)]
+[NetworkCommand(ServerCommand.ActionDelay)]
 public class ServerCooldownMessage : ServerMessage
 {
     public AbilityType AbilityType { get; set; }

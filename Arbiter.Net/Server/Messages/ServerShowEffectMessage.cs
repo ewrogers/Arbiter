@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowEffect)]
+[NetworkCommand(ServerCommand.EffectLayer)]
 public class ServerShowEffectMessage : ServerMessage
 {
     public uint TargetId { get; set; }

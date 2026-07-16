@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.WorldMapClick)]
+[NetworkCommand(ClientCommand.FieldMap)]
 public class ClientWorldMapClickMessage : ClientMessage
 {
     public ushort MapId { get; set; }

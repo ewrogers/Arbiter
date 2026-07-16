@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.SpellChant)]
+[NetworkCommand(ClientCommand.SpellDelaySay)]
 public class ClientSpellChantMessage : ClientMessage
 {
     public string Content { get; set; } = string.Empty;

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.2] - 2026-07-16
+
+### Changed
+
+- Rename known client and server packet commands throughout the network library, trace filters, and packet documentation, while retaining heartbeat terminology for `ReplyCRC` in user-facing settings
+
+### Fixed
+
+- Use the corrected binary startup encryption key so the initial client `Hello` packet decrypts to `baram` without delaying the handshake for a server encryption update
+- Preserve transfer state across accepted and blocked redirects, and block client heartbeat packets until `TransferServer` completes
+
 ## [1.9.1] - 2026-07-11
 
 ### Added

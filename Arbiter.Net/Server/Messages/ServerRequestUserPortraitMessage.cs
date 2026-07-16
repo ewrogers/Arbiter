@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.RequestUserPortrait)]
+[NetworkCommand(ServerCommand.RequestPortrait)]
 public class ServerRequestUserPortraitMessage : ServerMessage
 {
     public override void Deserialize(NetworkPacketReader reader)

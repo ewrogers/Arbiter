@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestMetadata)]
+[NetworkCommand(ClientCommand.Metadata)]
 public class ClientRequestMetadataMessage : ClientMessage
 {
     public MetadataRequestType RequestType { get; set; }

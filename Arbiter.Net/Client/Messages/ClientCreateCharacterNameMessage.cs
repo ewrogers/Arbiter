@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.CreateCharacterName)]
+[NetworkCommand(ClientCommand.NewUser)]
 public class ClientCreateCharacterNameMessage : ClientMessage
 {
     public string Name { get; set; } = string.Empty;

@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.PublicMessage)]
+[NetworkCommand(ServerCommand.Say)]
 public class ServerPublicMessageMessage : ServerMessage
 {
     public PublicMessageType MessageType { get; set; }

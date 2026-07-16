@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestEntity)]
+[NetworkCommand(ClientCommand.PutGround)]
 public class ClientRequestEntityMessage : ClientMessage
 {
     public uint EntityId { get; set; }

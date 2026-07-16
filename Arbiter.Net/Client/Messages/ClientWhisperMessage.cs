@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Whisper)]
+[NetworkCommand(ClientCommand.Tell)]
 public class ClientWhisperMessage : ClientMessage
 {
     public string Target { get; set; } = string.Empty;

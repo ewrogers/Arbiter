@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.CastSpell)]
+[NetworkCommand(ClientCommand.UseSpell)]
 public class ClientCastSpellMessage : ClientMessage
 {
     public byte Slot { get; set; }

@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.LoginResult)]
+[NetworkCommand(ServerCommand.LoginCheck)]
 public class ServerLoginResultMessage : ServerMessage
 {
     public LoginResult Result { get; set; }

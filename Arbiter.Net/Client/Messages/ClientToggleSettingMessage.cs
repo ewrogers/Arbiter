@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.ToggleSetting)]
+[NetworkCommand(ClientCommand.UserSetting)]
 public class ClientToggleSettingMessage : ClientMessage
 {
     public byte OptionIndex { get; set; }

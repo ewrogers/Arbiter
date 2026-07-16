@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowSpinner)]
+[NetworkCommand(ServerCommand.BlockInput)]
 public class ServerShowSpinnerMessage : ServerMessage
 {
     public bool IsVisible { get; set; }

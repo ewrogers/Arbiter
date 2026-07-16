@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.SyncTicks)]
+[NetworkCommand(ClientCommand.CheckTime)]
 public class ClientSyncTicksMessage : ClientMessage
 {
     public uint ServerTickCount { get; set; }

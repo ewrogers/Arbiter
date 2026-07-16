@@ -70,8 +70,8 @@ Each predicate uses `field=value` or `field!=value`:
 
 | Field | Matches | Example |
 | --- | --- | --- |
-| `client` | Client packet command, as hex or a command name | `client=45-47\|Heartbeat` |
-| `server` | Server packet command, as hex or a command name | `server=05,15\|HealthBar` |
+| `client` | Client packet command, as hex or a command name | `client=45-47\|ReplyCRC` |
+| `server` | Server packet command, as hex or a command name | `server=05,15\|DamageEffect` |
 | `data` | Contiguous bytes in the decrypted payload | `data=65 01 01` |
 | `raw` | Contiguous bytes in the complete raw packet | `raw=AA 00 04 13` |
 | `text` | ASCII text or a regular expression in the payload | `text="hello world"` |

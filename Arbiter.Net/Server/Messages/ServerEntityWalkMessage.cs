@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.EntityWalk)]
+[NetworkCommand(ServerCommand.MoveObject)]
 public class ServerEntityWalkMessage : ServerMessage
 {
     public uint EntityId { get; set; }

@@ -34,6 +34,7 @@ public partial class ProxyConnection : IDisposable
 
     private int _clientSequence;
     private int _serverSequence;
+    private int _isTransferring;
     private readonly Channel<NetworkPacket> _sendQueue = Channel.CreateUnbounded<NetworkPacket>();
     private readonly Channel<NetworkPacket> _prioritySendQueue = Channel.CreateUnbounded<NetworkPacket>();
 
@@ -42,6 +43,7 @@ public partial class ProxyConnection : IDisposable
     public long? UserId { get; set; }
     public bool HasAuthenticated { get; private set; }
     public bool IsLoggedIn { get; private set; }
+    public bool IsTransferring => Volatile.Read(ref _isTransferring) != 0;
 
     public IPEndPoint? LocalEndpoint => _client.Client.LocalEndPoint as IPEndPoint;
     public IPEndPoint? RemoteEndpoint => _server?.Client.RemoteEndPoint as IPEndPoint;

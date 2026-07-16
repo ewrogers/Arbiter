@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.PlaySound)]
+[NetworkCommand(ServerCommand.SoundEffect)]
 public class ServerPlaySoundMessage : ServerMessage
 {
     public byte Sound { get; set; }

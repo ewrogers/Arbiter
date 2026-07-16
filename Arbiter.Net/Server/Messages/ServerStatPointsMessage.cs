@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.StatPoints)]
+[NetworkCommand(ServerCommand.LevelPoint)]
 public class ServerStatPointsMessage : ServerMessage
 {
     public bool FlashButtons { get; set; }

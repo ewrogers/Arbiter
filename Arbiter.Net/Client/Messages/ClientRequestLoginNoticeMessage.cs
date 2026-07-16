@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestLoginNotice)]
+[NetworkCommand(ClientCommand.Stipulation)]
 public class ClientRequestLoginNoticeMessage : ClientMessage
 {
     // Nothing to show

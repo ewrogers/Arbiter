@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.StatusEffect)]
+[NetworkCommand(ServerCommand.Spelled)]
 public class ServerStatusEffectMessage : ServerMessage
 {
     public ushort Icon { get; set; }

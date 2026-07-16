@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapLocation)]
+[NetworkCommand(ServerCommand.UserPosition)]
 public class ServerMapLocationMessage : ServerMessage
 {
     public ushort X { get; set; }

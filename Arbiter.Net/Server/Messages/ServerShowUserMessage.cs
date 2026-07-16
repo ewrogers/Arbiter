@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowUser)]
+[NetworkCommand(ServerCommand.DrawHumanObjects)]
 public class ServerShowUserMessage : ServerMessage
 {
     private static readonly byte[] DefaultMonsterUnknown = new byte[6];

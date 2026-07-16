@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapTransferComplete)]
+[NetworkCommand(ServerCommand.UserReady)]
 public class ServerMapTransferCompleteMessage : ServerMessage
 {
     public byte Result { get; set; }

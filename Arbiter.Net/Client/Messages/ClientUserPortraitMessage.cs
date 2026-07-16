@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.UserPortrait)]
+[NetworkCommand(ClientCommand.SendPortrait)]
 public class ClientUserPortraitMessage : ClientMessage
 {
     public IReadOnlyList<byte> Portrait { get; set; } = [];

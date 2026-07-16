@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.AddEntity)]
+[NetworkCommand(ServerCommand.DrawObjects)]
 public class ServerAddEntityMessage : ServerMessage
 {
     public List<ServerEntityObject> Entities { get; set; } = [];

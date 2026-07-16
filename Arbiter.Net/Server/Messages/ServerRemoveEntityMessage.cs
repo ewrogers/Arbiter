@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.RemoveEntity)]
+[NetworkCommand(ServerCommand.RemoveObjects)]
 public class ServerRemoveEntityMessage : ServerMessage
 {
     public uint EntityId { get; set; }

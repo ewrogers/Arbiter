@@ -5,20 +5,20 @@ namespace Arbiter.Net.Tests.Client;
 
 public class ClientPacketEncryptorTests
 {
-    // A client 0x10 Authenticate packet (this packet is not encrypted)
+    // A client 0x10 TransferServer packet (this packet is not encrypted)
     private static readonly byte[] AuthenticatePacketBytes =
     [
         0xAA, 0x00, 0x19, 0x10, 0x07, 0x09, 0x63, 0x3E, 0x5F, 0x41, 0x46, 0x78, 0x21, 0x68, 0x2C, 0x07, 0x4D, 0x6F,
         0x6E, 0x69, 0x74, 0x6F, 0x72, 0x00, 0x00, 0x0C, 0xD2, 0x00
     ];
 
-    // A client 0x43 Interact packet (this packet is encrypted with static key)
+    // A client 0x43 RequestObjectInfo packet (this packet is encrypted with static key)
     private static readonly byte[] InteractPacketBytes =
     [
         0xAA, 0x00, 0x0F, 0x43, 0x06, 0x6E, 0x32, 0x53, 0x56, 0x2C, 0x74, 0x02, 0x66, 0xD5, 0x03, 0xFD, 0x97, 0x15
     ];
 
-    // Decrypted payload for the 0x43 Interact packet
+    // Decrypted payload for the 0x43 RequestObjectInfo packet
     private static readonly byte[] InteractPacketPayload = [0x01, 0x00, 0x00, 0x1B, 0x66];
 
     // A client 0x4F Portrait/Bio packet (this packet is encrypted with hash key)
@@ -47,25 +47,31 @@ public class ClientPacketEncryptorTests
         0x20, 0x7B, 0x3D, 0x6C, 0x6F
     ];
 
-    // A client 0x39 Dialog Menu Choice packet (this packet is encrypted with hash key + dialog encryption)
+    // A client 0x39 Merchant packet (this packet is encrypted with hash key + dialog encryption)
     private static readonly byte[] DialogMenuChoicePacketBytes =
     [
         0xAA, 0x00, 0x18, 0x39, 0x0A, 0xB3, 0xB0, 0x55, 0x5F, 0x77, 0x41, 0x40, 0x43, 0x13, 0x5D, 0x70, 0x1C, 0xA0,
         0x27, 0x4B, 0xD4, 0x28, 0xCB, 0xFC, 0x1E, 0xC8, 0x5E
     ];
 
-    // Decrypted payload for the 0x39 Dialog Menu Choice packet
+    // Decrypted payload for the 0x39 Merchant packet
     private static readonly byte[] DialogMenuChoicePayload = [0x01, 0x00, 0x00, 0x1B, 0x66, 0x04, 0xB9];
 
-    // A dialog 0x3A Dialog Choice packet (this packet is encrypted with hash key + dialog encryption)
+    // A client 0x3A Pursuit packet (this packet is encrypted with hash key + dialog encryption)
     private static readonly byte[] DialogChoicePacketBytes =
     [
         0xAA, 0x00, 0x19, 0x3A, 0x0B, 0x36, 0x9A, 0x5F, 0x4B, 0x3E, 0x1F, 0xF8, 0xB1, 0xEA, 0xBD, 0x9E, 0x98, 0x38,
         0x87, 0xE6, 0x35, 0x0C, 0x30, 0xDA, 0xC4, 0x37, 0x53, 0x55
     ];
 
-    // Decrypted payload for the 0x3A Dialog Choice packet
+    // Decrypted payload for the 0x3A Pursuit packet
     private static readonly byte[] DialogChoicePayload = [0x01, 0x00, 0x00, 0x1B, 0x66, 0x00, 0xB9, 0x00, 0x5C];
+
+    // A client 0x62 Hello packet sent immediately after the server supplies its encryption key.
+    private static readonly byte[] HelloPacketBytes =
+    [
+        0xAA, 0x00, 0x0E, 0x62, 0x00, 0x34, 0x00, 0x0A, 0x88, 0x6E, 0x23, 0x1E, 0xA4, 0x60, 0x7F, 0x4C, 0x6A
+    ];
 
     private ClientPacketEncryptor _encryptor;
 
@@ -128,6 +134,17 @@ public class ClientPacketEncryptorTests
         var decrypted = _encryptor.Decrypt(clientPacket);
 
         Assert.That(decrypted.Data, Is.EqualTo(InteractPacketPayload));
+    }
+
+    [Test]
+    public void Should_Decrypt_Hello_With_Startup_Encryption_Parameters()
+    {
+        var encryptor = new ClientPacketEncryptor(NetworkEncryptionParameters.Default);
+        var packet = new ClientPacket(HelloPacketBytes[3], HelloPacketBytes.AsSpan(4));
+
+        var decrypted = encryptor.Decrypt(packet);
+
+        Assert.That(decrypted.Data, Is.EqualTo(new byte[] { 0x61, 0x72, 0x61, 0x6D }));
     }
 
     [Test]

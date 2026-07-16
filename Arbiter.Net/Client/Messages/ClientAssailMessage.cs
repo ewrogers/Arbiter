@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Assail)]
+[NetworkCommand(ClientCommand.Attack)]
 public class ClientAssailMessage : ClientMessage
 {
     // Nothing to show

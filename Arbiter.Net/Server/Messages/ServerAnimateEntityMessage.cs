@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.AnimateEntity)]
+[NetworkCommand(ServerCommand.Motion)]
 public class ServerAnimateEntityMessage : ServerMessage
 {
     public uint EntityId { get; set; }

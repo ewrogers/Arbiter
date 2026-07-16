@@ -473,9 +473,9 @@
                                             <TextBlock Grid.Row="1" Grid.Column="1"
                                                        Foreground="{StaticResource Talgonite.Color.DimWhite}"
                                                        FontFamily="{StaticResource Talgonite.Font.Monospace}">
-                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">client</Run><Run>=45-47|Heartbeat</Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">client</Run><Run>=45-47|ReplyCRC</Run>
                                                 <LineBreak/>
-                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">server</Run><Run>=05,15|HealthBar</Run>
+                                                <Run Foreground="{StaticResource Talgonite.Color.LightBlue}">server</Run><Run>=05,15|DamageEffect</Run>
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="2" Grid.Column="0" Text="Payload"

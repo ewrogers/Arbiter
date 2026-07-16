@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.WorldList)]
+[NetworkCommand(ServerCommand.ShowUsers)]
 public class ServerWorldListMessage : ServerMessage
 {
     public ushort WorldCount { get; set; }

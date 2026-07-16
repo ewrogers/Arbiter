@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapInfo)]
+[NetworkCommand(ServerCommand.MapSize)]
 public class ServerMapInfoMessage : ServerMessage
 {
     public ushort MapId { get; set; }

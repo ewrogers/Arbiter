@@ -5,7 +5,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.LoginNotice)]
+[NetworkCommand(ServerCommand.Stipulation)]
 public class ServerLoginNoticeMessage : ServerMessage
 {
     public uint? Checksum { get; set; }

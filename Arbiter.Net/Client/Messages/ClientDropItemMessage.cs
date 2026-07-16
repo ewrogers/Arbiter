@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.DropItem)]
+[NetworkCommand(ClientCommand.Drop)]
 public class ClientDropItemMessage : ClientMessage
 {
     public byte Slot { get; set; }

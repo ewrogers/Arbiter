@@ -181,6 +181,13 @@ public partial class ProxyConnection
             Input = packet
         };
 
+        if (ShouldBlockClientHeartbeatDuringTransfer(packet))
+        {
+            result.Action = NetworkFilterAction.Block;
+            result.AddFilterName("TransferHeartbeatBlock");
+            return result;
+        }
+
         try
         {
             var output = packet;
@@ -226,4 +233,10 @@ public partial class ProxyConnection
 
         return result;
     }
+
+    internal bool ShouldBlockClientHeartbeatDuringTransfer(NetworkPacket packet) =>
+        IsTransferring && packet is ClientPacket
+        {
+            Command: ClientCommand.ReplyCRC or ClientCommand.CheckTime
+        };
 }
