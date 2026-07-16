@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.GroupInvite)]
+[NetworkCommand(ClientCommand.Group)]
 public class ClientGroupInviteMessage : ClientMessage
 {
     public ClientGroupAction Action { get; set; }

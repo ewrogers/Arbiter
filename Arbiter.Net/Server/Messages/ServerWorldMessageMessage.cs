@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.WorldMessage)]
+[NetworkCommand(ServerCommand.Message)]
 public class ServerWorldMessageMessage : ServerMessage
 {
     public WorldMessageType MessageType { get; set; }

@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapChanging)]
+[NetworkCommand(ServerCommand.MapTransferOK)]
 public class ServerMapChangingMessage : ServerMessage
 {
     public byte ChangeType { get; set; }

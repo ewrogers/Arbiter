@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.UserIdResponse)]
+[NetworkCommand(ServerCommand.UserId)]
 public class ServerUserIdResponseMessage : ServerMessage
 {
     public uint UserId { get; set; }

@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.UserId)]
+[NetworkCommand(ServerCommand.UserAppearance)]
 public class ServerUserIdMessage : ServerMessage
 {
     public uint UserId { get; set; }

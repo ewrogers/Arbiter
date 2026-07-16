@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestSequence)]
+[NetworkCommand(ClientCommand.Hello)]
 public class ClientRequestSequenceMessage : ClientMessage
 {
     public uint Unknown { get; set; }

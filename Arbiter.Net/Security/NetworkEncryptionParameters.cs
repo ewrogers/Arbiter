@@ -7,7 +7,10 @@ public class NetworkEncryptionParameters
     public const int KeyLength = 9;
     public const int KeyTableSize = 1024;
     public const int SaltTableSize = 256;
-    public static readonly ReadOnlyMemory<byte> DefaultKey = "UrkcnItnI"u8.ToArray();
+    public static readonly ReadOnlyMemory<byte> DefaultKey = new byte[]
+    {
+        0x55, 0x72, 0x6B, 0xE5, 0x6E, 0x49, 0x74, 0xA3, 0x49
+    };
 
     private readonly byte[] _privateKey = new byte[KeyLength];
     private readonly byte[] _saltTable = new byte[SaltTableSize];

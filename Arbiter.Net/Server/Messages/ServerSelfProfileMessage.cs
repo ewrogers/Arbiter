@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.SelfProfile)]
+[NetworkCommand(ServerCommand.SelfLook)]
 public class ServerSelfProfileMessage : ServerMessage
 {
     public NationFlag Nation { get; set; }

@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowMapHelp)]
+[NetworkCommand(ServerCommand.ScreenShot)]
 public class ServerShowMapHelpMessage : ServerMessage
 {
     public byte MapIndex { get; set; }

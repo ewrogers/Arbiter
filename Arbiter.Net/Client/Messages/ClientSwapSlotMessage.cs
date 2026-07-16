@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.SwapSlot)]
+[NetworkCommand(ClientCommand.ChangeSlot)]
 public class ClientSwapSlotMessage : ClientMessage
 {
     public ClientSlotSwapType Pane { get; set; }

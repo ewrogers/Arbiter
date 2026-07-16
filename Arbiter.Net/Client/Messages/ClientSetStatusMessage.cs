@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.SetStatus)]
+[NetworkCommand(ClientCommand.UserChangeState)]
 public class ClientSetStatusMessage : ClientMessage
 {
     public SocialStatus Status { get; set; }

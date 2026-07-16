@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.AddItem)]
+[NetworkCommand(ServerCommand.AddInventory)]
 public class ServerAddItemMessage : ServerMessage
 {
     public byte Slot { get; set; }

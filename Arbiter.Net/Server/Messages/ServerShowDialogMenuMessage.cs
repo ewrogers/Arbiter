@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowDialogMenu)]
+[NetworkCommand(ServerCommand.ScreenMenu)]
 public class ServerShowDialogMenuMessage : ServerMessage
 {
     public DialogMenuType MenuType { get; set; }

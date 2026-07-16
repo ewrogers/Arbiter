@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.WeatherChanged)]
+[NetworkCommand(ServerCommand.ChangeWeather)]
 public class ServerWeatherChangedMessage : ServerMessage
 {
     public byte WeatherFlags { get; set; }

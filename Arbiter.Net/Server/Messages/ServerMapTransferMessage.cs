@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.MapTransfer)]
+[NetworkCommand(ServerCommand.MapPart)]
 public class ServerMapTransferMessage : ServerMessage
 {
     public ushort RowY { get; set; }

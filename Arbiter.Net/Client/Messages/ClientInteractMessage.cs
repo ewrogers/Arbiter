@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Interact)]
+[NetworkCommand(ClientCommand.RequestObjectInfo)]
 public class ClientInteractMessage : ClientMessage
 {
     public InteractionType InteractionType { get; set; }

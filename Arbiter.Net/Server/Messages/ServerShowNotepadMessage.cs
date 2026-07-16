@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ShowNotepad)]
+[NetworkCommand(ServerCommand.EnterEditingMode)]
 public class ServerShowNotepadMessage : ServerMessage
 {
     public byte Slot { get; set; }

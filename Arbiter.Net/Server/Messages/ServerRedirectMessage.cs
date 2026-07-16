@@ -4,7 +4,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.Redirect)]
+[NetworkCommand(ServerCommand.TransferServer)]
 public class ServerRedirectMessage : ServerMessage
 {
     public IPAddress Address { get; set; } = IPAddress.None;

@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.PickupItem)]
+[NetworkCommand(ClientCommand.Get)]
 public class ClientPickupItemMessage : ClientMessage
 {
     public byte Slot { get; set; }

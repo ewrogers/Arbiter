@@ -5,7 +5,7 @@ using Arbiter.Net.Server.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ServerTable)]
+[NetworkCommand(ServerCommand.MultiServer)]
 public class ServerServerTableMessage : ServerMessage
 {
     public List<ServerTableEntry> Servers { get; set; } = [];

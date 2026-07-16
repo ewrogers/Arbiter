@@ -4,7 +4,7 @@ using Arbiter.Net.Server.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.WorldMap)]
+[NetworkCommand(ServerCommand.FieldMap)]
 public class ServerWorldMapMessage : ServerMessage
 {
     public string FieldName { get; set; } = string.Empty;

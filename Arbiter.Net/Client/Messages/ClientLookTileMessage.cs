@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.LookTile)]
+[NetworkCommand(ClientCommand.FarLook)]
 public class ClientLookTileMessage : ClientMessage
 {
     public ushort TileX { get; set; }

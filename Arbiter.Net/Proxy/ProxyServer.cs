@@ -126,8 +126,14 @@ public partial class ProxyServer : IDisposable
         connection.PacketException += OnExceptionPacket;
         connection.FilterException += OnFilterException;
 
-        // Check for any pending redirects, use that first
-        var remoteEndpoint = _pendingRedirects.TryDequeue(out var endpoint) ? endpoint : RemoteEndpoint!;
+        // Check for any pending redirects, use that first. The replacement connection stays in transfer
+        // until the client sends its TransferServer packet.
+        var isRedirected = _pendingRedirects.TryDequeue(out var endpoint);
+        var remoteEndpoint = isRedirected ? endpoint! : RemoteEndpoint!;
+        if (isRedirected)
+        {
+            connection.BeginTransfer();
+        }
 
         try
         {

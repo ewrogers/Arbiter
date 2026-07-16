@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.BoardAction)]
+[NetworkCommand(ClientCommand.Bulletin)]
 public class ClientBoardActionMessage : ClientMessage
 {
     public MessageBoardAction Action { get; set; }

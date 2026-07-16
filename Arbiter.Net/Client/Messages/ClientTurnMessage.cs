@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Turn)]
+[NetworkCommand(ClientCommand.ChangeDirection)]
 public class ClientTurnMessage : ClientMessage
 {
     public WorldDirection Direction { get; set; }

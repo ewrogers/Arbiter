@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.SetEquipment)]
+[NetworkCommand(ServerCommand.AddEquip)]
 public class ServerSetEquipmentMessage : ServerMessage
 {
     public EquipmentSlot Slot { get; set; }

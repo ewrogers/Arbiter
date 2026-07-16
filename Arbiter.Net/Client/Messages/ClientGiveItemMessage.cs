@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.GiveItem)]
+[NetworkCommand(ClientCommand.Give)]
 public class ClientGiveItemMessage : ClientMessage
 {
     public byte Slot { get; set; }

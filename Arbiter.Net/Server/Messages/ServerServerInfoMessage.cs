@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ServerInfo)]
+[NetworkCommand(ServerCommand.Browser)]
 public class ServerServerInfoMessage : ServerMessage
 {
     public ServerInfoType DataType { get; set; }

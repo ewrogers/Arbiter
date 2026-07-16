@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.EntityTurn)]
+[NetworkCommand(ServerCommand.ChangeDirection)]
 public class ServerEntityTurnMessage : ServerMessage
 {
     public uint EntityId { get; set; }

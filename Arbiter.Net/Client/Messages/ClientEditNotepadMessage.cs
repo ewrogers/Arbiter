@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.EditNotepad)]
+[NetworkCommand(ClientCommand.ExitEditingMode)]
 public class ClientEditNotepadMessage : ClientMessage
 {
     public byte Slot { get; set; }

@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestExit)]
+[NetworkCommand(ClientCommand.Quit)]
 public class ClientRequestExitMessage : ClientMessage
 {
     public ClientExitReason? Reason { get; set; }

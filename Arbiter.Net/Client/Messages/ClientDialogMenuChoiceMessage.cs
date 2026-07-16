@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.DialogMenuChoice)]
+[NetworkCommand(ClientCommand.Merchant)]
 public class ClientDialogMenuChoiceMessage : ClientMessage
 {
     public EntityTypeFlags EntityType { get; set; }

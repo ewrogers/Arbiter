@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.Emote)]
+[NetworkCommand(ClientCommand.Emotion)]
 public class ClientEmoteMessage : ClientMessage
 {
     public Emote Emote { get; set; }

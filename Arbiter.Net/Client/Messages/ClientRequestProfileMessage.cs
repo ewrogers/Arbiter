@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestProfile)]
+[NetworkCommand(ClientCommand.SelfLook)]
 public class ClientRequestProfileMessage : ClientMessage
 {
     // Nothing to show

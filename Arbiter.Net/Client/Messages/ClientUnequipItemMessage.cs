@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.UnequipItem)]
+[NetworkCommand(ClientCommand.RemoveEquipment)]
 public class ClientUnequipItemMessage : ClientMessage
 {
     public EquipmentSlot Slot { get; set; }

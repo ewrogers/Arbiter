@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.RemoveItem)]
+[NetworkCommand(ServerCommand.RemoveInventory)]
 public class ServerRemoveItemMessage : ServerMessage
 {
     public byte Slot { get; set; }

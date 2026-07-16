@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.IgnoreUser)]
+[NetworkCommand(ClientCommand.BlockListen)]
 public class ClientIgnoreUserMessage : ClientMessage
 {
     public IgnoreUserAction Action { get; set; }

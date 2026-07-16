@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.BoardResult)]
+[NetworkCommand(ServerCommand.Bulletin)]
 public class ServerBoardResultMessage : ServerMessage
 {
     public MessageBoardResult ResultType { get; set; }

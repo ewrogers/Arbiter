@@ -52,27 +52,28 @@ public partial class ProxyConnection
                     // Decrypt the packet if necessary
                     var decrypted = encryptor.Decrypt(encryptedPacket);
 
+                    NetworkRedirectEventArgs? redirect = null;
                     switch (decrypted)
                     {
                         // Handle server encryption, we need to update encryption parameters
-                        case ServerPacket { Command: ServerCommand.ServerList }:
+                        case ServerPacket { Command: ServerCommand.VersionCheck }:
                             HandleServerSetEncryption(decrypted);
                             break;
                         // Handle server redirects, we need to hijack the redirect
-                        case ServerPacket { Command: ServerCommand.Redirect }:
-                            HandleServerRedirect(decrypted);
+                        case ServerPacket { Command: ServerCommand.TransferServer }:
+                            redirect = HandleServerRedirect(decrypted);
                             break;
                         // Handle server setting user ID, this confirms a valid game connection
-                        case ServerPacket { Command: ServerCommand.UserId }:
+                        case ServerPacket { Command: ServerCommand.UserAppearance }:
                             HandleServerSetUserId(decrypted);
                             break;
                         // Handle server exit response, to clear state
-                        case ServerPacket { Command: ServerCommand.ExitResponse }:
+                        case ServerPacket { Command: ServerCommand.Quit }:
                             HandleServerExitResponse(decrypted);
                             break;
-                        // Handle client auth request, we need to update encryption parameters
-                        case ClientPacket { Command: ClientCommand.Authenticate }:
-                            HandleClientAuthRequest(decrypted);
+                        // Handle client transfer server request, we need to update encryption parameters
+                        case ClientPacket { Command: ClientCommand.TransferServer }:
+                            HandleClientTransferServer(decrypted);
                             break;
                     }
 
@@ -90,6 +91,12 @@ public partial class ProxyConnection
                     if (filterResult.Action == NetworkFilterAction.Block)
                     {
                         continue;
+                    }
+
+                    // Queue the redirected endpoint only after the client will receive the redirect packet.
+                    if (redirect is not null)
+                    {
+                        ClientRedirected?.Invoke(this, redirect);
                     }
 
                     if (filterResult.Output is not null)

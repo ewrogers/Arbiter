@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.RefreshComplete)]
+[NetworkCommand(ServerCommand.RefreshUserOK)]
 public class ServerRefreshCompleteMessage : ServerMessage
 {
     public override void Deserialize(NetworkPacketReader reader)

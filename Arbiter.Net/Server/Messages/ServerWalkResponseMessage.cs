@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.WalkResponse)]
+[NetworkCommand(ServerCommand.Move)]
 public class ServerWalkResponseMessage : ServerMessage
 {
     public WorldDirection Direction { get; set; }

@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ServerList)]
+[NetworkCommand(ServerCommand.VersionCheck)]
 public class ServerServerListMessage : ServerMessage
 {
     public uint Checksum { get; set; }

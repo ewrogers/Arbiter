@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.Heartbeat)]
+[NetworkCommand(ServerCommand.RequestCRC)]
 public class ServerHeartbeatMessage : ServerMessage
 {
     public ushort Request { get; set; }

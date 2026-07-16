@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.ExitResponse)]
+[NetworkCommand(ServerCommand.Quit)]
 public class ServerExitResponseMessage : ServerMessage
 {
     public byte Result { get; set; }

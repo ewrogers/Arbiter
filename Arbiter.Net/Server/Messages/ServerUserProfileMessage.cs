@@ -5,7 +5,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.UserProfile)]
+[NetworkCommand(ServerCommand.ObjectInfo)]
 public class ServerUserProfileMessage : ServerMessage
 {
     // This is the order the equipment is sent in, which differs from the enum order

@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.HealthBar)]
+[NetworkCommand(ServerCommand.DamageEffect)]
 public class ServerHealthBarMessage : ServerMessage
 {
     public uint EntityId { get; set; }

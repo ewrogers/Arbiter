@@ -7,7 +7,7 @@ public class ServerPacketEncryptorTests
 {
     private ServerPacketEncryptor _encryptor;
     
-    // A server 0x03 Redirect packet (this packet is not encrypted)
+    // A server 0x03 TransferServer packet (this packet is not encrypted)
     private static readonly byte[] RedirectPacketBytes =
     {
         0xAA, 0x00, 0x20, 0x03, 0x01, 0x00, 0x00, 0x7F, 0x0A, 0x32, 0x17, 0x07, 0x09, 0x63, 0x3E, 0x5F, 0x41, 0x46,

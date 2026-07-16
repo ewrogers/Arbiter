@@ -3,7 +3,7 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.RequestServerTable)]
+[NetworkCommand(ClientCommand.MultiServer)]
 public class ClientRequestServerTableMessage : ClientMessage
 {
     public bool NeedsServerTable { get; set; }

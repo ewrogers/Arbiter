@@ -4,7 +4,7 @@ using Arbiter.Net.Types;
 
 namespace Arbiter.Net.Server.Messages;
 
-[NetworkCommand(ServerCommand.UpdateStats)]
+[NetworkCommand(ServerCommand.Status)]
 public class ServerUpdateStatsMessage : ServerMessage
 {
     public StatsFieldFlags Fields { get; set; }

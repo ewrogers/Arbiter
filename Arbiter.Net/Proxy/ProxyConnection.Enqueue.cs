@@ -152,8 +152,8 @@ public partial class ProxyConnection
     {
         return packet switch
         {
-            ClientPacket { Command: ClientCommand.Heartbeat or ClientCommand.SyncTicks } => NetworkPriority.High,
-            ServerPacket { Command: ServerCommand.Heartbeat or ServerCommand.SyncTicks } => NetworkPriority.High,
+            ClientPacket { Command: ClientCommand.ReplyCRC or ClientCommand.CheckTime } => NetworkPriority.High,
+            ServerPacket { Command: ServerCommand.RequestCRC or ServerCommand.CheckTime } => NetworkPriority.High,
             _ => requestedPriority,
         };
     }
