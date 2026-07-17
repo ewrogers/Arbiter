@@ -26,6 +26,10 @@ public class GameClientService : IGameClientService
         (0x4B897C, [0x75, 0x6C], [0xEB, 0x6C]),
         (0x4B8ACF, [0x75, 0x6D], [0xEB, 0x6D]),
     ];
+    private static readonly (IntPtr Address, byte[] Expected, byte[] Replacement)[] LoginTransferDelayPatches =
+    [
+        (0x564855, [0x68, 0xE8, 0x03, 0x00, 0x00], [0x68, 0x00, 0x00, 0x00, 0x00]),
+    ];
     private static readonly IntPtr[] ServerHostnamePatchAddresses = [0x433392, 0x565628];
     private const IntPtr ServerFallbackIpPatchAddress = 0x4333C3;
     private const IntPtr ServerPortPatchAddress = 0x4333E3;
@@ -122,7 +126,9 @@ public class GameClientService : IGameClientService
 
     private static void ApplySuppressLoginNoticePatch(BinaryWriter writer)
     {
-        foreach (var patch in SuppressLoginNoticePatches)
+        var patches = SuppressLoginNoticePatches.Concat(LoginTransferDelayPatches);
+
+        foreach (var patch in patches)
         {
             writer.BaseStream.Position = patch.Address;
 
@@ -134,7 +140,10 @@ public class GameClientService : IGameClientService
                                                $"expected {Convert.ToHexString(patch.Expected)}, " +
                                                $"found {Convert.ToHexString(actual)}.");
             }
+        }
 
+        foreach (var patch in patches)
+        {
             writer.BaseStream.Position = patch.Address;
             writer.Write(patch.Replacement);
         }
