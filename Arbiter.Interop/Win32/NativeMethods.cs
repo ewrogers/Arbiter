@@ -51,6 +51,19 @@ internal static class NativeMethods
     [DllImport("kernel32.dll", EntryPoint = "ResumeThread", SetLastError = true)]
     internal static extern uint ResumeThread(IntPtr hThread);
 
+    [DllImport("ntdll.dll", EntryPoint = "NtQueryInformationProcess")]
+    internal static extern int NtQueryInformationProcess(IntPtr processHandle,
+        Win32ProcessInformationClass processInformationClass, out IntPtr processInformation,
+        int processInformationLength, out int returnLength);
+
+    [DllImport("ntdll.dll", EntryPoint = "NtQueryInformationProcess")]
+    internal static extern int NtQueryInformationProcess(IntPtr processHandle,
+        Win32ProcessInformationClass processInformationClass, out Win32ProcessBasicInformation processInformation,
+        int processInformationLength, out int returnLength);
+
+    [DllImport("ntdll.dll", EntryPoint = "RtlNtStatusToDosError")]
+    internal static extern uint RtlNtStatusToDosError(int status);
+
     [DllImport("kernel32.dll", EntryPoint = "ReadProcessMemory", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr baseAddress, byte[] buffer, int size,
@@ -74,6 +87,10 @@ internal static class NativeMethods
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr baseAddress, UIntPtr size,
         Win32FreeType freeType);
+
+    [DllImport("kernel32.dll", EntryPoint = "FlushInstructionCache", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool FlushInstructionCache(IntPtr hProcess, IntPtr baseAddress, UIntPtr size);
 
     [DllImport("kernel32.dll", EntryPoint = "TerminateProcess", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

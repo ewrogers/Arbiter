@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.5] - 2026-07-17
+
+### Fixed
+
+- Add an enabled-by-default launch option that clears pressed keys and modifiers when the Dark Ages client loses focus, using the suspended process image base directly
+
 ### Changed
 
 - Rename the client `PutGround` command and message to `RequestObject`
