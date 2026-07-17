@@ -16,11 +16,11 @@ public partial class GameClientService
     private const int InputGetEventManagerRva = 0x00027380;
     private const int InputPostKeyUpRva = 0x00066E60;
     private const int OriginalActivationFunctionRva = 0x000AC950;
-    private const int GetMessageTimeIatRva = 0x0022006E;
+    private const int GetMessageTimeThunkRva = 0x0022006E;
 
     private static readonly byte[] ExpectedStuckModifierCall = [0xE8, 0xCA, 0x2B, 0x00, 0x00];
     private const int PatchVerificationPadding = 8;
-    private const int StuckModifierFixStubSize = 69;
+    private const int StuckModifierFixStubSize = 68;
 
     private static void VerifySupportedClient(string clientExecutablePath)
     {
@@ -117,11 +117,12 @@ public partial class GameClientService
             Add(moduleBaseAddress, InputGetEventManagerRva)));
 
         writer.Write([0x85, 0xC0]); // TEST EAX, EAX
-        writer.Write([0x74, 0x33]); // JZ cleanup complete
+        writer.Write([0x74, 0x32]); // JZ cleanup complete
         writer.Write([0x89, 0xC3]); // MOV EBX, EAX
 
-        writer.Write([0xFF, 0x15]); // CALL DWORD PTR [GetMessageTime]
-        writer.Write(checked((uint)Add(moduleBaseAddress, GetMessageTimeIatRva).ToInt64()));
+        writer.Write((byte)0xE8); // CALL GetMessageTime import thunk
+        writer.Write(GetRelativeOffset(Add(stubAddress, checked((int)stream.Position)), sizeof(int),
+            Add(moduleBaseAddress, GetMessageTimeThunkRva)));
         writer.Write([0x89, 0xC7]); // MOV EDI, EAX
         writer.Write([0x31, 0xF6]); // XOR ESI, ESI
 
