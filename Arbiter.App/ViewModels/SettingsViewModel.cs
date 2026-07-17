@@ -33,6 +33,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(ClientExecutablePath))]
     [NotifyPropertyChangedFor(nameof(SkipIntroVideo))]
     [NotifyPropertyChangedFor(nameof(SuppressLoginNotice))]
+    [NotifyPropertyChangedFor(nameof(ApplyModifiersKeyFix))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -107,6 +108,17 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.SuppressLoginNotice = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool ApplyModifiersKeyFix
+    {
+        get => Settings.ApplyModifiersKeyFix;
+        set
+        {
+            Settings.ApplyModifiersKeyFix = value;
             OnPropertyChanged();
             HasChanges = true;
         }

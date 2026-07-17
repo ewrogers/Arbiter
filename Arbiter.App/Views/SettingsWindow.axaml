@@ -62,7 +62,7 @@
                     </TextBox>
                     
                     <!-- Options -->
-                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4">
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4">
                         <!-- Skip Intro Video  -->
                         <Label Grid.Row="0" Grid.Column="0"
                                Content="Skip Intro Video"
@@ -75,6 +75,12 @@
                                ToolTip.Tip="Bypasses the login notification when starting the client."/>
                         <ToggleSwitch Grid.Row="1" Grid.Column="1"
                                       IsChecked="{Binding SuppressLoginNotice}"/>
+                        <!-- Apply Modifiers Key Fix -->
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Content="Apply Modifiers Key Fix"
+                               ToolTip.Tip="Clears held keys and modifiers when the client loses focus."/>
+                        <ToggleSwitch Grid.Row="2" Grid.Column="1"
+                                      IsChecked="{Binding ApplyModifiersKeyFix}"/>
                     </Grid>
                 </StackPanel>
             </TabItem>

@@ -5,6 +5,39 @@ namespace Arbiter.Interop.Process;
 
 public class ProcessMemoryAllocator : IDisposable
 {
+    private sealed class MemoryProtectionScope : IDisposable
+    {
+        private readonly IntPtr _processHandle;
+        private readonly IntPtr _address;
+        private readonly UIntPtr _size;
+        private readonly Win32MemoryProtection _originalProtection;
+        private bool _isDisposed;
+
+        public MemoryProtectionScope(IntPtr processHandle, IntPtr address, UIntPtr size,
+            Win32MemoryProtection originalProtection)
+        {
+            _processHandle = processHandle;
+            _address = address;
+            _size = size;
+            _originalProtection = originalProtection;
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            if (!NativeMethods.VirtualProtectEx(_processHandle, _address, _size, _originalProtection, out _))
+            {
+                throw new Win32Exception();
+            }
+
+            _isDisposed = true;
+        }
+    }
+
     private bool _isDisposed;
     private readonly bool _leaveOpen;
     
@@ -59,6 +92,44 @@ public class ProcessMemoryAllocator : IDisposable
         CheckIfDisposed();
         
         if (!NativeMethods.VirtualFreeEx(ProcessHandle, memPointer, UIntPtr.Zero, Win32FreeType.Release))
+        {
+            throw new Win32Exception();
+        }
+    }
+
+    public void MakeExecutable(IntPtr address, int size)
+    {
+        CheckIfDisposed();
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
+
+        if (!NativeMethods.VirtualProtectEx(ProcessHandle, address, (UIntPtr)size,
+                Win32MemoryProtection.ExecuteRead, out _))
+        {
+            throw new Win32Exception();
+        }
+    }
+
+    public IDisposable MakeWritable(IntPtr address, int size)
+    {
+        CheckIfDisposed();
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
+
+        var nativeSize = (UIntPtr)size;
+        if (!NativeMethods.VirtualProtectEx(ProcessHandle, address, nativeSize,
+                Win32MemoryProtection.ExecuteReadWrite, out var originalProtection))
+        {
+            throw new Win32Exception();
+        }
+
+        return new MemoryProtectionScope(ProcessHandle, address, nativeSize, originalProtection);
+    }
+
+    public void FlushInstructionCache(IntPtr address, int size)
+    {
+        CheckIfDisposed();
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
+
+        if (!NativeMethods.FlushInstructionCache(ProcessHandle, address, (UIntPtr)size))
         {
             throw new Win32Exception();
         }

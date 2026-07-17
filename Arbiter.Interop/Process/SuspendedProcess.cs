@@ -144,6 +144,46 @@ public class SuspendedProcess : IDisposable
         return new ProcessMemoryAllocator(newHandle);
     }
 
+    public IntPtr GetImageBaseAddress()
+    {
+        CheckIfDisposed();
+
+        IntPtr pebAddress;
+        if (Environment.Is64BitProcess)
+        {
+            var status = NativeMethods.NtQueryInformationProcess(ProcessHandle,
+                Win32ProcessInformationClass.Wow64Information, out pebAddress, IntPtr.Size, out _);
+            ThrowIfNtStatusFailed(status);
+
+            if (pebAddress == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("The suspended client is not a 32-bit process.");
+            }
+        }
+        else
+        {
+            var status = NativeMethods.NtQueryInformationProcess(ProcessHandle,
+                Win32ProcessInformationClass.BasicInformation, out Win32ProcessBasicInformation processInformation,
+                Marshal.SizeOf<Win32ProcessBasicInformation>(), out _);
+            ThrowIfNtStatusFailed(status);
+            pebAddress = processInformation.PebBaseAddress;
+        }
+
+        var imageBaseBytes = new byte[sizeof(uint)];
+        var imageBasePointerAddress = IntPtr.Add(pebAddress, 0x08);
+        if (!NativeMethods.ReadProcessMemory(ProcessHandle, imageBasePointerAddress, imageBaseBytes,
+                imageBaseBytes.Length, out var bytesRead) || bytesRead.ToInt64() != imageBaseBytes.Length)
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error(),
+                "Could not read the client image base from the suspended process.");
+        }
+
+        var imageBaseAddress = new IntPtr(BitConverter.ToUInt32(imageBaseBytes));
+        return imageBaseAddress != IntPtr.Zero
+            ? imageBaseAddress
+            : throw new InvalidOperationException("The suspended client image base is null.");
+    }
+
     public void Resume()
     {
         CheckIfDisposed();
@@ -175,6 +215,17 @@ public class SuspendedProcess : IDisposable
         ProcessId = 0;
         ThreadId = 0;
         IsSuspended = false;
+    }
+
+    private static void ThrowIfNtStatusFailed(int status)
+    {
+        if (status >= 0)
+        {
+            return;
+        }
+
+        var error = NativeMethods.RtlNtStatusToDosError(status);
+        throw new Win32Exception(checked((int)error));
     }
 
     private void CheckIfDisposed() => ObjectDisposedException.ThrowIf(_isDisposed, this);

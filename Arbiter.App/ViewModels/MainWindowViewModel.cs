@@ -92,7 +92,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var clientExecutablePath = Settings.ClientExecutablePath;
             var options = new LaunchClientOptions(Settings.LocalPort, Settings.SkipIntroVideo,
-                Settings.SuppressLoginNotice);
+                Settings.SuppressLoginNotice, Settings.ApplyModifiersKeyFix);
 
             await _gameClientService.LaunchLoopbackClient(clientExecutablePath, options);
         }

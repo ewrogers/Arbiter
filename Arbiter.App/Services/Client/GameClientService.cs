@@ -13,7 +13,7 @@ using Arbiter.Interop.Window;
 
 namespace Arbiter.App.Services.Client;
 
-public class GameClientService : IGameClientService
+public partial class GameClientService : IGameClientService
 {
     private const string DarkAgesWindowClassName = "Darkages";
     private const long CharacterNameAddress = 0x73d910; // 7.41
@@ -41,29 +41,54 @@ public class GameClientService : IGameClientService
             throw new ArgumentOutOfRangeException(nameof(options), "Port must be between 1 and 65535");
         }
 
+        if (options.ApplyModifiersKeyFix)
+        {
+            VerifySupportedClient(clientExecutablePath);
+        }
+
         using var process = SuspendedProcess.Start(clientExecutablePath);
-        await using var stream = process.GetProcessMemoryStream();
-        await using var writer = new BinaryWriter(stream, Encoding.UTF8);
-
-        // Allocate memory to write our hostname instead
-        using var allocator = process.GetProcessMemoryAllocator();
-        var hostnamePointer = allocator.AllocMemory(mem => { mem.WriteNullTerminated("localhost"); });
-
-        ApplyMultipleInstancePatch(writer);
-
-        if (options.SkipIntroVideo)
+        try
         {
-            ApplySkipIntroVideoPatch(writer);
-        }
+            await using (var stream = process.GetProcessMemoryStream())
+            await using (var writer = new BinaryWriter(stream, Encoding.UTF8))
+            using (var allocator = process.GetProcessMemoryAllocator())
+            {
+                // Allocate memory to write our hostname instead
+                var hostnamePointer = allocator.AllocMemory(mem => { mem.WriteNullTerminated("localhost"); });
 
-        if (options.SuppressLoginNotice)
+                ApplyMultipleInstancePatch(writer);
+
+                if (options.SkipIntroVideo)
+                {
+                    ApplySkipIntroVideoPatch(writer);
+                }
+
+                if (options.SuppressLoginNotice)
+                {
+                    ApplySuppressLoginNoticePatch(writer);
+                }
+
+                ApplyServerEndpointPatch(writer, hostnamePointer, options.LocalPort);
+
+                if (options.ApplyModifiersKeyFix)
+                {
+                    var moduleBaseAddress = process.GetImageBaseAddress();
+                    ApplyStuckModifierFix(writer, allocator, moduleBaseAddress);
+                }
+            }
+
+            process.Resume();
+            return process.ProcessId;
+        }
+        catch
         {
-            ApplySuppressLoginNoticePatch(writer);
+            if (process.IsSuspended)
+            {
+                process.Kill(1);
+            }
+
+            throw;
         }
-
-        ApplyServerEndpointPatch(writer, hostnamePointer, options.LocalPort);
-
-        return process.ProcessId;
     }
 
     public IEnumerable<GameClientWindow> GetGameClients()
