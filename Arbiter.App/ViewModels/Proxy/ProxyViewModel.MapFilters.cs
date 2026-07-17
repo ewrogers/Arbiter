@@ -1,4 +1,4 @@
-﻿using Arbiter.App.Models.Settings;
+using Arbiter.App.Models.Settings;
 using Arbiter.Net;
 using Arbiter.Net.Filters;
 using Arbiter.Net.Proxy;
@@ -14,10 +14,10 @@ public partial class ProxyViewModel
 
     private void AddDebugMapFilters(DebugSettings settings)
     {
-        _debugUserIdFilter = _proxyServer.AddFilter<ServerUserIdMessage>(HandleUserIdMessage,
+        _debugUserIdFilter = _proxyServer.AddFilter<ServerUserAppearanceMessage>(HandleUserIdMessage,
             $"{FilterPrefix}_Map_ServerUserId", DebugFilterPriority, settings);
 
-        _debugMapInfoFilter = _proxyServer.AddFilter<ServerMapInfoMessage>(HandleMapInfoMessage,
+        _debugMapInfoFilter = _proxyServer.AddFilter<ServerMapSizeMessage>(HandleMapInfoMessage,
             $"{FilterPrefix}_Map_ServerMapInfo", DebugFilterPriority, settings);
     }
 
@@ -27,8 +27,8 @@ public partial class ProxyViewModel
         _debugMapInfoFilter?.Unregister();
     }
 
-    private static NetworkPacket HandleUserIdMessage(ProxyConnection connection, ServerUserIdMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerUserIdMessage> result)
+    private static NetworkPacket HandleUserIdMessage(ProxyConnection connection, ServerUserAppearanceMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerUserAppearanceMessage> result)
     {
         if (parameter is not DebugSettings filterSettings ||
             filterSettings is { EnableZoomedOutMap: false } ||
@@ -41,8 +41,8 @@ public partial class ProxyViewModel
         return result.Replace(message);
     }
 
-    private static NetworkPacket HandleMapInfoMessage(ProxyConnection connection, ServerMapInfoMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerMapInfoMessage> result)
+    private static NetworkPacket HandleMapInfoMessage(ProxyConnection connection, ServerMapSizeMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerMapSizeMessage> result)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is
                 { EnableTabMap: false, DisableWeatherEffects: false, DisableDarkness: false })

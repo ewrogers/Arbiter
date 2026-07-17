@@ -127,7 +127,7 @@ public class TraceQueryParserTests
     [Test]
     public void Should_Accept_Command_Names_And_Hexadecimal_Lists()
     {
-        var query = Parse("server=HealthBar|29, client=Heartbeat");
+        var query = Parse("server=DamageEffect|29, client=ReplyCRC");
 
         Assert.Multiple(() =>
         {

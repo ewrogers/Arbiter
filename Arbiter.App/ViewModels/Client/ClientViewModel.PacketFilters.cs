@@ -1,4 +1,4 @@
-﻿using Arbiter.Net;
+using Arbiter.Net;
 using Arbiter.Net.Filters;
 using Arbiter.Net.Proxy;
 using Arbiter.Net.Server.Messages;
@@ -12,7 +12,7 @@ public partial class ClientViewModel
     
     private void RegisterFilters()
     {
-        _redirectFilter = _connection.AddFilter<ServerRedirectMessage>(HandleServerRedirectMessage, "Client_RedirectFilter", int.MaxValue);
+        _redirectFilter = _connection.AddFilter<ServerTransferServerMessage>(HandleServerRedirectMessage, "Client_RedirectFilter", int.MaxValue);
     }
     
     private void UnregisterFilters()
@@ -20,8 +20,8 @@ public partial class ClientViewModel
         _redirectFilter?.Unregister();
     }
 
-    private NetworkPacket? HandleServerRedirectMessage(ProxyConnection connection, ServerRedirectMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerRedirectMessage> result)
+    private NetworkPacket? HandleServerRedirectMessage(ProxyConnection connection, ServerTransferServerMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerTransferServerMessage> result)
     {
         if (!ShouldBlockNextRedirect)
         {
@@ -29,7 +29,7 @@ public partial class ClientViewModel
         }
 
         // Queue a notice to the client that a redirect has been blocked
-        var notificationMessage = new ServerWorldMessageMessage
+        var notificationMessage = new ServerSystemMessage
         {
             MessageType = WorldMessageType.BarMessage,
             Message = "Server redirect has been blocked. You are now in limbo."

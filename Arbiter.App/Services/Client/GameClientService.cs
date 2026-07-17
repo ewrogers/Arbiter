@@ -21,6 +21,11 @@ public class GameClientService : IGameClientService
     
     private const IntPtr MultipleInstancePatchAddress = 0x57A7CE;
     private const IntPtr SkipIntroVideoPatchAddress = 0x42E61F;
+    private static readonly (IntPtr Address, byte[] Expected, byte[] Replacement)[] SuppressLoginNoticePatches =
+    [
+        (0x4B897C, [0x75, 0x6C], [0xEB, 0x6C]),
+        (0x4B8ACF, [0x75, 0x6D], [0xEB, 0x6D]),
+    ];
     private static readonly IntPtr[] ServerHostnamePatchAddresses = [0x433392, 0x565628];
     private const IntPtr ServerFallbackIpPatchAddress = 0x4333C3;
     private const IntPtr ServerPortPatchAddress = 0x4333E3;
@@ -117,7 +122,22 @@ public class GameClientService : IGameClientService
 
     private static void ApplySuppressLoginNoticePatch(BinaryWriter writer)
     {
-        // TODO: find out where this is and patch it
+        foreach (var patch in SuppressLoginNoticePatches)
+        {
+            writer.BaseStream.Position = patch.Address;
+
+            var actual = new byte[patch.Expected.Length];
+            writer.BaseStream.ReadExactly(actual);
+            if (!actual.SequenceEqual(patch.Expected))
+            {
+                throw new InvalidDataException($"Unexpected client bytes at 0x{patch.Address:X}: " +
+                                               $"expected {Convert.ToHexString(patch.Expected)}, " +
+                                               $"found {Convert.ToHexString(actual)}.");
+            }
+
+            writer.BaseStream.Position = patch.Address;
+            writer.Write(patch.Replacement);
+        }
     }
 
     private static void ApplyServerEndpointPatch(BinaryWriter writer, IntPtr hostnamePointer, int port)

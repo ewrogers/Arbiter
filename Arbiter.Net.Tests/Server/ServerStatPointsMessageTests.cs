@@ -14,7 +14,7 @@ public sealed class ServerStatPointsMessageTests
         var factory = new ServerMessageFactory();
 
         var created = factory.Create(packet);
-        var message = created as ServerStatPointsMessage;
+        var message = created as ServerLevelPointMessage;
 
         Assert.That(message, Is.Not.Null);
 
@@ -27,8 +27,8 @@ public sealed class ServerStatPointsMessageTests
         {
             Assert.That((byte)ServerCommand.LevelPoint, Is.EqualTo(0x3D));
             Assert.That(factory.GetMessageType(ServerCommand.LevelPoint),
-                Is.EqualTo(typeof(ServerStatPointsMessage)));
-            Assert.That(factory.GetMessageCommand(typeof(ServerStatPointsMessage)),
+                Is.EqualTo(typeof(ServerLevelPointMessage)));
+            Assert.That(factory.GetMessageCommand(typeof(ServerLevelPointMessage)),
                 Is.EqualTo(ServerCommand.LevelPoint));
             Assert.That(message.FlashButtons, Is.True);
             Assert.That(message.StatPoints, Is.EqualTo(points));

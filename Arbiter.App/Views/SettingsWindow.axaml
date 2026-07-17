@@ -72,11 +72,9 @@
                         <!-- Suppress Login Notice -->
                         <Label Grid.Row="1" Grid.Column="0"
                                Content="Suppress Login Notice"
-                               ToolTip.Tip="Prevents the login notification from being displayed."
-                               IsEnabled="False"/>
+                               ToolTip.Tip="Bypasses the login notification when starting the client."/>
                         <ToggleSwitch Grid.Row="1" Grid.Column="1"
-                                      IsChecked="{Binding SuppressLoginNotice}"
-                                      IsEnabled="False"/>
+                                      IsChecked="{Binding SuppressLoginNotice}"/>
                     </Grid>
                 </StackPanel>
             </TabItem>

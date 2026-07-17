@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Arbiter.App.Models.Player;
 using Arbiter.App.Services.Sprites;
 using Arbiter.App.ViewModels.Player;
@@ -69,7 +69,7 @@ public partial class ClientViewModel : ViewModelBase
 
     public void SendBarMessage(string message, WorldMessageType messageType = WorldMessageType.BarMessage)
     {
-        EnqueueMessage(new ServerWorldMessageMessage
+        EnqueueMessage(new ServerSystemMessage
         {
             MessageType = messageType,
             Message = message,

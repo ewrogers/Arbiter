@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Arbiter.App.Models.Settings;
 using Arbiter.Net;
 using Arbiter.Net.Filters;
@@ -14,10 +14,10 @@ public partial class ProxyViewModel
     private NetworkFilterRef? _debugShowEquipmentDurabilityFilter;
     private void AddDebugPlayerFilters(DebugSettings settings)
     {
-        _debugShowUserFilter = _proxyServer.AddFilter<ServerShowUserMessage>(HandleShowUserMessage,
+        _debugShowUserFilter = _proxyServer.AddFilter<ServerDrawHumanObjectsMessage>(HandleShowUserMessage,
             $"{FilterPrefix}_Player_ServerShowUser", DebugFilterPriority, settings);
 
-        _debugShowEquipmentDurabilityFilter = _proxyServer.AddFilter<ServerSetEquipmentMessage>(
+        _debugShowEquipmentDurabilityFilter = _proxyServer.AddFilter<ServerAddEquipMessage>(
             HandleSetEquipmentMessage, $"{FilterPrefix}_Player_ServerSetEquipment", DebugFilterPriority, settings);
     }
 
@@ -27,8 +27,8 @@ public partial class ProxyViewModel
         _debugShowEquipmentDurabilityFilter?.Unregister();
     }
 
-    private static NetworkPacket HandleShowUserMessage(ProxyConnection connection, ServerShowUserMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerShowUserMessage> result)
+    private static NetworkPacket HandleShowUserMessage(ProxyConnection connection, ServerDrawHumanObjectsMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerDrawHumanObjectsMessage> result)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is
                 { ShowHiddenPlayers: false, ShowPlayerNames: false })
@@ -58,8 +58,8 @@ public partial class ProxyViewModel
     }
 
     private static NetworkPacket HandleSetEquipmentMessage(ProxyConnection connection,
-        ServerSetEquipmentMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerSetEquipmentMessage> result)
+        ServerAddEquipMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerAddEquipMessage> result)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is
                 { ShowEquipmentDurability: false })

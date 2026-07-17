@@ -1,4 +1,4 @@
-﻿using Arbiter.Net.Client.Messages;
+using Arbiter.Net.Client.Messages;
 using Arbiter.Net.Types;
 
 namespace Arbiter.App.Mappings.Client;
@@ -63,7 +63,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientAssailMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientAssailMessage>(b =>
+        registry.Register<ClientAttackMessage>(b =>
         {
             // No mappings
         });
@@ -71,7 +71,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientAuthenticateMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientAuthenticateMessage>(b =>
+        registry.Register<ClientTransferServerMessage>(b =>
         {
             b.Section("Connection")
                 .Property(m => m.ConnectionId, p => p.ShowHex().ToolTip("Connection ID of the client."))
@@ -84,7 +84,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientBeginSpellCastMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientBeginSpellCastMessage>(b =>
+        registry.Register<ClientSpellDelayRequestMessage>(b =>
         {
             b.Section("Spell")
                 .Property(m => m.LineCount, p => p.ToolTip("Number of chant lines to cast the spell."));
@@ -93,7 +93,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientBoardActionMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientBoardActionMessage>(b =>
+        registry.Register<ClientBulletinMessage>(b =>
         {
             b.Section("Action")
                 .Property(m => m.Action, p => p.ToolTip("Message board action to perform."));
@@ -124,7 +124,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientCastSpellMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientCastSpellMessage>(b =>
+        registry.Register<ClientUseSpellMessage>(b =>
         {
             b.Section("Spell")
                 .Property(m => m.Slot, p => p.ToolTip("Slot of the spell to cast."));
@@ -155,7 +155,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientCreateCharacterAppearance(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientCreateCharacterAppearanceMessage>(b =>
+        registry.Register<ClientNewUserAppearanceMessage>(b =>
         {
             b.Section("Appearance")
                 .Property(m => m.HairStyle, p => p.ToolTip("Hair style of the character."))
@@ -166,7 +166,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientCreateCharacterNameMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientCreateCharacterNameMessage>(b =>
+        registry.Register<ClientNewUserMessage>(b =>
         {
             b.Section("Credentials")
                 .Property(m => m.Name, p => p.ToolTip("Desired name for the character."))
@@ -177,7 +177,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientDialogChoiceMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientDialogChoiceMessage>(b =>
+        registry.Register<ClientPursuitMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityType, p => p.ToolTip("Type of entity responsible for the dialog."))
@@ -195,7 +195,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
     
     private static void RegisterClientDialogMenuChoiceMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientDialogMenuChoiceMessage>(b =>
+        registry.Register<ClientMerchantMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityType, p => p.ToolTip("Type of entity responsible for the dialog menu."))
@@ -226,7 +226,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientDropItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientDropItemMessage>(b =>
+        registry.Register<ClientDropMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot of the item to drop."))
@@ -239,7 +239,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientEatItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientEatItemMessage>(b =>
+        registry.Register<ClientEatMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot of the item to eat."));
@@ -248,7 +248,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientEditNotepadMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientEditNotepadMessage>(b =>
+        registry.Register<ClientExitEditingModeMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot of the notepad to edit."));
@@ -259,7 +259,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientEmoteMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientEmoteMessage>(b =>
+        registry.Register<ClientEmotionMessage>(b =>
         {
             b.Section("Emote")
                 .Property(m => m.Emote, p => p.ToolTip("Emote to perform."));
@@ -277,7 +277,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientExchangeActionMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientExchangeActionMessage>(b =>
+        registry.Register<ClientExchangeMessage>(b =>
         {
             b.Section("Action")
                 .Property(m => m.Action, p => p.ToolTip("Exchange action to perform."));
@@ -307,7 +307,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientGiveItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientGiveItemMessage>(b =>
+        registry.Register<ClientGiveMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the entity to give the item to."));
@@ -319,7 +319,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientGroupInviteMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientGroupInviteMessage>(b =>
+        registry.Register<ClientGroupMessage>(b =>
         {
             b.Section("Action")
                 .Property(m => m.Action, p => p.ToolTip("Group action to perform."));
@@ -334,7 +334,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientHeartbeatMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientHeartbeatMessage>(b =>
+        registry.Register<ClientReplyCRCMessage>(b =>
         {
             b.Section("Heartbeat")
                 .Property(m => m.Reply, p => p.ShowHex().ToolTip("Client reply to the heartbeat nonce."));
@@ -343,7 +343,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientIgnoreUserMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientIgnoreUserMessage>(b =>
+        registry.Register<ClientBlockListenMessage>(b =>
         {
             b.Section("Ignore")
                 .Property(m => m.Action, p => p.ToolTip("Ignore action to perform."))
@@ -353,7 +353,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientInteractMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientInteractMessage>(b =>
+        registry.Register<ClientRequestObjectInfoMessage>(b =>
         {
             b.Section("Interaction")
                 .Property(m => m.InteractionType, p => p.ToolTip("Type of world interaction to perform."));
@@ -382,7 +382,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientLookTileMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientLookTileMessage>(b =>
+        registry.Register<ClientFarLookMessage>(b =>
         {
             b.Section("Location")
                 .Property(m => m.TileX, p => p.ToolTip("X-coordinate of the tile to look at."))
@@ -405,7 +405,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientPickupItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientPickupItemMessage>(b =>
+        registry.Register<ClientGetMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot to store the picked up item."));
@@ -417,7 +417,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRaiseStatMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRaiseStatMessage>(b =>
+        registry.Register<ClientAddStatMessage>(b =>
         {
             b.Section("Stat")
                 .Property(m => m.Stat, p => p.ToolTip("Stat to request to raise."));
@@ -426,7 +426,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestEntityMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestEntityMessage>(b =>
+        registry.Register<ClientPutGroundMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the entity to request."));
@@ -435,7 +435,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestExitMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestExitMessage>(b =>
+        registry.Register<ClientQuitMessage>(b =>
         {
             b.Section("Request")
                 .Property(m => m.Reason, p => p.ToolTip("Reason for the exit request."));
@@ -453,7 +453,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestLoginNoticeMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestLoginNoticeMessage>(b =>
+        registry.Register<ClientStipulationMessage>(b =>
         {
             // No mappings
         });
@@ -461,7 +461,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestMetadataMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestMetadataMessage>(b =>
+        registry.Register<ClientMetadataMessage>(b =>
         {
             b.Section("Request")
                 .Property(m => m.RequestType, p => p.ToolTip("Type of metadata to request."))
@@ -471,7 +471,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestProfileMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestProfileMessage>(b =>
+        registry.Register<ClientSelfLookMessage>(b =>
         {
             // No mappings
         });
@@ -479,7 +479,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestSequenceMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestSequenceMessage>(b =>
+        registry.Register<ClientHelloMessage>(b =>
         {
             b.Section("Request")
                 .Property(m => m.Sequence, p => p.ShowHex().ToolTip("Sequence counter value to request."))
@@ -489,7 +489,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientRequestServerTableMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientRequestServerTableMessage>(b =>
+        registry.Register<ClientMultiServerMessage>(b =>
         {
             b.Section("Request")
                 .Property(m => m.NeedsServerTable, p => p.ToolTip("Whether the client needs the server table."));
@@ -515,7 +515,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientSetStatusMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientSetStatusMessage>(b =>
+        registry.Register<ClientUserChangeStateMessage>(b =>
         {
             b.Section("Status")
                 .Property(m => m.Status, p => p.ToolTip("Social status to set."));
@@ -524,7 +524,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientSpellChantMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientSpellChantMessage>(b =>
+        registry.Register<ClientSpellDelaySayMessage>(b =>
         {
             b.Section("Message")
                 .Property(m => m.Content, p => p.ShowMultiline().ToolTip("Spell chant to send."));
@@ -533,7 +533,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientSwapSlotMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientSwapSlotMessage>(b =>
+        registry.Register<ClientChangeSlotMessage>(b =>
         {
             b.Section("Interface")
                 .Property(m => m.Pane, p => p.ToolTip("Interface pane to swap the slots in."));
@@ -545,7 +545,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientSyncTicksMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientSyncTicksMessage>(b =>
+        registry.Register<ClientCheckTimeMessage>(b =>
         {
             b.Section("Ticks")
                 .Property(m => m.ClientTickCount, p => p.ToolTip("Client tick count."))
@@ -556,7 +556,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientToggleSettingMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientToggleSettingMessage>(b =>
+        registry.Register<ClientUserSettingMessage>(b =>
         {
             b.Section("Setting")
                 .Property(m => m.OptionIndex, p => p.ToolTip("Index of the setting to toggle."));
@@ -565,7 +565,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientTurnMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientTurnMessage>(b =>
+        registry.Register<ClientChangeDirectionMessage>(b =>
         {
             b.Section("Movement")
                 .Property(m => m.Direction, p => p.ToolTip("Direction to face."));
@@ -574,7 +574,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientUnequipItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientUnequipItemMessage>(b =>
+        registry.Register<ClientRemoveEquipmentMessage>(b =>
         {
             b.Section("Equipment")
                 .Property(m => m.Slot, p => p.ToolTip("Equipment slot to unequip."));
@@ -583,7 +583,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientUseItem(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientUseItemMessage>(b =>
+        registry.Register<ClientUseMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot of the item to use."));
@@ -592,7 +592,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientUserPortraitMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientUserPortraitMessage>(b =>
+        registry.Register<ClientSendPortraitMessage>(b =>
         {
             b.Section("Portrait")
                 .Property(m => m.Portrait,
@@ -626,7 +626,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientWalkMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientWalkMessage>(b =>
+        registry.Register<ClientMoveMessage>(b =>
         {
             b.Section("Movement")
                 .Property(m => m.Direction, p => p.ToolTip("Direction to walk."))
@@ -636,7 +636,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientWhisperMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientWhisperMessage>(b =>
+        registry.Register<ClientTellMessage>(b =>
         {
             b.Section("Whisper")
                 .Property(m => m.Target, p => p.ToolTip("Name of the recipient or channel of the whisper."))
@@ -646,7 +646,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterClientWorldMapClickMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientWorldMapClickMessage>(b =>
+        registry.Register<ClientFieldMapMessage>(b =>
         {
             b.Section("Location")
                 .Property(m => m.MapId, p => p.ToolTip("ID of the destination map the user clicked on."))
