@@ -13,7 +13,7 @@ public enum ClientCommand : byte
     Look = 0x09,
     FarLook = 0x0A,
     Quit = 0x0B,
-    PutGround = 0x0C,
+    RequestObject = 0x0C,
     BlockListen = 0x0D,
     Say = 0x0E,
     UseSpell = 0x0F,

@@ -3,8 +3,8 @@ using Arbiter.Net.Serialization;
 
 namespace Arbiter.Net.Client.Messages;
 
-[NetworkCommand(ClientCommand.PutGround)]
-public class ClientPutGroundMessage : ClientMessage
+[NetworkCommand(ClientCommand.RequestObject)]
+public class ClientRequestObjectMessage : ClientMessage
 {
     public uint EntityId { get; set; }
 

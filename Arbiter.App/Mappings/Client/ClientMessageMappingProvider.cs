@@ -35,7 +35,7 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
         RegisterClientManufactureMapping(registry);
         RegisterClientPickupItemMapping(registry);
         RegisterClientRaiseStatMapping(registry);
-        RegisterClientRequestEntityMapping(registry);
+        RegisterClientRequestObjectMapping(registry);
         RegisterClientRequestExitMapping(registry);
         RegisterClientRequestHomepageMapping(registry);
         RegisterClientRequestLoginNoticeMapping(registry);
@@ -424,9 +424,9 @@ public class ClientMessageMappingProvider : IInspectorMappingProvider
         });
     }
 
-    private static void RegisterClientRequestEntityMapping(InspectorMappingRegistry registry)
+    private static void RegisterClientRequestObjectMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ClientPutGroundMessage>(b =>
+        registry.Register<ClientRequestObjectMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the entity to request."));
