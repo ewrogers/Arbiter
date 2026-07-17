@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Arbiter.App.Models.Entities;
 using Arbiter.Net.Client.Messages;
@@ -20,19 +20,19 @@ public partial class EntityManagerViewModel
     {
         const int observerPriority = int.MinValue;
         
-        proxyServer.AddObserver<ClientInteractMessage>(OnClientInteractMessage, observerPriority);
+        proxyServer.AddObserver<ClientRequestObjectInfoMessage>(OnClientInteractMessage, observerPriority);
 
-        proxyServer.AddObserver<ServerAddEntityMessage>(OnAddEntityMessage, observerPriority);
-        proxyServer.AddObserver<ServerRemoveEntityMessage>(OnRemoveEntityMessage, observerPriority);
-        proxyServer.AddObserver<ServerShowUserMessage>(OnShowUserMessage, observerPriority);
-        proxyServer.AddObserver<ServerUserProfileMessage>(OnUserProfileMessage, observerPriority);
-        proxyServer.AddObserver<ServerPublicMessageMessage>(OnPublicMessage, observerPriority);
-        proxyServer.AddObserver<ServerShowDialogMessage>(OnShowDialogMessage, observerPriority);
-        proxyServer.AddObserver<ServerShowDialogMenuMessage>(OnShowDialogMenuMessage, observerPriority);
-        proxyServer.AddObserver<ServerEntityWalkMessage>(OnEntityWalkMessage, observerPriority);
-        proxyServer.AddObserver<ServerWalkResponseMessage>(OnSelfWalkMessage, observerPriority);
-        proxyServer.AddObserver<ServerMapLocationMessage>(OnServerMapLocationMessage, observerPriority);
-        proxyServer.AddObserver<ServerWorldMessageMessage>(OnInteractResponse, observerPriority);
+        proxyServer.AddObserver<ServerDrawObjectsMessage>(OnAddEntityMessage, observerPriority);
+        proxyServer.AddObserver<ServerRemoveObjectsMessage>(OnRemoveEntityMessage, observerPriority);
+        proxyServer.AddObserver<ServerDrawHumanObjectsMessage>(OnShowUserMessage, observerPriority);
+        proxyServer.AddObserver<ServerObjectInfoMessage>(OnUserProfileMessage, observerPriority);
+        proxyServer.AddObserver<ServerSayMessage>(OnPublicMessage, observerPriority);
+        proxyServer.AddObserver<ServerPursuitMessage>(OnShowDialogMessage, observerPriority);
+        proxyServer.AddObserver<ServerScreenMenuMessage>(OnShowDialogMenuMessage, observerPriority);
+        proxyServer.AddObserver<ServerMoveObjectMessage>(OnEntityWalkMessage, observerPriority);
+        proxyServer.AddObserver<ServerMoveMessage>(OnSelfWalkMessage, observerPriority);
+        proxyServer.AddObserver<ServerUserPositionMessage>(OnServerMapLocationMessage, observerPriority);
+        proxyServer.AddObserver<ServerSystemMessage>(OnInteractResponse, observerPriority);
 
         proxyServer.ClientConnected += OnClientConnected;
         proxyServer.ClientDisconnected += OnClientDisconnected;
@@ -52,7 +52,7 @@ public partial class EntityManagerViewModel
         }
     }
 
-    private void OnAddEntityMessage(ProxyConnection connection, ServerAddEntityMessage message, object? parameter)
+    private void OnAddEntityMessage(ProxyConnection connection, ServerDrawObjectsMessage message, object? parameter)
     {
         foreach (var entity in message.Entities)
         {
@@ -90,7 +90,7 @@ public partial class EntityManagerViewModel
         }
     }
     
-    private void OnRemoveEntityMessage(ProxyConnection connection, ServerRemoveEntityMessage message, object? parameter)
+    private void OnRemoveEntityMessage(ProxyConnection connection, ServerRemoveObjectsMessage message, object? parameter)
     {
         // Only remove monster and item entities since they are more ephemeral than player/npc entities
         if (_entityStore.TryGetEntity(message.EntityId, out var existing) && existing.Flags == EntityFlags.Monster ||
@@ -100,7 +100,7 @@ public partial class EntityManagerViewModel
         }
     }
 
-    private void OnShowUserMessage(ProxyConnection connection, ServerShowUserMessage message, object? parameter)
+    private void OnShowUserMessage(ProxyConnection connection, ServerDrawHumanObjectsMessage message, object? parameter)
     {
         // Try to get the player so we can get map context
         _playerService.TryGetState(connection.Id, out var player);
@@ -122,7 +122,7 @@ public partial class EntityManagerViewModel
         _entityStore.AddOrUpdateEntity(entity, out _);
     }
 
-    private void OnUserProfileMessage(ProxyConnection connection, ServerUserProfileMessage message, object? parameter)
+    private void OnUserProfileMessage(ProxyConnection connection, ServerObjectInfoMessage message, object? parameter)
     {
         // Try to get the player so we can get map context
         _playerService.TryGetState(connection.Id, out var player);
@@ -139,7 +139,7 @@ public partial class EntityManagerViewModel
         _entityStore.AddOrUpdateEntity(entity, out _);
     }
 
-    private void OnPublicMessage(ProxyConnection connection, ServerPublicMessageMessage message, object? parameter)
+    private void OnPublicMessage(ProxyConnection connection, ServerSayMessage message, object? parameter)
     {
         // Ignore world shouts and spell chants
         if (message.SenderId == 0 || message.MessageType == PublicMessageType.Chant)
@@ -189,7 +189,7 @@ public partial class EntityManagerViewModel
         _entityStore.AddOrUpdateEntity(entity, out _);
     }
 
-    private void OnShowDialogMessage(ProxyConnection connection, ServerShowDialogMessage message, object? parameter)
+    private void OnShowDialogMessage(ProxyConnection connection, ServerPursuitMessage message, object? parameter)
     {
         // Skip on invalid entity ID
         if (message.EntityId is null or 0)
@@ -230,7 +230,7 @@ public partial class EntityManagerViewModel
         _entityStore.AddOrUpdateEntity(entity, out _);
     }
 
-    private void OnShowDialogMenuMessage(ProxyConnection connection, ServerShowDialogMenuMessage message, object? parameter)
+    private void OnShowDialogMenuMessage(ProxyConnection connection, ServerScreenMenuMessage message, object? parameter)
     {
         // Skip on invalid entity ID
         if (message.EntityId is null or 0)
@@ -268,7 +268,7 @@ public partial class EntityManagerViewModel
         _entityStore.AddOrUpdateEntity(entity, out _);
     }
 
-    private void OnEntityWalkMessage(ProxyConnection connection, ServerEntityWalkMessage message, object? parameter)
+    private void OnEntityWalkMessage(ProxyConnection connection, ServerMoveObjectMessage message, object? parameter)
     {
         var existing = _entityStore.TryGetEntity(message.EntityId, out _);
         if (!existing)
@@ -293,7 +293,7 @@ public partial class EntityManagerViewModel
         _entityStore.TrySetEntityLocation(message.EntityId, newX, newY);
     }
 
-    private void OnSelfWalkMessage(ProxyConnection connection, ServerWalkResponseMessage message, object? parameter)
+    private void OnSelfWalkMessage(ProxyConnection connection, ServerMoveMessage message, object? parameter)
     {
         // If no active player, ignore
         if (!_playerService.TryGetState(connection.Id, out var player) || player.UserId is null)
@@ -332,7 +332,7 @@ public partial class EntityManagerViewModel
         }
     }
 
-    private void OnServerMapLocationMessage(ProxyConnection connection, ServerMapLocationMessage message, object? parameter)
+    private void OnServerMapLocationMessage(ProxyConnection connection, ServerUserPositionMessage message, object? parameter)
     {
         if (SelectedClient is not null && FilterMode is not EntityFilterMode.All)
         {
@@ -340,7 +340,7 @@ public partial class EntityManagerViewModel
         }
     }
 
-    private void OnClientInteractMessage(ProxyConnection connection, ClientInteractMessage message,
+    private void OnClientInteractMessage(ProxyConnection connection, ClientRequestObjectInfoMessage message,
         object? parameter)
     {
         // Ensure there is a valid entity interaction request
@@ -366,7 +366,7 @@ public partial class EntityManagerViewModel
         QueueInteractionRequest(connection.Id, message.TargetId.Value);
     }
 
-    private void OnInteractResponse(ProxyConnection connection, ServerWorldMessageMessage message, object? parameter)
+    private void OnInteractResponse(ProxyConnection connection, ServerSystemMessage message, object? parameter)
     {
         var trimmedMessage = message.Message.Trim();
 

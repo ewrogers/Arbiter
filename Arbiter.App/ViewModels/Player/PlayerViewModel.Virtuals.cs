@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Arbiter.App.Models.Player;
 using Arbiter.Net;
@@ -26,17 +26,17 @@ public partial class PlayerViewModel
 
     private void AddVirtualFilters(ProxyConnection connection)
     {
-        _virtualItemFilter = connection.AddFilter<ClientUseItemMessage>(HandleClientUseItemMessage,
+        _virtualItemFilter = connection.AddFilter<ClientUseMessage>(HandleClientUseItemMessage,
             $"{FilterPrefix}_VirtualItemFilter",
             int.MaxValue);
 
         _virtualSkillFilter = connection.AddFilter<ClientUseSkillMessage>(HandleClientUseSkillMessage,
             $"{FilterPrefix}_VirtualSkillFilter", int.MaxValue);
 
-        _virtualSpellFilter = connection.AddFilter<ClientCastSpellMessage>(HandleClientCastSpellMessage,
+        _virtualSpellFilter = connection.AddFilter<ClientUseSpellMessage>(HandleClientCastSpellMessage,
             $"{FilterPrefix}_VirtualSpellFilter", int.MaxValue);
 
-        _virtualSwapSlotFilter = connection.AddFilter<ClientSwapSlotMessage>(HandleClientSwapSlotMessage,
+        _virtualSwapSlotFilter = connection.AddFilter<ClientChangeSlotMessage>(HandleClientSwapSlotMessage,
             $"{FilterPrefix}_VirtualSwapSlotFilter", int.MaxValue);
     }
 
@@ -48,8 +48,8 @@ public partial class PlayerViewModel
         _virtualSwapSlotFilter?.Unregister();
     }
 
-    private NetworkPacket? HandleClientUseItemMessage(ProxyConnection connection, ClientUseItemMessage message,
-        object? parameter, NetworkMessageFilterResult<ClientUseItemMessage> result)
+    private NetworkPacket? HandleClientUseItemMessage(ProxyConnection connection, ClientUseMessage message,
+        object? parameter, NetworkMessageFilterResult<ClientUseMessage> result)
     {
         if (!Inventory.TryGetSlot(message.Slot, out var slotted) || !slotted.Value.IsVirtual is not true)
         {
@@ -84,8 +84,8 @@ public partial class PlayerViewModel
         return result.Block();
     }
 
-    private NetworkPacket? HandleClientCastSpellMessage(ProxyConnection connection, ClientCastSpellMessage message,
-        object? parameter, NetworkMessageFilterResult<ClientCastSpellMessage> result)
+    private NetworkPacket? HandleClientCastSpellMessage(ProxyConnection connection, ClientUseSpellMessage message,
+        object? parameter, NetworkMessageFilterResult<ClientUseSpellMessage> result)
     {
         if (!Spells.TryGetSlot(message.Slot, out var slotted) || !slotted.Value.IsVirtual)
         {
@@ -115,8 +115,8 @@ public partial class PlayerViewModel
         return result.Block();
     }
 
-    private NetworkPacket HandleClientSwapSlotMessage(ProxyConnection connection, ClientSwapSlotMessage message,
-        object? parameter, NetworkMessageFilterResult<ClientSwapSlotMessage> result)
+    private NetworkPacket HandleClientSwapSlotMessage(ProxyConnection connection, ClientChangeSlotMessage message,
+        object? parameter, NetworkMessageFilterResult<ClientChangeSlotMessage> result)
     {
         var slotA = message.SourceSlot;
         var slotB = message.TargetSlot;
@@ -174,7 +174,7 @@ public partial class PlayerViewModel
     {
         Inventory.SetSlot(targetSlot, item);
 
-        var addItemMessage = new ServerAddItemMessage
+        var addItemMessage = new ServerAddInventoryMessage
         {
             Slot = (byte)targetSlot,
             Name = item.Name,

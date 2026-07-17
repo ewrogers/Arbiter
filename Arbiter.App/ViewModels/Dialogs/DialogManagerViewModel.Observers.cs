@@ -1,4 +1,4 @@
-﻿using Arbiter.Net.Proxy;
+using Arbiter.Net.Proxy;
 using Arbiter.Net.Server.Messages;
 using Arbiter.Net.Types;
 
@@ -8,11 +8,11 @@ public partial class DialogManagerViewModel
 {
     private void AddObservers()
     {
-        _proxyServer.AddObserver<ServerShowDialogMessage>(OnDialogMessage);
-        _proxyServer.AddObserver<ServerShowDialogMenuMessage>(OnDialogMenuMessage);
+        _proxyServer.AddObserver<ServerPursuitMessage>(OnDialogMessage);
+        _proxyServer.AddObserver<ServerScreenMenuMessage>(OnDialogMenuMessage);
     }
 
-    private void OnDialogMessage(ProxyConnection connection, ServerShowDialogMessage message, object? parameter)
+    private void OnDialogMessage(ProxyConnection connection, ServerPursuitMessage message, object? parameter)
     {
         if (!ShouldSync || !_clientManager.TryGetClient(connection.Id, out var client))
         {
@@ -28,7 +28,7 @@ public partial class DialogManagerViewModel
         }
     }
 
-    private void OnDialogMenuMessage(ProxyConnection connection, ServerShowDialogMenuMessage message, object? parameter)
+    private void OnDialogMenuMessage(ProxyConnection connection, ServerScreenMenuMessage message, object? parameter)
     {
         if (!ShouldSync || !_clientManager.TryGetClient(connection.Id, out var client))
         {
@@ -47,7 +47,7 @@ public partial class DialogManagerViewModel
     private void SetActiveDialogForClient(long clientId, DialogViewModel? dialog)
         => _activeDialogs.AddOrUpdate(clientId, dialog, (_, _) => dialog);
 
-    private DialogViewModel? BuildDialogView(ServerShowDialogMessage message)
+    private DialogViewModel? BuildDialogView(ServerPursuitMessage message)
     {
         if (message.DialogType == DialogType.CloseDialog)
         {
@@ -93,7 +93,7 @@ public partial class DialogManagerViewModel
         return dialog;
     }
 
-    private DialogViewModel BuildDialogView(ServerShowDialogMenuMessage message)
+    private DialogViewModel BuildDialogView(ServerScreenMenuMessage message)
     {
         var name = !string.IsNullOrWhiteSpace(message.Name) ? message.Name : message.EntityType.ToString();
         var dialog = new DialogViewModel(_spriteService)

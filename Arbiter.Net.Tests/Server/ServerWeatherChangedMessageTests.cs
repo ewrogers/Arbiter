@@ -14,7 +14,7 @@ public sealed class ServerWeatherChangedMessageTests
         var factory = new ServerMessageFactory();
 
         var created = factory.Create(packet);
-        var message = created as ServerWeatherChangedMessage;
+        var message = created as ServerChangeWeatherMessage;
 
         Assert.That(message, Is.Not.Null);
 
@@ -27,8 +27,8 @@ public sealed class ServerWeatherChangedMessageTests
         {
             Assert.That((byte)ServerCommand.ChangeWeather, Is.EqualTo(0x1F));
             Assert.That(factory.GetMessageType(ServerCommand.ChangeWeather),
-                Is.EqualTo(typeof(ServerWeatherChangedMessage)));
-            Assert.That(factory.GetMessageCommand(typeof(ServerWeatherChangedMessage)),
+                Is.EqualTo(typeof(ServerChangeWeatherMessage)));
+            Assert.That(factory.GetMessageCommand(typeof(ServerChangeWeatherMessage)),
                 Is.EqualTo(ServerCommand.ChangeWeather));
             Assert.That(message.WeatherFlags, Is.EqualTo(weatherFlags));
             Assert.That(serialized.Data, Is.EqualTo(new byte[] { weatherFlags }));

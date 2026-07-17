@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Arbiter.Net.Server.Messages;
 using Arbiter.Net.Types;
 
@@ -74,7 +74,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerAddEntityMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerAddEntityMessage>(b =>
+        registry.Register<ServerDrawObjectsMessage>(b =>
         {
             b.Section("EntityManager")
                 .Property(m => m.Entities);
@@ -83,7 +83,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerAddItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerAddItemMessage>(b =>
+        registry.Register<ServerAddInventoryMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot containing the item."))
@@ -132,7 +132,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerAnimateEntityMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerAnimateEntityMessage>(b =>
+        registry.Register<ServerMotionMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the target entity."));
@@ -147,7 +147,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerBoardResultMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerBoardResultMessage>(b =>
+        registry.Register<ServerBulletinMessage>(b =>
         {
             b.Section("Result")
                 .Property(m => m.ResultType, p => p.ToolTip("Type of message board result."))
@@ -175,7 +175,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerCooldownMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerCooldownMessage>(b =>
+        registry.Register<ServerActionDelayMessage>(b =>
         {
             b.Section("Cooldown")
                 .Property(m => m.AbilityType, p => p.ToolTip("Type of ability that is now on cooldown."))
@@ -186,7 +186,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerEntityTurnMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerEntityTurnMessage>(b =>
+        registry.Register<ServerChangeDirectionMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the target entity."));
@@ -197,7 +197,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerEntityWalkMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerEntityWalkMessage>(b =>
+        registry.Register<ServerMoveObjectMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the target entity."));
@@ -241,7 +241,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerExitResponseMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerExitResponseMessage>(b =>
+        registry.Register<ServerQuitMessage>(b =>
         {
             b.Section("Response")
                 .Property(m => m.Result, p => p.ToolTip("Response to the exit request."))
@@ -251,7 +251,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerForcePacketMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerForcePacketMessage>(b =>
+        registry.Register<ServerBounceMessage>(b =>
         {
             b.Section("Command")
                 .Property(m => m.ClientCommand, p => p.ShowHex().ToolTip("Client command code for the raw packet."));
@@ -275,7 +275,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerHealthBarMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerHealthBarMessage>(b =>
+        registry.Register<ServerDamageEffectMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the target entity."));
@@ -291,7 +291,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerHeartbeatMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerHeartbeatMessage>(b =>
+        registry.Register<ServerRequestCRCMessage>(b =>
         {
             b.Section("Heartbeat")
                 .Property(m => m.Request, p => p.ShowHex().ToolTip("Nonce of the heartbeat."));
@@ -309,7 +309,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerLightLevelMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerLightLevelMessage>(b =>
+        registry.Register<ServerChangeHourMessage>(b =>
         {
             b.Section("Time of Day")
                 .Property(m => m.TimeOfDay,
@@ -322,7 +322,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerLoginNoticeMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerLoginNoticeMessage>(b =>
+        registry.Register<ServerStipulationMessage>(b =>
         {
             b.Section("Notice")
                 .Property(m => m.Checksum, p => p.ShowHex().ToolTip("CRC-32 checksum of the notice message."))
@@ -332,7 +332,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerLoginResultMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerLoginResultMessage>(b =>
+        registry.Register<ServerLoginCheckMessage>(b =>
         {
             b.Section("Login")
                 .Property(m => m.Result, p => p.ToolTip("Type of login result."))
@@ -366,7 +366,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
     
     private static void RegisterServerWeatherChangedMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerWeatherChangedMessage>(b =>
+        registry.Register<ServerChangeWeatherMessage>(b =>
         {
             b.Section("Weather")
                 .Property(m => m.WeatherFlags, p => p.ShowHex().ToolTip("Active weather effect flags."));
@@ -375,7 +375,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapChangingMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapChangingMessage>(b =>
+        registry.Register<ServerMapTransferOKMessage>(b =>
         {
             b.Section("Map")
                 .Property(m => m.ChangeType, p => p.ToolTip("Type of map change."));
@@ -386,7 +386,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapDoorMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapDoorMessage>(b =>
+        registry.Register<ServerStaticObjectStateMessage>(b =>
         {
             b.Section("Doors")
                 .Property(m => m.Doors);
@@ -395,7 +395,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapInfoMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapInfoMessage>(b =>
+        registry.Register<ServerMapSizeMessage>(b =>
         {
             b.Section("Map")
                 .Property(m => m.MapId, p => p.ToolTip("ID of the map."))
@@ -411,7 +411,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapLocationMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapLocationMessage>(b =>
+        registry.Register<ServerUserPositionMessage>(b =>
         {
             b.Section("Position")
                 .Property(m => m.X, p => p.ToolTip("Current X-coordinate of the user."))
@@ -424,7 +424,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapTransferCompleteMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapTransferCompleteMessage>(b =>
+        registry.Register<ServerUserReadyMessage>(b =>
         {
             b.Section("Result")
                 .Property(m => m.Result, p => p.ToolTip("Result of the map transfer."));
@@ -433,7 +433,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerMapTransferMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerMapTransferMessage>(b =>
+        registry.Register<ServerMapPartMessage>(b =>
         {
             b.Section("Row Index")
                 .Property(m => m.RowY, p => p.ToolTip("Y-index of the map tiles transfer."));
@@ -461,7 +461,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerPlaySoundMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerPlaySoundMessage>(b =>
+        registry.Register<ServerSoundEffectMessage>(b =>
         {
             b.Section("Sound")
                 .Property(m => m.Sound, p => p.ToolTip("Sound to play."))
@@ -475,7 +475,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerPublicMessageMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerPublicMessageMessage>(b =>
+        registry.Register<ServerSayMessage>(b =>
         {
             b.Section("Message")
                 .Property(m => m.MessageType, p => p.ToolTip("Type of public message."))
@@ -486,7 +486,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRedirectMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRedirectMessage>(b =>
+        registry.Register<ServerTransferServerMessage>(b =>
         {
             b.Section("Server")
                 .Property(m => m.Address, p => p.ToolTip("Address of the server to redirect to."))
@@ -502,7 +502,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRefreshCompletedMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRefreshCompleteMessage>(b =>
+        registry.Register<ServerRefreshUserOKMessage>(b =>
         {
             // Nothing to map
         });
@@ -510,7 +510,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRemoveEntityMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRemoveEntityMessage>(b =>
+        registry.Register<ServerRemoveObjectsMessage>(b =>
         {
             b.Section("Entity")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the target entity."));
@@ -519,7 +519,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRemoveEquipmentMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRemoveEquipmentMessage>(b =>
+        registry.Register<ServerRemoveEquipMessage>(b =>
         {
             b.Section("Equipment")
                 .Property(m => m.Slot, p => p.ToolTip("Equipment slot to be removed."));
@@ -528,7 +528,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRemoveItemMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRemoveItemMessage>(b =>
+        registry.Register<ServerRemoveInventoryMessage>(b =>
         {
             b.Section("Item")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot to be removed."));
@@ -555,7 +555,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerRequestUserPortraitMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerRequestUserPortraitMessage>(b =>
+        registry.Register<ServerRequestPortraitMessage>(b =>
         {
             // Nothing to map    
         });
@@ -563,7 +563,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerSelfProfileMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerSelfProfileMessage>(b =>
+        registry.Register<ServerSelfLookMessage>(b =>
         {
             b.Section("Profile")
                 .Property(m => m.Class, p => p.ToolTip("Base class of the user."))
@@ -594,7 +594,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerServerInfoMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerServerInfoMessage>(b =>
+        registry.Register<ServerBrowserMessage>(b =>
         {
             b.Section("Information")
                 .Property(m => m.DataType, p => p.ToolTip("Type of server information."))
@@ -604,7 +604,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerServerListMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerServerListMessage>(b =>
+        registry.Register<ServerVersionCheckMessage>(b =>
         {
             b.Section("Server List")
                 .Property(m => m.Checksum, p => p.ShowHex().ToolTip("CRC-32 checksum of the server table."));
@@ -616,7 +616,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerServerTableMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerServerTableMessage>(b =>
+        registry.Register<ServerMultiServerMessage>(b =>
         {
             b.Section("Servers")
                 .Property(m => m.Servers);
@@ -625,7 +625,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerSetEquipmentMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerSetEquipmentMessage>(b =>
+        registry.Register<ServerAddEquipMessage>(b =>
         {
             b.Section("Equipment")
                 .Property(m => m.Slot, p => p.ToolTip("Equipment slot to be set."))
@@ -641,7 +641,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowDialogMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowDialogMessage>(b =>
+        registry.Register<ServerPursuitMessage>(b =>
         {
             b.Section("Dialog")
                 .Property(m => m.DialogType, p => p.ToolTip("Type of dialog."))
@@ -681,7 +681,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowDialogMenuMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowDialogMenuMessage>(b =>
+        registry.Register<ServerScreenMenuMessage>(b =>
         {
             b.Section("Menu")
                 .Property(m => m.MenuType, p => p.ToolTip("Type of dialog menu."))
@@ -722,7 +722,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowEffectMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowEffectMessage>(b =>
+        registry.Register<ServerEffectLayerMessage>(b =>
         {
             b.Section("Target Entity")
                 .Property(m => m.TargetId, p => p.ShowHex().ToolTip("ID of the target entity."))
@@ -744,7 +744,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowMapHelpMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowMapHelpMessage>(b =>
+        registry.Register<ServerScreenShotMessage>(b =>
         {
             b.Section("Map")
                 .Property(m => m.MapIndex, p => p.ToolTip("Index of the map to show help for."));
@@ -753,7 +753,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowNotepadMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowNotepadMessage>(b =>
+        registry.Register<ServerEnterEditingModeMessage>(b =>
         {
             b.Section("Notepad")
                 .Property(m => m.Slot, p => p.ToolTip("Inventory slot containing the note item."))
@@ -768,7 +768,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowSpinnerMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowSpinnerMessage>(b =>
+        registry.Register<ServerBlockInputMessage>(b =>
         {
             b.Section("Visibility")
                 .Property(m => m.IsVisible, p => p.ToolTip("Whether the spinner is visible."));
@@ -777,7 +777,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerShowUserMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerShowUserMessage>(b =>
+        registry.Register<ServerDrawHumanObjectsMessage>(b =>
         {
             b.Section("User")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the user."))
@@ -837,7 +837,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerStatPointsMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerStatPointsMessage>(b =>
+        registry.Register<ServerLevelPointMessage>(b =>
         {
             b.Section("Stat Points")
                 .Property(m => m.FlashButtons,
@@ -848,7 +848,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerStatusEffectMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerStatusEffectMessage>(b =>
+        registry.Register<ServerSpelledMessage>(b =>
         {
             b.Section("Effect")
                 .Property(m => m.Icon, p => p.ToolTip("Icon displayed for the status effect."))
@@ -858,7 +858,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerSwitchPaneMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerSwitchPaneMessage>(b =>
+        registry.Register<ServerWindowChangeMessage>(b =>
         {
             b.Section("Interface")
                 .Property(m => m.Pane, p => p.ToolTip("Interface pane to be switched to."));
@@ -867,7 +867,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerSyncTicksMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerSyncTicksMessage>(b =>
+        registry.Register<ServerCheckTimeMessage>(b =>
         {
             b.Section("Ticks")
                 .Property(m => m.TickCount, p => p.ToolTip("Server-side tick count, used for synchronizing timing."));
@@ -876,7 +876,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerUpdateStatsMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerUpdateStatsMessage>(b =>
+        registry.Register<ServerStatusMessage>(b =>
         {
             b.Section("Fields")
                 .Property(m => m.Fields,
@@ -943,7 +943,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerUserIdMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerUserIdMessage>(b =>
+        registry.Register<ServerUserAppearanceMessage>(b =>
         {
             b.Section("User")
                 .Property(m => m.UserId, p => p.ShowHex().ToolTip("ID of the user."))
@@ -958,7 +958,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerUserIdResponseMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerUserIdResponseMessage>(b =>
+        registry.Register<ServerUserIdMessage>(b =>
         {
             b.Section("User")
                 .Property(m => m.UserId, p => p.ShowHex().ToolTip("ID of the user."));
@@ -969,7 +969,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerUserProfileMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerUserProfileMessage>(b =>
+        registry.Register<ServerObjectInfoMessage>(b =>
         {
             b.Section("User")
                 .Property(m => m.EntityId, p => p.ShowHex().ToolTip("ID of the user."));
@@ -1005,7 +1005,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerWalkResponseMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerWalkResponseMessage>(b =>
+        registry.Register<ServerMoveMessage>(b =>
         {
             b.Section("Movement")
                 .Property(m => m.Direction, p => p.ToolTip("Direction the user has walked."));
@@ -1021,7 +1021,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerWorldListMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerWorldListMessage>(b =>
+        registry.Register<ServerShowUsersMessage>(b =>
         {
             b.Section("Totals")
                 .Property(m => m.WorldCount, p => p.ToolTip("Total number of users across all world servers."))
@@ -1037,7 +1037,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerWorldMapMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerWorldMapMessage>(b =>
+        registry.Register<ServerFieldMapMessage>(b =>
         {
             b.Section("Field")
                 .Property(m => m.FieldIndex, p => p.ToolTip("Index of the field to be displayed."))
@@ -1049,7 +1049,7 @@ public class ServerMessageMappingProvider : IInspectorMappingProvider
 
     private static void RegisterServerWorldMessageMapping(InspectorMappingRegistry registry)
     {
-        registry.Register<ServerWorldMessageMessage>(b =>
+        registry.Register<ServerSystemMessage>(b =>
         {
             b.Section("Message")
                 .Property(m => m.MessageType, p => p.ToolTip("Type of the message to be displayed."))

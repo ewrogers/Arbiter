@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using Arbiter.App.Models.Player;
 using Arbiter.Net.Client.Messages;
@@ -54,13 +54,13 @@ public partial class ClientManagerViewModel
 
     private static void PerformTrueLook(ClientViewModel client)
     {
-        var lookAction = new ClientLookAheadMessage();
+        var lookAction = new ClientLookMessage();
         client.EnqueueMessage(lookAction);
     }
 
     private static void PerformTrueLookTile(ClientViewModel client, SpellCastParameters castParameters)
     {
-        var lookTileAction = new ClientLookTileMessage
+        var lookTileAction = new ClientFarLookMessage
         {
             TileX = (ushort)castParameters.TargetX,
             TileY = (ushort)castParameters.TargetY

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Binary;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +26,7 @@ public partial class EntityManagerViewModel
         }
 
         var entityId = (uint)SelectedEntities[0].Id;
-        var clientInteract = new ClientInteractMessage
+        var clientInteract = new ClientRequestObjectInfoMessage
         {
             InteractionType = InteractionType.Entity,
             TargetId = entityId

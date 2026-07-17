@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 using Arbiter.App.Models.Player;
 using Arbiter.Net;
@@ -33,20 +33,20 @@ public partial class PlayerViewModel
     {
         const int observerPriority = int.MaxValue - 100;
 
-        _userIdMessageObserver = connection.AddObserver<ServerUserIdMessage>(OnUserIdMessage, observerPriority);
+        _userIdMessageObserver = connection.AddObserver<ServerUserAppearanceMessage>(OnUserIdMessage, observerPriority);
 
-        _walkMessageObserver = connection.AddObserver<ClientWalkMessage>(OnClientWalkMessage, observerPriority);
-        _mapInfoMessageObserver = connection.AddObserver<ServerMapInfoMessage>(OnMapInfoMessage, observerPriority);
+        _walkMessageObserver = connection.AddObserver<ClientMoveMessage>(OnClientWalkMessage, observerPriority);
+        _mapInfoMessageObserver = connection.AddObserver<ServerMapSizeMessage>(OnMapInfoMessage, observerPriority);
         _mapLocationMessageObserver =
-            connection.AddObserver<ServerMapLocationMessage>(OnMapLocationMessage, observerPriority);
+            connection.AddObserver<ServerUserPositionMessage>(OnMapLocationMessage, observerPriority);
         _selfProfileMessageObserver =
-            connection.AddObserver<ServerSelfProfileMessage>(OnSelfProfileMessage, observerPriority);
+            connection.AddObserver<ServerSelfLookMessage>(OnSelfProfileMessage, observerPriority);
         _updateStatsMessageObserver =
-            connection.AddObserver<ServerUpdateStatsMessage>(OnUpdateStatsMessage, observerPriority);
+            connection.AddObserver<ServerStatusMessage>(OnUpdateStatsMessage, observerPriority);
 
         // Inventory
-        _addItemObserver = connection.AddObserver<ServerAddItemMessage>(OnAddItemMessage);
-        _removeItemObserver = connection.AddObserver<ServerRemoveItemMessage>(OnRemoveItemMessage);
+        _addItemObserver = connection.AddObserver<ServerAddInventoryMessage>(OnAddItemMessage);
+        _removeItemObserver = connection.AddObserver<ServerRemoveInventoryMessage>(OnRemoveItemMessage);
 
         // Skills
         _addSkillObserver = connection.AddObserver<ServerAddSkillMessage>(OnAddSkillMessage);
@@ -57,7 +57,7 @@ public partial class PlayerViewModel
         _removeSpellObserver = connection.AddObserver<ServerRemoveSpellMessage>(OnRemoveSpellMessage);
 
         // Cooldowns
-        _cooldownObserver = connection.AddObserver<ServerCooldownMessage>(OnCooldownMessage);
+        _cooldownObserver = connection.AddObserver<ServerActionDelayMessage>(OnCooldownMessage);
     }
 
     private void RemoveObservers()
@@ -81,7 +81,7 @@ public partial class PlayerViewModel
         _cooldownObserver?.Unregister();
     }
 
-    private void OnUserIdMessage(ProxyConnection connection, ServerUserIdMessage message, object? parameter)
+    private void OnUserIdMessage(ProxyConnection connection, ServerUserAppearanceMessage message, object? parameter)
     {
         EntityId = message.UserId;
         Class = message.Class.ToString();
@@ -89,7 +89,7 @@ public partial class PlayerViewModel
 
     #region Location Observers
 
-    private void OnClientWalkMessage(ProxyConnection connection, ClientWalkMessage message, object? parameter)
+    private void OnClientWalkMessage(ProxyConnection connection, ClientMoveMessage message, object? parameter)
     {
         // Update predicted client position on UI thread
         var direction = message.Direction;
@@ -114,13 +114,13 @@ public partial class PlayerViewModel
         MapY = newY;
     }
 
-    private void OnMapInfoMessage(ProxyConnection connection, ServerMapInfoMessage message, object? parameter)
+    private void OnMapInfoMessage(ProxyConnection connection, ServerMapSizeMessage message, object? parameter)
     {
         MapId = message.MapId;
         MapName = message.Name;
     }
 
-    private void OnMapLocationMessage(ProxyConnection connection, ServerMapLocationMessage message, object? parameter)
+    private void OnMapLocationMessage(ProxyConnection connection, ServerUserPositionMessage message, object? parameter)
     {
         MapX = message.X;
         MapY = message.Y;
@@ -130,14 +130,14 @@ public partial class PlayerViewModel
 
     #region Stats Observers
 
-    private void OnSelfProfileMessage(ProxyConnection connection, ServerSelfProfileMessage message, object? parameter)
+    private void OnSelfProfileMessage(ProxyConnection connection, ServerSelfLookMessage message, object? parameter)
     {
         Class = string.Equals(message.DisplayClass, "Master", StringComparison.OrdinalIgnoreCase)
             ? message.Class.ToString()
             : message.DisplayClass;
     }
 
-    private void OnUpdateStatsMessage(ProxyConnection connection, ServerUpdateStatsMessage message, object? parameter)
+    private void OnUpdateStatsMessage(ProxyConnection connection, ServerStatusMessage message, object? parameter)
     {
         Level = message.Level ?? Level;
         AbilityLevel = message.AbilityLevel ?? AbilityLevel;
@@ -152,7 +152,7 @@ public partial class PlayerViewModel
 
     #region Inventory Observers
 
-    private void OnAddItemMessage(ProxyConnection connection, ServerAddItemMessage message, object? parameter)
+    private void OnAddItemMessage(ProxyConnection connection, ServerAddInventoryMessage message, object? parameter)
     {
         // Ignore injected items, these are likely virtual items
         if (message.Source == NetworkPacketSource.Injected)
@@ -174,7 +174,7 @@ public partial class PlayerViewModel
         Inventory.SetSlot(message.Slot, item);
     }
 
-    private void OnRemoveItemMessage(ProxyConnection connection, ServerRemoveItemMessage message, object? parameter)
+    private void OnRemoveItemMessage(ProxyConnection connection, ServerRemoveInventoryMessage message, object? parameter)
     {
         var slot = message.Slot;
         if (!_pendingVirtualItemSwaps.TryRemove(slot, out var swap))
@@ -289,7 +289,7 @@ public partial class PlayerViewModel
 
     #endregion
 
-    private void OnCooldownMessage(ProxyConnection connection, ServerCooldownMessage message, object? parameter)
+    private void OnCooldownMessage(ProxyConnection connection, ServerActionDelayMessage message, object? parameter)
     {
         var duration = TimeSpan.FromSeconds(message.Seconds);
 

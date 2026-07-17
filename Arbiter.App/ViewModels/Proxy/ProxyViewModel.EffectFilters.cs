@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Arbiter.App.Models.Settings;
 using Arbiter.Net;
 using Arbiter.Net.Filters;
@@ -51,10 +51,10 @@ public partial class ProxyViewModel
 
     private void AddDebugEffectsFilters(DebugSettings settings)
     {
-        _debugClassicEffectsFilter = _proxyServer.AddFilter<ServerShowEffectMessage>(HandleShowEffectMessage,
+        _debugClassicEffectsFilter = _proxyServer.AddFilter<ServerEffectLayerMessage>(HandleShowEffectMessage,
             $"{FilterPrefix}_Effect_ServerShowEffect", DebugFilterPriority, settings);
 
-        _debugNoBlindFilter = _proxyServer.AddFilter<ServerUpdateStatsMessage>(HandleUpdateStatsMessage,
+        _debugNoBlindFilter = _proxyServer.AddFilter<ServerStatusMessage>(HandleUpdateStatsMessage,
             $"{FilterPrefix}_Effect_ServerUpdateStats", DebugFilterPriority, settings);
     }
 
@@ -64,8 +64,8 @@ public partial class ProxyViewModel
         _debugNoBlindFilter?.Unregister();
     }
 
-    private static NetworkPacket HandleShowEffectMessage(ProxyConnection connection, ServerShowEffectMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerShowEffectMessage> result)
+    private static NetworkPacket HandleShowEffectMessage(ProxyConnection connection, ServerEffectLayerMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerEffectLayerMessage> result)
     {
         if (parameter is not DebugSettings { UseClassicEffects: true })
         {
@@ -98,8 +98,8 @@ public partial class ProxyViewModel
         return hasReplacement ? result.Replace(message) : result.Passthrough();
     }
 
-    private static NetworkPacket HandleUpdateStatsMessage(ProxyConnection connection, ServerUpdateStatsMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerUpdateStatsMessage> result)
+    private static NetworkPacket HandleUpdateStatsMessage(ProxyConnection connection, ServerStatusMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerStatusMessage> result)
     {
         if (message.IsBlinded is not true || parameter is not DebugSettings { DisableBlind: true })
         {

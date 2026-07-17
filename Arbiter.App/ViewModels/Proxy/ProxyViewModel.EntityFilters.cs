@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Arbiter.App.Models.Entities;
 using Arbiter.App.Models.Settings;
@@ -26,13 +26,13 @@ public partial class ProxyViewModel
 
     private void AddDebugEntityFilters(DebugSettings settings)
     {
-        _debugAddEntityFilter = _proxyServer.AddFilter<ServerAddEntityMessage>(HandleAddEntityMessage,
+        _debugAddEntityFilter = _proxyServer.AddFilter<ServerDrawObjectsMessage>(HandleAddEntityMessage,
             $"{FilterPrefix}_Entity_ServerAddEntity", DebugFilterPriority, settings);
 
-        _debugInteractObserver = _proxyServer.AddObserver<ClientInteractMessage>(OnClientInteractMessage, parameter: settings);
+        _debugInteractObserver = _proxyServer.AddObserver<ClientRequestObjectInfoMessage>(OnClientInteractMessage, parameter: settings);
 
         _debugInteractResponseFilter =
-            _proxyServer.AddFilter<ServerWorldMessageMessage>(HandleInteractResponseMessage,
+            _proxyServer.AddFilter<ServerSystemMessage>(HandleInteractResponseMessage,
                 $"{FilterPrefix}_Entity_OnServerInteractMessage", DebugFilterPriority - 10, settings);
     }
 
@@ -43,8 +43,8 @@ public partial class ProxyViewModel
         _debugInteractResponseFilter?.Unregister();
     }
 
-    private static NetworkPacket HandleAddEntityMessage(ProxyConnection connection, ServerAddEntityMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerAddEntityMessage> result)
+    private static NetworkPacket HandleAddEntityMessage(ProxyConnection connection, ServerDrawObjectsMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerDrawObjectsMessage> result)
     {
         if (parameter is not DebugSettings filterSettings ||
             filterSettings is { ShowMonsterId: false, ShowNpcId: false })
@@ -92,7 +92,7 @@ public partial class ProxyViewModel
         return hasChanges ? result.Replace(message) : result.Passthrough();
     }
 
-    private void OnClientInteractMessage(ProxyConnection connection, ClientInteractMessage message, object? parameter)
+    private void OnClientInteractMessage(ProxyConnection connection, ClientRequestObjectInfoMessage message, object? parameter)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is { ShowMonsterClickId: false })
         {
@@ -116,8 +116,8 @@ public partial class ProxyViewModel
         }
     }
 
-    private NetworkPacket HandleInteractResponseMessage(ProxyConnection connection, ServerWorldMessageMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerWorldMessageMessage> result)
+    private NetworkPacket HandleInteractResponseMessage(ProxyConnection connection, ServerSystemMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerSystemMessage> result)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is { ShowMonsterClickId: false })
         {

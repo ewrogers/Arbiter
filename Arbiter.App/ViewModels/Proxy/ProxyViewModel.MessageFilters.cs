@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Arbiter.App.Models.Settings;
@@ -19,10 +19,10 @@ public partial class ProxyViewModel
 
     private void AddDebugMessageFilters(DebugSettings settings, IReadOnlyList<MessageFilter> filters)
     {
-        _emptyWorldMessageFilter = _proxyServer.AddFilter<ServerWorldMessageMessage>(HandleEmptyWorldMessageMessage,
+        _emptyWorldMessageFilter = _proxyServer.AddFilter<ServerSystemMessage>(HandleEmptyWorldMessageMessage,
             $"{FilterPrefix}_Message_EmptyServerWorldMessage", DebugFilterPriority, settings);
 
-        _worldMessageFilter = _proxyServer.AddFilter<ServerWorldMessageMessage>(HandleWorldMessage,
+        _worldMessageFilter = _proxyServer.AddFilter<ServerSystemMessage>(HandleWorldMessage,
             $"{FilterPrefix}_Message_ServerWorldMessageFilter", DebugFilterPriority - 10, filters.ToList());
     }
 
@@ -35,8 +35,8 @@ public partial class ProxyViewModel
     }
 
     private static NetworkPacket? HandleEmptyWorldMessageMessage(ProxyConnection connection,
-        ServerWorldMessageMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerWorldMessageMessage> result)
+        ServerSystemMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerSystemMessage> result)
     {
         if (parameter is not DebugSettings filterSettings || filterSettings is { IgnoreEmptyMessages: false })
         {
@@ -47,8 +47,8 @@ public partial class ProxyViewModel
         return string.IsNullOrWhiteSpace(message.Message.Trim()) ? result.Block() : result.Passthrough();
     }
 
-    private NetworkPacket? HandleWorldMessage(ProxyConnection connection, ServerWorldMessageMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerWorldMessageMessage> result)
+    private NetworkPacket? HandleWorldMessage(ProxyConnection connection, ServerSystemMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerSystemMessage> result)
     {
         if (parameter is not IReadOnlyList<MessageFilter> filters)
         {

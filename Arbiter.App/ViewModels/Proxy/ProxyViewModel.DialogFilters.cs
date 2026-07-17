@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Arbiter.App.Collections;
 using Arbiter.App.Models.Player;
@@ -19,13 +19,13 @@ public partial class ProxyViewModel
 
     private void AddDebugDialogFilters(DebugSettings settings)
     {
-        _debugDialogFilter = _proxyServer.AddFilter<ServerShowDialogMessage>(HandleDialogMessage,
+        _debugDialogFilter = _proxyServer.AddFilter<ServerPursuitMessage>(HandleDialogMessage,
             $"{FilterPrefix}_Dialog_ServerShowDialog", DebugFilterPriority, settings);
 
-        _debugDialogMenuFilter = _proxyServer.AddFilter<ServerShowDialogMenuMessage>(HandleDialogMenuMessage,
+        _debugDialogMenuFilter = _proxyServer.AddFilter<ServerScreenMenuMessage>(HandleDialogMenuMessage,
             $"{FilterPrefix}_Dialog_ServerShowDialogMenu", DebugFilterPriority, settings);
 
-        _debugDialogMenuItemQuantityFilter = _proxyServer.AddFilter<ServerShowDialogMenuMessage>(
+        _debugDialogMenuItemQuantityFilter = _proxyServer.AddFilter<ServerScreenMenuMessage>(
             HandleDialogItemQuantityMenuMessage,
             $"{FilterPrefix}_Dialog_ItemQuantity_ServerShowDialogMenu", int.MinValue, settings);
     }
@@ -37,8 +37,8 @@ public partial class ProxyViewModel
         _debugDialogMenuItemQuantityFilter?.Unregister();
     }
 
-    private static NetworkPacket HandleDialogMessage(ProxyConnection connection, ServerShowDialogMessage message,
-        object? parameter, NetworkMessageFilterResult<ServerShowDialogMessage> result)
+    private static NetworkPacket HandleDialogMessage(ProxyConnection connection, ServerPursuitMessage message,
+        object? parameter, NetworkMessageFilterResult<ServerPursuitMessage> result)
     {
         if (parameter is not DebugSettings settings || settings is { ShowDialogId: false, ShowPursuitId: false })
         {
@@ -66,8 +66,8 @@ public partial class ProxyViewModel
     }
 
     private static NetworkPacket HandleDialogMenuMessage(ProxyConnection connection,
-        ServerShowDialogMenuMessage message, object? parameter,
-        NetworkMessageFilterResult<ServerShowDialogMenuMessage> result)
+        ServerScreenMenuMessage message, object? parameter,
+        NetworkMessageFilterResult<ServerScreenMenuMessage> result)
     {
         if (parameter is not DebugSettings settings || settings is { ShowDialogId: false, ShowPursuitId: false })
         {
@@ -113,8 +113,8 @@ public partial class ProxyViewModel
     }
 
     private NetworkPacket HandleDialogItemQuantityMenuMessage(ProxyConnection connection,
-        ServerShowDialogMenuMessage message, object? parameter,
-        NetworkMessageFilterResult<ServerShowDialogMenuMessage> result)
+        ServerScreenMenuMessage message, object? parameter,
+        NetworkMessageFilterResult<ServerScreenMenuMessage> result)
     {
         if (parameter is not DebugSettings settings || settings is { ShowDialogItemQuantity: false } ||
             message.MenuType != DialogMenuType.UserInventory)
@@ -141,7 +141,7 @@ public partial class ProxyViewModel
             .Select(item =>
             {
                 var baseName = InventoryItem.GetBaseName(item.Value.Name);
-                return new ServerAddItemMessage
+                return new ServerAddInventoryMessage
                 {
                     Slot = (byte)item.Slot,
                     Name = $"{baseName} [{item.Value.Quantity}]",
@@ -161,7 +161,7 @@ public partial class ProxyViewModel
             .Select(item =>
             {
                 var baseName = InventoryItem.GetBaseName(item.Value.Name);
-                return new ServerAddItemMessage
+                return new ServerAddInventoryMessage
                 {
                     Slot = (byte)item.Slot,
                     Name = baseName,

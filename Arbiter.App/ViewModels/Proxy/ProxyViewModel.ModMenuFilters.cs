@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Arbiter.App.Collections;
 using Arbiter.App.Models.Entities;
@@ -38,10 +38,10 @@ public partial class ProxyViewModel
 
     private void AddModMenuFilters(DebugSettings settings)
     {
-        _modMenuInteractFilter = _proxyServer.AddFilter<ClientInteractMessage>(HandleModMenuInteractMessage,
+        _modMenuInteractFilter = _proxyServer.AddFilter<ClientRequestObjectInfoMessage>(HandleModMenuInteractMessage,
             $"{FilterPrefix}_ModMenu_ClientInteract", ModMenuFilterPriority, settings);
 
-        _modMenuInteractFilter = _proxyServer.AddFilter<ClientDialogMenuChoiceMessage>(HandleModMenuDialogChoiceMessage,
+        _modMenuInteractFilter = _proxyServer.AddFilter<ClientMerchantMessage>(HandleModMenuDialogChoiceMessage,
             $"{FilterPrefix}_ModMenu_ClientInteract", ModMenuFilterPriority, settings);
     }
 
@@ -50,8 +50,8 @@ public partial class ProxyViewModel
         _modMenuInteractFilter?.Unregister();
     }
 
-    private NetworkPacket? HandleModMenuInteractMessage(ProxyConnection connection, ClientInteractMessage message,
-        object? parameter, NetworkMessageFilterResult<ClientInteractMessage> result)
+    private NetworkPacket? HandleModMenuInteractMessage(ProxyConnection connection, ClientRequestObjectInfoMessage message,
+        object? parameter, NetworkMessageFilterResult<ClientRequestObjectInfoMessage> result)
     {
         if (parameter is not DebugSettings { EnableNpcModMenu: true })
         {
@@ -79,8 +79,8 @@ public partial class ProxyViewModel
     }
 
     private NetworkPacket? HandleModMenuDialogChoiceMessage(ProxyConnection connection,
-        ClientDialogMenuChoiceMessage message,
-        object? parameter, NetworkMessageFilterResult<ClientDialogMenuChoiceMessage> result)
+        ClientMerchantMessage message,
+        object? parameter, NetworkMessageFilterResult<ClientMerchantMessage> result)
     {
         if (parameter is not DebugSettings { EnableNpcModMenu: true })
         {
@@ -90,7 +90,7 @@ public partial class ProxyViewModel
         // Treat as interact request
         if (message.PursuitId == 0xFF00)
         {
-            var interactMessage = new ClientInteractMessage
+            var interactMessage = new ClientRequestObjectInfoMessage
             {
                 InteractionType = InteractionType.Entity,
                 TargetId = message.EntityId
@@ -118,9 +118,9 @@ public partial class ProxyViewModel
         return message.PursuitId >= 0xFF00 ? result.Block() : result.Passthrough();
     }
 
-    private static ServerShowDialogMenuMessage GetModMenuDialogForEntity(GameEntity entity)
+    private static ServerScreenMenuMessage GetModMenuDialogForEntity(GameEntity entity)
     {
-        var dialog = new ServerShowDialogMenuMessage
+        var dialog = new ServerScreenMenuMessage
         {
             MenuType = DialogMenuType.Menu,
             EntityType = entity.Flags switch
@@ -151,10 +151,10 @@ public partial class ProxyViewModel
         return dialog;
     }
 
-    private static ServerShowDialogMenuMessage GetDestroyItemDialogForEntity(GameEntity entity,
+    private static ServerScreenMenuMessage GetDestroyItemDialogForEntity(GameEntity entity,
         ISlottedCollection<InventoryItem> inventory)
     {
-        var dialog = new ServerShowDialogMenuMessage
+        var dialog = new ServerScreenMenuMessage
         {
             MenuType = DialogMenuType.UserInventory,
             EntityType = entity.Flags switch

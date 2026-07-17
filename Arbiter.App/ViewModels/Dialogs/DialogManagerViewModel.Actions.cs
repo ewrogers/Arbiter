@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Arbiter.Net.Client.Messages;
 using Arbiter.Net.Server.Messages;
 using Arbiter.Net.Types;
@@ -22,7 +22,7 @@ public partial class DialogManagerViewModel
         }
 
         // With a pursuit this is a dialog menu that begins the pursuit
-        var menuChoiceMessage = new ClientDialogMenuChoiceMessage
+        var menuChoiceMessage = new ClientMerchantMessage
         {
             EntityType = ActiveDialog.EntityType,
             EntityId = (uint)ActiveDialog.EntityId.Value,
@@ -75,7 +75,7 @@ public partial class DialogManagerViewModel
         }
 
         // This just re-interacts with the entity
-        var interactMessage = new ClientInteractMessage
+        var interactMessage = new ClientRequestObjectInfoMessage
         {
             InteractionType = InteractionType.Entity,
             TargetId = (uint)entityId.Value
@@ -106,7 +106,7 @@ public partial class DialogManagerViewModel
         // If there is no step ID, we can just act like the dialog was closed by the server
         if (ActiveDialog?.StepId is null)
         {
-            var closeDialogMessage = new ServerShowDialogMessage
+            var closeDialogMessage = new ServerPursuitMessage
             {
                 DialogType = DialogType.CloseDialog
             };
@@ -126,7 +126,7 @@ public partial class DialogManagerViewModel
         }
 
         // Next/Prev dialogs require an explicit client action to prevent "You are busy" messages
-        var closeInteractMessage = new ClientDialogChoiceMessage
+        var closeInteractMessage = new ClientPursuitMessage
         {
             EntityId = (uint)dialog.EntityId,
             EntityType = dialog.EntityType,
@@ -146,7 +146,7 @@ public partial class DialogManagerViewModel
             return false;
         }
 
-        var closeInteractMessage = new ClientDialogChoiceMessage
+        var closeInteractMessage = new ClientPursuitMessage
         {
             EntityId = (uint)dialog.EntityId,
             EntityType = dialog.EntityType,
