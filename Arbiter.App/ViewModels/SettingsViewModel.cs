@@ -34,6 +34,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(SkipIntroVideo))]
     [NotifyPropertyChangedFor(nameof(SuppressLoginNotice))]
     [NotifyPropertyChangedFor(nameof(ApplyModifiersKeyFix))]
+    [NotifyPropertyChangedFor(nameof(SkipQuantityPromptInExchange))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -119,6 +120,17 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.ApplyModifiersKeyFix = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool SkipQuantityPromptInExchange
+    {
+        get => Settings.SkipQuantityPromptInExchange;
+        set
+        {
+            Settings.SkipQuantityPromptInExchange = value;
             OnPropertyChanged();
             HasChanges = true;
         }

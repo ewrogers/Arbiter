@@ -14,6 +14,7 @@ public class ArbiterSettings : ICloneable
     public bool SkipIntroVideo { get; set; } = true;
     public bool SuppressLoginNotice { get; set; } = true;
     public bool ApplyModifiersKeyFix { get; set; } = true;
+    public bool SkipQuantityPromptInExchange { get; set; } = true;
 
     public int LocalPort { get; set; } = 2610;
 
@@ -46,6 +47,7 @@ public class ArbiterSettings : ICloneable
         SkipIntroVideo = SkipIntroVideo,
         SuppressLoginNotice = SuppressLoginNotice,
         ApplyModifiersKeyFix = ApplyModifiersKeyFix,
+        SkipQuantityPromptInExchange = SkipQuantityPromptInExchange,
         LocalPort = LocalPort,
         RemoteServerAddress = RemoteServerAddress,
         RemoteServerPort = RemoteServerPort,

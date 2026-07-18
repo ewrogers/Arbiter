@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add an enabled-by-default game client option that skips the exchange quantity prompt only for stackable items with a quantity of one
+
 ## [1.9.5] - 2026-07-17
 
 ### Fixed

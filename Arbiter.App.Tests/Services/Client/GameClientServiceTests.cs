@@ -14,6 +14,10 @@ public class GameClientServiceTests
         "BuildStuckModifierFixStub", BindingFlags.NonPublic | BindingFlags.Static)!;
     private static readonly MethodInfo BuildStuckModifierCall = typeof(GameClientService).GetMethod(
         "BuildStuckModifierCall", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildSkipExchangeQuantityPromptStub = typeof(GameClientService).GetMethod(
+        "BuildSkipExchangeQuantityPromptStub", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildSkipExchangeQuantityPromptHook = typeof(GameClientService).GetMethod(
+        "BuildSkipExchangeQuantityPromptHook", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     [Test]
     public void Should_Replace_Expected_Login_Notification_Patches()
@@ -113,6 +117,47 @@ public class GameClientServiceTests
             Assert.That(call, Has.Length.EqualTo(5));
             Assert.That(call[0], Is.EqualTo(0xE8));
             Assert.That(GetRelativeTarget(call, callAddress, 0), Is.EqualTo(stubAddress.ToInt64()));
+        });
+    }
+
+    [Test]
+    public void Should_Build_Skip_Exchange_Quantity_Prompt_Stub_With_Resolved_Addresses()
+    {
+        var moduleBaseAddress = (IntPtr)0x00400000;
+        var stubAddress = (IntPtr)0x0066867A;
+
+        var stub = (byte[])BuildSkipExchangeQuantityPromptStub.Invoke(null,
+            [moduleBaseAddress, stubAddress])!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(stub, Has.Length.EqualTo(125));
+            Assert.That(stub[0..16], Is.EqualTo(new byte[]
+            {
+                0x53, 0x56, 0x57, 0x89, 0xCE, 0x8B, 0x7C, 0x24,
+                0x10, 0x0F, 0xB6, 0x5F, 0x02, 0x84, 0xDB, 0x74,
+            }));
+            Assert.That(stub[0x17..0x1B], Is.EqualTo(new byte[] { 0xAB, 0x15, 0xF4, 0xFF }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x16), Is.EqualTo(0x005A9C40));
+            Assert.That(stub[0x5D..0x61], Is.EqualTo(new byte[] { 0xC5, 0x3B, 0xE0, 0xFF }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x5C), Is.EqualTo(0x0046C2A0));
+            Assert.That(stub[0x79..0x7D], Is.EqualTo(new byte[] { 0x9E, 0x1F, 0xE0, 0xFF }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x78), Is.EqualTo(0x0046A695));
+        });
+    }
+
+    [Test]
+    public void Should_Build_Only_A_Five_Byte_Jump_To_The_Exchange_Quantity_Prompt_Stub()
+    {
+        var hookAddress = (IntPtr)0x0046A690;
+        var stubAddress = (IntPtr)0x0066867A;
+
+        var hook = (byte[])BuildSkipExchangeQuantityPromptHook.Invoke(null, [hookAddress, stubAddress])!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(hook, Is.EqualTo(new byte[] { 0xE9, 0xE5, 0xDF, 0x1F, 0x00 }));
+            Assert.That(GetRelativeTarget(hook, hookAddress, 0), Is.EqualTo(stubAddress.ToInt64()));
         });
     }
 

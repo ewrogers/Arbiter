@@ -14,6 +14,7 @@ public sealed class ArbiterSettingsTests
         {
             Assert.That(settings?.TraceDetailedView, Is.True);
             Assert.That(settings?.ApplyModifiersKeyFix, Is.True);
+            Assert.That(settings?.SkipQuantityPromptInExchange, Is.True);
         });
     }
 
@@ -35,5 +36,15 @@ public sealed class ArbiterSettingsTests
         var clone = (ArbiterSettings)settings.Clone();
 
         Assert.That(clone.ApplyModifiersKeyFix, Is.False);
+    }
+
+    [Test]
+    public void Should_Preserve_Exchange_Quantity_Prompt_Preference_When_Cloned()
+    {
+        var settings = new ArbiterSettings { SkipQuantityPromptInExchange = false };
+
+        var clone = (ArbiterSettings)settings.Clone();
+
+        Assert.That(clone.SkipQuantityPromptInExchange, Is.False);
     }
 }
