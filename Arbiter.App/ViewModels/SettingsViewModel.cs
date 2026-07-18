@@ -44,7 +44,6 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(TraceMaxHistory))]
     [NotifyPropertyChangedFor(nameof(DebugShowDialogId))]
     [NotifyPropertyChangedFor(nameof(DebugShowPursuitId))]
-    [NotifyPropertyChangedFor(nameof(DebugShowDialogItemQuantity))]
     [NotifyPropertyChangedFor(nameof(DebugShowEquipmentDurability))]
     [NotifyPropertyChangedFor(nameof(DebugShowNpcId))]
     [NotifyPropertyChangedFor(nameof(DebugShowMonsterId))]
@@ -236,17 +235,6 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.Debug.ShowPursuitId = value;
-            OnPropertyChanged();
-            HasChanges = true;
-        }
-    }
-
-    public bool DebugShowDialogItemQuantity
-    {
-        get => Settings.Debug.ShowDialogItemQuantity;
-        set
-        {
-            Settings.Debug.ShowDialogItemQuantity = value;
             OnPropertyChanged();
             HasChanges = true;
         }

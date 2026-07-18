@@ -108,8 +108,6 @@ public partial class ProxyViewModel
             var inventory = player?.Inventory ?? new SlottedCollection<InventoryItem>(1);
             
             var destroyItemMenu = GetDestroyItemDialogForEntity(entity, inventory);
-            
-            SendItemQuantityOverrides(connection, inventory);
             connection.EnqueueMessage(destroyItemMenu);
             return result.Block();
         }
