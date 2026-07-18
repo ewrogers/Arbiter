@@ -15,6 +15,7 @@ public sealed class ArbiterSettingsTests
             Assert.That(settings?.TraceDetailedView, Is.True);
             Assert.That(settings?.ApplyModifiersKeyFix, Is.True);
             Assert.That(settings?.SkipQuantityPromptInExchange, Is.True);
+            Assert.That(settings?.ShowItemQuantityInDialogs, Is.True);
         });
     }
 
@@ -46,5 +47,15 @@ public sealed class ArbiterSettingsTests
         var clone = (ArbiterSettings)settings.Clone();
 
         Assert.That(clone.SkipQuantityPromptInExchange, Is.False);
+    }
+
+    [Test]
+    public void Should_Preserve_Dialog_Item_Quantity_Preference_When_Cloned()
+    {
+        var settings = new ArbiterSettings { ShowItemQuantityInDialogs = false };
+
+        var clone = (ArbiterSettings)settings.Clone();
+
+        Assert.That(clone.ShowItemQuantityInDialogs, Is.False);
     }
 }

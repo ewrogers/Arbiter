@@ -18,6 +18,10 @@ public class GameClientServiceTests
         "BuildSkipExchangeQuantityPromptStub", BindingFlags.NonPublic | BindingFlags.Static)!;
     private static readonly MethodInfo BuildSkipExchangeQuantityPromptHook = typeof(GameClientService).GetMethod(
         "BuildSkipExchangeQuantityPromptHook", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildShowItemQuantityInDialogsStub = typeof(GameClientService).GetMethod(
+        "BuildShowItemQuantityInDialogsStub", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildShowItemQuantityInDialogsHook = typeof(GameClientService).GetMethod(
+        "BuildShowItemQuantityInDialogsHook", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     [Test]
     public void Should_Replace_Expected_Login_Notification_Patches()
@@ -161,6 +165,67 @@ public class GameClientServiceTests
         });
     }
 
+    [Test]
+    public void Should_Build_Show_Item_Quantity_In_Dialogs_Stub_With_Resolved_Addresses()
+    {
+        var moduleBaseAddress = (IntPtr)0x00400000;
+        var stubAddress = (IntPtr)0x10000000;
+
+        var stub = (byte[])BuildShowItemQuantityInDialogsStub.Invoke(null,
+            [moduleBaseAddress, stubAddress])!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(stub, Has.Length.EqualTo(341));
+            Assert.That(stub[0x0C..0x23], Is.EqualTo(new byte[]
+            {
+                0x8B, 0x75, 0x10, 0x89, 0xB5, 0xD8, 0xFE, 0xFF, 0xFF, 0x8B, 0x7D, 0x00,
+                0x8B, 0x7F, 0xE8, 0x0F, 0xB6, 0x3F, 0x90, 0x90, 0x90, 0x90, 0x90,
+            }));
+            Assert.That(GetNearConditionalTarget(stub, 0x26), Is.EqualTo(0x139));
+            Assert.That(GetNearConditionalTarget(stub, 0x2F), Is.EqualTo(0x139));
+            Assert.That(GetNearConditionalTarget(stub, 0x3C), Is.EqualTo(0x139));
+            Assert.That(stub[0x72..0x7A],
+                Is.EqualTo(new byte[] { 0x49, 0x0F, 0x8E, 0xC0, 0x00, 0x00, 0x00, 0x41 }));
+            Assert.That(GetNearConditionalTarget(stub, 0x73), Is.EqualTo(0x139));
+            Assert.That(stub[0x36..0x3A], Is.EqualTo(new byte[] { 0x06, 0x9C, 0x5A, 0xF0 }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x35), Is.EqualTo(0x005A9C40));
+            Assert.That(stub[0x99..0x9D], Is.EqualTo(new byte[] { 0x80, 0x93, 0x66, 0x00 }));
+            Assert.That(BitConverter.ToUInt32(stub, 0x99), Is.EqualTo(0x00669380));
+            Assert.That(BitConverter.ToInt32(stub, 0xCC), Is.EqualTo(20));
+            Assert.That(stub[0xDA..0xDD], Is.EqualTo(new byte[] { 0x83, 0xEA, 0x02 }));
+            Assert.That(stub[0x109..0x115], Is.EqualTo(new byte[]
+            {
+                0x66, 0xC7, 0x07, 0x2E, 0x2E, 0x90, 0x90, 0x90, 0x90, 0x83, 0xC7, 0x02,
+            }));
+            Assert.That(stub[0xF4..0xF8], Is.EqualTo(new byte[] { 0x78, 0xD5, 0x47, 0xF0 }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0xF3), Is.EqualTo(0x0047D670));
+            Assert.That(stub[0x133..0x139], Is.EqualTo(new byte[] { 0x89, 0x85, 0xD8, 0xFE, 0xFF, 0xFF }));
+            Assert.That(stub[0x139..0x145], Is.EqualTo(new byte[]
+            {
+                0xFF, 0xB5, 0xD8, 0xFE, 0xFF, 0xFF, 0xFF, 0x75, 0x0C, 0xFF, 0x75, 0x08,
+            }));
+            Assert.That(stub[0x146..0x14A], Is.EqualTo(new byte[] { 0x7A, 0x27, 0x62, 0xF0 }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x145), Is.EqualTo(0x006228C4));
+            Assert.That(stub[^8..], Is.EqualTo(new byte[] { 0x8D, 0x65, 0xF4, 0x5F, 0x5E, 0x5B, 0x5D, 0xC3 }));
+        });
+    }
+
+    [Test]
+    public void Should_Build_Only_A_Five_Byte_Call_To_The_Dialog_Item_Quantity_Stub()
+    {
+        var hookAddress = (IntPtr)0x0053609C;
+        var stubAddress = (IntPtr)0x10000000;
+
+        var hook = (byte[])BuildShowItemQuantityInDialogsHook.Invoke(null, [hookAddress, stubAddress])!;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(hook, Is.EqualTo(new byte[] { 0xE8, 0x5F, 0x9F, 0xAC, 0x0F }));
+            Assert.That(GetRelativeTarget(hook, hookAddress, 0), Is.EqualTo(stubAddress.ToInt64()));
+        });
+    }
+
     private static void ApplyPatch(byte[] memory)
     {
         using var stream = new MemoryStream(memory, writable: true);
@@ -177,4 +242,7 @@ public class GameClientServiceTests
 
     private static int GetShortTarget(byte[] code, int instructionOffset) =>
         instructionOffset + 2 + unchecked((sbyte)code[instructionOffset + 1]);
+
+    private static int GetNearConditionalTarget(byte[] code, int instructionOffset) =>
+        instructionOffset + 6 + BitConverter.ToInt32(code, instructionOffset + 2);
 }

@@ -62,7 +62,7 @@
                     </TextBox>
                     
                     <!-- Options -->
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4">
                         <!-- Skip Intro Video  -->
                         <Label Grid.Row="0" Grid.Column="0"
                                Content="Skip Intro Video"
@@ -87,6 +87,12 @@
                                ToolTip.Tip="Skips asking quantity for single item stacks in exchange window."/>
                         <ToggleSwitch Grid.Row="3" Grid.Column="1"
                                       IsChecked="{Binding SkipQuantityPromptInExchange}"/>
+                        <!-- Show Item Quantity in Dialogs -->
+                        <Label Grid.Row="4" Grid.Column="0"
+                               Content="Show Item Quantity in Dialogs"
+                               ToolTip.Tip="Adds the current quantity in parentheses to stackable item names in inventory-based merchant and storage dialogs."/>
+                        <ToggleSwitch Grid.Row="4" Grid.Column="1"
+                                      IsChecked="{Binding ShowItemQuantityInDialogs}"/>
                     </Grid>
                 </StackPanel>
             </TabItem>

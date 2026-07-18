@@ -35,6 +35,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(SuppressLoginNotice))]
     [NotifyPropertyChangedFor(nameof(ApplyModifiersKeyFix))]
     [NotifyPropertyChangedFor(nameof(SkipQuantityPromptInExchange))]
+    [NotifyPropertyChangedFor(nameof(ShowItemQuantityInDialogs))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -131,6 +132,17 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.SkipQuantityPromptInExchange = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool ShowItemQuantityInDialogs
+    {
+        get => Settings.ShowItemQuantityInDialogs;
+        set
+        {
+            Settings.ShowItemQuantityInDialogs = value;
             OnPropertyChanged();
             HasChanges = true;
         }

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add an enabled-by-default game client option that skips the exchange quantity prompt only for stackable items with a quantity of one
+- Add an enabled-by-default client patch that displays stack quantities in inventory-based merchant and storage dialogs
 
 ## [1.9.5] - 2026-07-17
 

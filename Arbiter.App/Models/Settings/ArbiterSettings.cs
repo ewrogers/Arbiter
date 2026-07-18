@@ -15,6 +15,7 @@ public class ArbiterSettings : ICloneable
     public bool SuppressLoginNotice { get; set; } = true;
     public bool ApplyModifiersKeyFix { get; set; } = true;
     public bool SkipQuantityPromptInExchange { get; set; } = true;
+    public bool ShowItemQuantityInDialogs { get; set; } = true;
 
     public int LocalPort { get; set; } = 2610;
 
@@ -48,6 +49,7 @@ public class ArbiterSettings : ICloneable
         SuppressLoginNotice = SuppressLoginNotice,
         ApplyModifiersKeyFix = ApplyModifiersKeyFix,
         SkipQuantityPromptInExchange = SkipQuantityPromptInExchange,
+        ShowItemQuantityInDialogs = ShowItemQuantityInDialogs,
         LocalPort = LocalPort,
         RemoteServerAddress = RemoteServerAddress,
         RemoteServerPort = RemoteServerPort,
