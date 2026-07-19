@@ -34,6 +34,9 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(SkipIntroVideo))]
     [NotifyPropertyChangedFor(nameof(SuppressLoginNotice))]
     [NotifyPropertyChangedFor(nameof(ApplyModifiersKeyFix))]
+    [NotifyPropertyChangedFor(nameof(AllowAltToShowGroundItems))]
+    [NotifyPropertyChangedFor(nameof(SkipQuantityPromptInExchange))]
+    [NotifyPropertyChangedFor(nameof(ShowItemQuantityInDialogs))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -42,7 +45,6 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(TraceMaxHistory))]
     [NotifyPropertyChangedFor(nameof(DebugShowDialogId))]
     [NotifyPropertyChangedFor(nameof(DebugShowPursuitId))]
-    [NotifyPropertyChangedFor(nameof(DebugShowDialogItemQuantity))]
     [NotifyPropertyChangedFor(nameof(DebugShowEquipmentDurability))]
     [NotifyPropertyChangedFor(nameof(DebugShowNpcId))]
     [NotifyPropertyChangedFor(nameof(DebugShowMonsterId))]
@@ -119,6 +121,39 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.ApplyModifiersKeyFix = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool AllowAltToShowGroundItems
+    {
+        get => Settings.AllowAltToShowGroundItems;
+        set
+        {
+            Settings.AllowAltToShowGroundItems = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool SkipQuantityPromptInExchange
+    {
+        get => Settings.SkipQuantityPromptInExchange;
+        set
+        {
+            Settings.SkipQuantityPromptInExchange = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool ShowItemQuantityInDialogs
+    {
+        get => Settings.ShowItemQuantityInDialogs;
+        set
+        {
+            Settings.ShowItemQuantityInDialogs = value;
             OnPropertyChanged();
             HasChanges = true;
         }
@@ -212,17 +247,6 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.Debug.ShowPursuitId = value;
-            OnPropertyChanged();
-            HasChanges = true;
-        }
-    }
-
-    public bool DebugShowDialogItemQuantity
-    {
-        get => Settings.Debug.ShowDialogItemQuantity;
-        set
-        {
-            Settings.Debug.ShowDialogItemQuantity = value;
             OnPropertyChanged();
             HasChanges = true;
         }

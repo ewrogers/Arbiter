@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.6] - 2026-07-18
+
+### Added
+
+- Add an enabled-by-default game client option that skips the exchange quantity prompt only for stackable items with a quantity of one
+- Add an enabled-by-default client patch that displays stack quantities greater than one in inventory-based merchant and storage dialogs, truncating long names with two dots to keep the quantity visible
+- Add an enabled-by-default client patch that replays up to 255 ground items as translucent hints after the completed world draw while either Alt key is held
+
+### Removed
+
+- Remove the proxy-side inventory name overrides superseded by the client dialog quantity patch
+
+### Fixed
+
+- Prevent tracing client cleanup from enumerating the proxy connection list while it is being modified
+
 ## [1.9.5] - 2026-07-17
 
 ### Fixed

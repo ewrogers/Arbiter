@@ -41,7 +41,10 @@ public partial class GameClientService : IGameClientService
             throw new ArgumentOutOfRangeException(nameof(options), "Port must be between 1 and 65535");
         }
 
-        if (options.ApplyModifiersKeyFix)
+        var shouldApplyModifierFix = options.ApplyModifiersKeyFix || options.AllowAltToShowGroundItems;
+        var hasRuntimePatches = shouldApplyModifierFix || options.SkipQuantityPromptInExchange ||
+                                options.ShowItemQuantityInDialogs;
+        if (hasRuntimePatches)
         {
             VerifySupportedClient(clientExecutablePath);
         }
@@ -70,10 +73,28 @@ public partial class GameClientService : IGameClientService
 
                 ApplyServerEndpointPatch(writer, hostnamePointer, options.LocalPort);
 
-                if (options.ApplyModifiersKeyFix)
+                if (hasRuntimePatches)
                 {
                     var moduleBaseAddress = process.GetImageBaseAddress();
-                    ApplyStuckModifierFix(writer, allocator, moduleBaseAddress);
+                    if (shouldApplyModifierFix)
+                    {
+                        ApplyStuckModifierFix(writer, allocator, moduleBaseAddress);
+                    }
+
+                    if (options.AllowAltToShowGroundItems)
+                    {
+                        ApplyAllowAltToShowGroundItemsPatch(writer, allocator, moduleBaseAddress);
+                    }
+
+                    if (options.SkipQuantityPromptInExchange)
+                    {
+                        ApplySkipExchangeQuantityPromptPatch(writer, allocator, moduleBaseAddress);
+                    }
+
+                    if (options.ShowItemQuantityInDialogs)
+                    {
+                        ApplyShowItemQuantityInDialogsPatch(writer, allocator, moduleBaseAddress);
+                    }
                 }
             }
 
