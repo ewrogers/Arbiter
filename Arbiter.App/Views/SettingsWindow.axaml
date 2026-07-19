@@ -84,7 +84,7 @@
                         <!-- Allow Alt to Show Ground Items -->
                         <Label Grid.Row="3" Grid.Column="0"
                                Content="Allow Alt to Show Ground Items"
-                               ToolTip.Tip="Hold either Alt key to draw translucent hints for ground items hidden behind static map art. Enabling this also applies the modifier-key cleanup needed when focus changes."/>
+                               ToolTip.Tip="Hold either Alt key to reveal ground items through static map art. Also enables modifier cleanup on focus loss."/>
                         <ToggleSwitch Grid.Row="3" Grid.Column="1"
                                       IsChecked="{Binding AllowAltToShowGroundItems}"/>
                         <!-- Skip Quantity Prompt in Exchange -->
