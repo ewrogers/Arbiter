@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.7] - 2026-07-18
+
+### Added
+
+- Add enabled-by-default client options that make the exchange window draggable and move final exchange results to the floating message bar
+
+### Fixed
+
+- Preserve the exchange dialog pointer when the quantity-prompt patch falls back to the native stacked-item path
+
 ## [1.9.6] - 2026-07-18
 
 ### Added

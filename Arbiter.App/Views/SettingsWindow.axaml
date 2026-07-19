@@ -62,7 +62,7 @@
                     </TextBox>
                     
                     <!-- Options -->
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="4">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="3">
                         <!-- Skip Intro Video  -->
                         <Label Grid.Row="0" Grid.Column="0"
                                Content="Skip Intro Video"
@@ -99,6 +99,18 @@
                                ToolTip.Tip="Adds the current quantity in parentheses to stackable item names in inventory-based merchant and storage dialogs."/>
                         <ToggleSwitch Grid.Row="5" Grid.Column="1"
                                       IsChecked="{Binding ShowItemQuantityInDialogs}"/>
+                        <!-- Make Exchange Window Draggable -->
+                        <Label Grid.Row="6" Grid.Column="0"
+                               Content="Make Exchange Window Draggable"
+                               ToolTip.Tip="Allows dragging the exchange window to move it around."/>
+                        <ToggleSwitch Grid.Row="6" Grid.Column="1"
+                                      IsChecked="{Binding MakeExchangeDialogDraggable}"/>
+                        <!-- Show Exchange Results in Message Bar -->
+                        <Label Grid.Row="7" Grid.Column="0"
+                               Content="Show Exchange Results in Message Bar"
+                               ToolTip.Tip="Shows final accepted and cancelled exchange messages in the floating message bar instead of popups."/>
+                        <ToggleSwitch Grid.Row="7" Grid.Column="1"
+                                      IsChecked="{Binding ShowExchangeResultsInMessageBar}"/>
                     </Grid>
                 </StackPanel>
             </TabItem>

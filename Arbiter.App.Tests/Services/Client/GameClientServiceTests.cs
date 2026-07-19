@@ -265,7 +265,7 @@ public class GameClientServiceTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(stub, Has.Length.EqualTo(125));
+            Assert.That(stub, Has.Length.EqualTo(127));
             Assert.That(stub[0..16], Is.EqualTo(new byte[]
             {
                 0x53, 0x56, 0x57, 0x89, 0xCE, 0x8B, 0x7C, 0x24,
@@ -275,8 +275,10 @@ public class GameClientServiceTests
             Assert.That(GetRelativeTarget(stub, stubAddress, 0x16), Is.EqualTo(0x005A9C40));
             Assert.That(stub[0x5D..0x61], Is.EqualTo(new byte[] { 0xC5, 0x3B, 0xE0, 0xFF }));
             Assert.That(GetRelativeTarget(stub, stubAddress, 0x5C), Is.EqualTo(0x0046C2A0));
-            Assert.That(stub[0x79..0x7D], Is.EqualTo(new byte[] { 0x9E, 0x1F, 0xE0, 0xFF }));
-            Assert.That(GetRelativeTarget(stub, stubAddress, 0x78), Is.EqualTo(0x0046A695));
+            Assert.That(stub[0x70..0x7A],
+                Is.EqualTo(new byte[] { 0x89, 0xF1, 0x5F, 0x5E, 0x5B, 0x55, 0x89, 0xE5, 0x6A, 0xFF }));
+            Assert.That(stub[0x7B..0x7F], Is.EqualTo(new byte[] { 0x9C, 0x1F, 0xE0, 0xFF }));
+            Assert.That(GetRelativeTarget(stub, stubAddress, 0x7A), Is.EqualTo(0x0046A695));
         });
     }
 

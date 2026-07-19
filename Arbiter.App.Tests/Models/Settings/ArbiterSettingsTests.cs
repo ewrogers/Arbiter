@@ -17,6 +17,8 @@ public sealed class ArbiterSettingsTests
             Assert.That(settings?.AllowAltToShowGroundItems, Is.True);
             Assert.That(settings?.SkipQuantityPromptInExchange, Is.True);
             Assert.That(settings?.ShowItemQuantityInDialogs, Is.True);
+            Assert.That(settings?.MakeExchangeDialogDraggable, Is.True);
+            Assert.That(settings?.ShowExchangeResultsInMessageBar, Is.True);
         });
     }
 
@@ -68,5 +70,23 @@ public sealed class ArbiterSettingsTests
         var clone = (ArbiterSettings)settings.Clone();
 
         Assert.That(clone.ShowItemQuantityInDialogs, Is.False);
+    }
+
+    [Test]
+    public void Should_Preserve_Exchange_Ui_Preferences_When_Cloned()
+    {
+        var settings = new ArbiterSettings
+        {
+            MakeExchangeDialogDraggable = false,
+            ShowExchangeResultsInMessageBar = false,
+        };
+
+        var clone = (ArbiterSettings)settings.Clone();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(clone.MakeExchangeDialogDraggable, Is.False);
+            Assert.That(clone.ShowExchangeResultsInMessageBar, Is.False);
+        });
     }
 }
