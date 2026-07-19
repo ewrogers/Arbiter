@@ -94,7 +94,8 @@ public partial class MainWindowViewModel : ViewModelBase
             var options = new LaunchClientOptions(Settings.LocalPort, Settings.SkipIntroVideo,
                 Settings.SuppressLoginNotice, Settings.ApplyModifiersKeyFix,
                 Settings.AllowAltToShowGroundItems, Settings.SkipQuantityPromptInExchange,
-                Settings.ShowItemQuantityInDialogs);
+                Settings.ShowItemQuantityInDialogs, Settings.MakeExchangeDialogDraggable,
+                Settings.ShowExchangeResultsInMessageBar);
 
             await _gameClientService.LaunchLoopbackClient(clientExecutablePath, options);
         }

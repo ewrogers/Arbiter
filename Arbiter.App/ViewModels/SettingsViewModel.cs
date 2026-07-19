@@ -37,6 +37,8 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(AllowAltToShowGroundItems))]
     [NotifyPropertyChangedFor(nameof(SkipQuantityPromptInExchange))]
     [NotifyPropertyChangedFor(nameof(ShowItemQuantityInDialogs))]
+    [NotifyPropertyChangedFor(nameof(MakeExchangeDialogDraggable))]
+    [NotifyPropertyChangedFor(nameof(ShowExchangeResultsInMessageBar))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -154,6 +156,28 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.ShowItemQuantityInDialogs = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool MakeExchangeDialogDraggable
+    {
+        get => Settings.MakeExchangeDialogDraggable;
+        set
+        {
+            Settings.MakeExchangeDialogDraggable = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool ShowExchangeResultsInMessageBar
+    {
+        get => Settings.ShowExchangeResultsInMessageBar;
+        set
+        {
+            Settings.ShowExchangeResultsInMessageBar = value;
             OnPropertyChanged();
             HasChanges = true;
         }
