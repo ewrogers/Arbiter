@@ -34,6 +34,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(SkipIntroVideo))]
     [NotifyPropertyChangedFor(nameof(SuppressLoginNotice))]
     [NotifyPropertyChangedFor(nameof(ApplyModifiersKeyFix))]
+    [NotifyPropertyChangedFor(nameof(AllowAltToShowGroundItems))]
     [NotifyPropertyChangedFor(nameof(SkipQuantityPromptInExchange))]
     [NotifyPropertyChangedFor(nameof(ShowItemQuantityInDialogs))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
@@ -120,6 +121,17 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.ApplyModifiersKeyFix = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool AllowAltToShowGroundItems
+    {
+        get => Settings.AllowAltToShowGroundItems;
+        set
+        {
+            Settings.AllowAltToShowGroundItems = value;
             OnPropertyChanged();
             HasChanges = true;
         }

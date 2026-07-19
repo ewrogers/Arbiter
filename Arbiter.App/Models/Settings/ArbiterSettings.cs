@@ -14,6 +14,7 @@ public class ArbiterSettings : ICloneable
     public bool SkipIntroVideo { get; set; } = true;
     public bool SuppressLoginNotice { get; set; } = true;
     public bool ApplyModifiersKeyFix { get; set; } = true;
+    public bool AllowAltToShowGroundItems { get; set; } = true;
     public bool SkipQuantityPromptInExchange { get; set; } = true;
     public bool ShowItemQuantityInDialogs { get; set; } = true;
 
@@ -48,6 +49,7 @@ public class ArbiterSettings : ICloneable
         SkipIntroVideo = SkipIntroVideo,
         SuppressLoginNotice = SuppressLoginNotice,
         ApplyModifiersKeyFix = ApplyModifiersKeyFix,
+        AllowAltToShowGroundItems = AllowAltToShowGroundItems,
         SkipQuantityPromptInExchange = SkipQuantityPromptInExchange,
         ShowItemQuantityInDialogs = ShowItemQuantityInDialogs,
         LocalPort = LocalPort,
