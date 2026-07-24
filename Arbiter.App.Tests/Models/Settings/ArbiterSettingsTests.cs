@@ -19,6 +19,7 @@ public sealed class ArbiterSettingsTests
             Assert.That(settings?.ShowItemQuantityInDialogs, Is.True);
             Assert.That(settings?.MakeExchangeDialogDraggable, Is.True);
             Assert.That(settings?.ShowExchangeResultsInMessageBar, Is.True);
+            Assert.That(settings?.ImprovedAutoFollow, Is.True);
         });
     }
 
@@ -88,5 +89,15 @@ public sealed class ArbiterSettingsTests
             Assert.That(clone.MakeExchangeDialogDraggable, Is.False);
             Assert.That(clone.ShowExchangeResultsInMessageBar, Is.False);
         });
+    }
+
+    [Test]
+    public void Should_Preserve_Improved_Auto_Follow_Preference_When_Cloned()
+    {
+        var settings = new ArbiterSettings { ImprovedAutoFollow = false };
+
+        var clone = (ArbiterSettings)settings.Clone();
+
+        Assert.That(clone.ImprovedAutoFollow, Is.False);
     }
 }

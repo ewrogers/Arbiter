@@ -44,7 +44,7 @@ public partial class GameClientService : IGameClientService
         var shouldApplyModifierFix = options.ApplyModifiersKeyFix || options.AllowAltToShowGroundItems;
         var hasRuntimePatches = shouldApplyModifierFix || options.SkipQuantityPromptInExchange ||
                                 options.ShowItemQuantityInDialogs || options.MakeExchangeDialogDraggable ||
-                                options.ShowExchangeResultsInMessageBar;
+                                options.ShowExchangeResultsInMessageBar || options.ImprovedAutoFollow;
         if (hasRuntimePatches)
         {
             VerifySupportedClient(clientExecutablePath);
@@ -105,6 +105,11 @@ public partial class GameClientService : IGameClientService
                     if (options.ShowExchangeResultsInMessageBar)
                     {
                         ApplyShowExchangeResultsInMessageBarPatch(writer, allocator, moduleBaseAddress);
+                    }
+
+                    if (options.ImprovedAutoFollow)
+                    {
+                        ApplyImprovedAutoFollowPatch(writer, allocator, moduleBaseAddress);
                     }
 
                 }

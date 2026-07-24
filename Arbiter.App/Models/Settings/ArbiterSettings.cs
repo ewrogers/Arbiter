@@ -19,6 +19,7 @@ public class ArbiterSettings : ICloneable
     public bool ShowItemQuantityInDialogs { get; set; } = true;
     public bool MakeExchangeDialogDraggable { get; set; } = true;
     public bool ShowExchangeResultsInMessageBar { get; set; } = true;
+    public bool ImprovedAutoFollow { get; set; } = true;
 
     public int LocalPort { get; set; } = 2610;
 
@@ -56,6 +57,7 @@ public class ArbiterSettings : ICloneable
         ShowItemQuantityInDialogs = ShowItemQuantityInDialogs,
         MakeExchangeDialogDraggable = MakeExchangeDialogDraggable,
         ShowExchangeResultsInMessageBar = ShowExchangeResultsInMessageBar,
+        ImprovedAutoFollow = ImprovedAutoFollow,
         LocalPort = LocalPort,
         RemoteServerAddress = RemoteServerAddress,
         RemoteServerPort = RemoteServerPort,

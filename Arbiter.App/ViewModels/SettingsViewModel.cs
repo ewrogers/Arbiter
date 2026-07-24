@@ -39,6 +39,7 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
     [NotifyPropertyChangedFor(nameof(ShowItemQuantityInDialogs))]
     [NotifyPropertyChangedFor(nameof(MakeExchangeDialogDraggable))]
     [NotifyPropertyChangedFor(nameof(ShowExchangeResultsInMessageBar))]
+    [NotifyPropertyChangedFor(nameof(ImprovedAutoFollow))]
     [NotifyPropertyChangedFor(nameof(LocalPort))]
     [NotifyPropertyChangedFor(nameof(RemoteServerAddress))]
     [NotifyPropertyChangedFor(nameof(RemoteServerPort))]
@@ -178,6 +179,17 @@ public partial class SettingsViewModel : ViewModelBase, IDialogResult<ArbiterSet
         set
         {
             Settings.ShowExchangeResultsInMessageBar = value;
+            OnPropertyChanged();
+            HasChanges = true;
+        }
+    }
+
+    public bool ImprovedAutoFollow
+    {
+        get => Settings.ImprovedAutoFollow;
+        set
+        {
+            Settings.ImprovedAutoFollow = value;
             OnPropertyChanged();
             HasChanges = true;
         }
