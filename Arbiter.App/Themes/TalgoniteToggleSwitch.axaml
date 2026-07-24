@@ -57,11 +57,10 @@
                                 BorderThickness="2"
                                 CornerRadius="{StaticResource Talgonite.ToggleSwitch.KnobCornerRadius}">
                             <Panel>
-                                <!-- Inset fill to prevent checked color from peeking under sunken borders -->
+                                <!-- The border already insets its content, so fill that interior without exposing the track. -->
                                 <Border Name="SwitchTrackFill"
                                         Background="{StaticResource Talgonite.ToggleSwitch.TrackBackground}"
-                                        CornerRadius="{StaticResource Talgonite.ToggleSwitch.KnobCornerRadius}"
-                                        Margin="2"/>
+                                        CornerRadius="0"/>
                                 <Border Classes="sunken-shadow"
                                         CornerRadius="{StaticResource Talgonite.ToggleSwitch.KnobCornerRadius}"
                                         ZIndex="100"/>
@@ -73,9 +72,8 @@
                         
                         <Canvas Name="PART_SwitchKnob"
                                 Grid.Row="1" Grid.Column="0"
-                                Width="28"
+                                Width="{StaticResource Talgonite.ToggleSwitch.KnobSize}"
                                 Height="{StaticResource Talgonite.ToggleSwitch.KnobSize}"
-                                Margin="2,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center">
                             
@@ -131,6 +129,7 @@
         
         <!-- Checked State -->
         <Style Selector="^:checked /template/ Border#SwitchTrackFill">
+            <Setter Property="Transitions" Value="{x:Null}"/>
             <Setter Property="Background" Value="{StaticResource Talgonite.ToggleSwitch.TrackCheckedBackground}"/>
         </Style>
         
@@ -142,12 +141,15 @@
             <Setter Property="IsVisible" Value="True"/>
         </Style>
         
-        <Style Selector="^:checked /template/ Canvas#PART_SwitchKnob">
-            <Setter Property="Margin" Value="6,0,0,0"/>
-        </Style>
-        
         <!-- Unchecked State -->
         <Style Selector="^:unchecked /template/ Border#SwitchTrackFill">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background"
+                                     Duration="0:0:0.150"
+                                     Easing="CubicEaseOut"/>
+                </Transitions>
+            </Setter>
             <Setter Property="Background" Value="{StaticResource Talgonite.ToggleSwitch.TrackBackground}"/>
         </Style>
         

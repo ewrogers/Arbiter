@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.8] - 2026-07-24
+
+### Added
+
+- Add an enabled-by-default Improved Auto-Follow client patch that makes Shift+right-click follow players and monsters without attacking, stopping at a shortest-path distance of three tiles
+
+### Changed
+
+- Move game client patch options into a dedicated scrollable Patches settings tab
+
+### Fixed
+
+- Make toggle-switch track fills sit flush against their borders without dark corner artifacts and fade briefly when switched off
+- Keep Improved Auto-Follow generation replay outside its overwritten hook bytes and let Shift-modified clicks reach player and monster targets
+
 ## [1.9.7] - 2026-07-18
 
 ### Added

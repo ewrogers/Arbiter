@@ -270,7 +270,7 @@
             <SolidColorBrush x:Key="Talgonite.ToggleSwitch.KnobBorderBrush" Color="#373d49"/>
             <SolidColorBrush x:Key="Talgonite.ToggleSwitch.HoverBorderBrush" Color="#4d535d"/>
             <SolidColorBrush x:Key="Talgonite.ToggleSwitch.FocusBorderBrush" Color="#81b8f5"/>
-            <sys:Double x:Key="Talgonite.ToggleSwitch.KnobSize">28</sys:Double>
+            <sys:Double x:Key="Talgonite.ToggleSwitch.KnobSize">32</sys:Double>
             <CornerRadius x:Key="Talgonite.ToggleSwitch.KnobCornerRadius">2</CornerRadius>
             
             <!-- ToolTip Resources -->

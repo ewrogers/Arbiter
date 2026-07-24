@@ -60,9 +60,17 @@
                             </Button>
                         </TextBox.InnerRightContent>
                     </TextBox>
-                    
-                    <!-- Options -->
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="3">
+                </StackPanel>
+            </TabItem>
+
+            <!-- Client Patches Tab -->
+            <TabItem Header="Patches">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                          ColumnDefinitions="*,Auto"
+                          RowSpacing="3"
+                          Margin="4,4,12,4">
                         <!-- Skip Intro Video  -->
                         <Label Grid.Row="0" Grid.Column="0"
                                Content="Skip Intro Video"
@@ -111,8 +119,14 @@
                                ToolTip.Tip="Shows final accepted and cancelled exchange messages in the floating message bar instead of popups."/>
                         <ToggleSwitch Grid.Row="7" Grid.Column="1"
                                       IsChecked="{Binding ShowExchangeResultsInMessageBar}"/>
+                        <!-- Improved Auto-Follow -->
+                        <Label Grid.Row="8" Grid.Column="0"
+                               Content="Improved Auto-Follow"
+                               ToolTip.Tip="Shift+right-click a player or monster to follow without attacking, stopping three route tiles away."/>
+                        <ToggleSwitch Grid.Row="8" Grid.Column="1"
+                                      IsChecked="{Binding ImprovedAutoFollow}"/>
                     </Grid>
-                </StackPanel>
+                </ScrollViewer>
             </TabItem>
             
             <!-- Network Settings Tab -->

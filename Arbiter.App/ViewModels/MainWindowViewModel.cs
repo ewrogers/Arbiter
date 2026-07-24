@@ -95,7 +95,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 Settings.SuppressLoginNotice, Settings.ApplyModifiersKeyFix,
                 Settings.AllowAltToShowGroundItems, Settings.SkipQuantityPromptInExchange,
                 Settings.ShowItemQuantityInDialogs, Settings.MakeExchangeDialogDraggable,
-                Settings.ShowExchangeResultsInMessageBar);
+                Settings.ShowExchangeResultsInMessageBar, Settings.ImprovedAutoFollow);
 
             await _gameClientService.LaunchLoopbackClient(clientExecutablePath, options);
         }
