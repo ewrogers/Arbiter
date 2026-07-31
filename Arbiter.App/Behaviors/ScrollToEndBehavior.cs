@@ -1,4 +1,7 @@
 ﻿using System.Collections.Specialized;
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -10,6 +13,8 @@ namespace Arbiter.App.Behaviors;
 
 public class ScrollToEndBehavior : AvaloniaObject
 {
+    private static readonly ConditionalWeakTable<Interactive, AutoScrollSubscription> AutoScrollSubscriptions = new();
+
     #region AutoScrollToEnd Property
 
     public static readonly AttachedProperty<bool> AutoScrollToEndProperty =
@@ -41,32 +46,36 @@ public class ScrollToEndBehavior : AvaloniaObject
 
     private static void HandleAutoScrollToEndChanged(Interactive element, AvaloniaPropertyChangedEventArgs e)
     {
+        if (e.NewValue is false)
+        {
+            if (AutoScrollSubscriptions.TryGetValue(element, out var existingSubscription))
+            {
+                existingSubscription.Dispose();
+                AutoScrollSubscriptions.Remove(element);
+            }
+
+            return;
+        }
+
+        if (e.NewValue is not true)
+        {
+            return;
+        }
+
         var itemsControl = element as ItemsControl ?? element.FindDescendantOfType<ItemsControl>();
         if (itemsControl is null)
         {
             return;
         }
 
-        if (e.NewValue is true)
+        if (AutoScrollSubscriptions.TryGetValue(element, out _))
         {
-            itemsControl.Items.CollectionChanged += OnCollectionChanged;
-        }
-        else if (e.NewValue is false)
-        {
-            itemsControl.Items.CollectionChanged -= OnCollectionChanged;
+            return;
         }
 
-        return;
-        
-        void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs _)
-        {
-            if (!GetAutoScrollToEnd(element))
-            {
-                return;
-            }
-
-            TryScrollToEnd(element);
-        }
+        var subscription = new AutoScrollSubscription(element, itemsControl);
+        AutoScrollSubscriptions.Add(element, subscription);
+        subscription.Start();
     }
 
     private static void HandleScrollToEndChanged(Interactive element, AvaloniaPropertyChangedEventArgs e)
@@ -76,15 +85,18 @@ public class ScrollToEndBehavior : AvaloniaObject
             return;
         }
 
-        TryScrollToEnd(element, force: true);
+        AutoScrollSubscriptions.TryGetValue(element, out var subscription);
+        TryScrollToEnd(element, force: true, subscription);
         SetScrollToEnd(element, false);
     }
 
-    private static void TryScrollToEnd(Interactive element, bool force = false)
+    private static void TryScrollToEnd(Interactive element, bool force = false,
+        AutoScrollSubscription? subscription = null)
     {
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            Dispatcher.UIThread.Post(() => TryScrollToEnd(element, force), DispatcherPriority.Background);
+            Dispatcher.UIThread.Post(() => TryScrollToEnd(element, force, subscription),
+                DispatcherPriority.Background);
             return;
         }
         
@@ -99,7 +111,110 @@ public class ScrollToEndBehavior : AvaloniaObject
 
         if (force || currentY >= maxY - 1)
         {
-            Dispatcher.UIThread.Post(() => scrollViewer.ScrollToEnd(), DispatcherPriority.Background);
+            if (subscription is not null)
+            {
+                subscription.ScheduleScroll(scrollViewer.ScrollToEnd);
+            }
+            else
+            {
+                Dispatcher.UIThread.Post(scrollViewer.ScrollToEnd, DispatcherPriority.Background);
+            }
+        }
+    }
+
+    private sealed class AutoScrollSubscription : IDisposable
+    {
+        private readonly Interactive _element;
+        private readonly ItemsControl _itemsControl;
+        private bool _isSubscribed;
+        private bool _isDisposed;
+        private int _isScrollScheduled;
+
+        public AutoScrollSubscription(Interactive element, ItemsControl itemsControl)
+        {
+            _element = element;
+            _itemsControl = itemsControl;
+
+            _itemsControl.AttachedToVisualTree += OnAttachedToVisualTree;
+            _itemsControl.DetachedFromVisualTree += OnDetachedFromVisualTree;
+        }
+
+        public void Start()
+        {
+            if (TopLevel.GetTopLevel(_itemsControl) is not null)
+            {
+                Subscribe();
+            }
+        }
+
+        public void ScheduleScroll(Action action)
+        {
+            if (_isDisposed || Interlocked.CompareExchange(ref _isScrollScheduled, 1, 0) != 0)
+            {
+                return;
+            }
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                try
+                {
+                    if (!_isDisposed && TopLevel.GetTopLevel(_itemsControl) is not null)
+                    {
+                        action();
+                    }
+                }
+                finally
+                {
+                    Volatile.Write(ref _isScrollScheduled, 0);
+                }
+            }, DispatcherPriority.Background);
+        }
+
+        private void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) => Subscribe();
+
+        private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e) => Unsubscribe();
+
+        private void Subscribe()
+        {
+            if (_isDisposed || _isSubscribed)
+            {
+                return;
+            }
+
+            _itemsControl.Items.CollectionChanged += OnCollectionChanged;
+            _isSubscribed = true;
+        }
+
+        private void Unsubscribe()
+        {
+            if (!_isSubscribed)
+            {
+                return;
+            }
+
+            _itemsControl.Items.CollectionChanged -= OnCollectionChanged;
+            _isSubscribed = false;
+        }
+
+        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs _)
+        {
+            if (GetAutoScrollToEnd(_element))
+            {
+                TryScrollToEnd(_element, subscription: this);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _isDisposed = true;
+            Unsubscribe();
+            _itemsControl.AttachedToVisualTree -= OnAttachedToVisualTree;
+            _itemsControl.DetachedFromVisualTree -= OnDetachedFromVisualTree;
         }
     }
 }

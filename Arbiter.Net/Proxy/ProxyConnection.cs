@@ -34,6 +34,8 @@ public partial class ProxyConnection : IDisposable
 
     private int _clientSequence;
     private int _serverSequence;
+    private int _isClientConnected;
+    private int _isServerConnected;
     private int _isTransferring;
     private readonly Channel<NetworkPacket> _sendQueue = Channel.CreateUnbounded<NetworkPacket>();
     private readonly Channel<NetworkPacket> _prioritySendQueue = Channel.CreateUnbounded<NetworkPacket>();
@@ -48,8 +50,8 @@ public partial class ProxyConnection : IDisposable
     public IPEndPoint? LocalEndpoint => _client.Client.LocalEndPoint as IPEndPoint;
     public IPEndPoint? RemoteEndpoint => _server?.Client.RemoteEndPoint as IPEndPoint;
     public bool IsConnected => IsClientConnected && IsServerConnected;
-    public bool IsClientConnected => _client.Connected;
-    public bool IsServerConnected => _server?.Connected ?? false;
+    public bool IsClientConnected => Volatile.Read(ref _isClientConnected) != 0;
+    public bool IsServerConnected => Volatile.Read(ref _isServerConnected) != 0;
 
     public event EventHandler? ClientAuthenticated;
     public event EventHandler? ClientLoggedIn;
@@ -72,6 +74,7 @@ public partial class ProxyConnection : IDisposable
 
         _client = client;
         _client.NoDelay = true;
+        _isClientConnected = client.Connected ? 1 : 0;
 
         _clientMessageFactory = clientMessageFactory ?? ClientMessageFactory.Default;
         _serverMessageFactory = serverMessageFactory ?? ServerMessageFactory.Default;
@@ -89,30 +92,32 @@ public partial class ProxyConnection : IDisposable
         _clientStream = _client.GetStream();
         _serverStream = _server.GetStream();
 
+        Volatile.Write(ref _isServerConnected, 1);
         ServerConnected?.Invoke(this, EventArgs.Empty);
     }
 
-    internal Task SendRecvLoopAsync(CancellationToken token = default)
+    internal async Task SendRecvLoopAsync(CancellationToken token = default)
     {
-        var linked = CancellationTokenSource.CreateLinkedTokenSource(token);
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(token);
 
         // Start the client/server recv and send queue tasks in the background
         var clientRecvTask = RecvLoopAsync(_clientStream!, _clientPacketBuffer, _clientEncryptor,
             ProxyDirection.ClientToServer, linked);
         var serverRecvTask = RecvLoopAsync(_serverStream!, _serverPacketBuffer, _serverEncryptor,
             ProxyDirection.ServerToClient, linked);
-        var senderTask = SendLoopAsync(linked.Token);
+        var senderTask = SendLoopAsync(linked);
 
-        return Task.WhenAll(clientRecvTask, serverRecvTask, senderTask);
+        await Task.WhenAll(clientRecvTask, serverRecvTask, senderTask).ConfigureAwait(false);
     }
 
     public void Disconnect()
     {
-        if (!IsConnected)
+        if (!IsClientConnected)
         {
             return;
         }
 
+        Volatile.Write(ref _isClientConnected, 0);
         _client.Close();
     }
 
@@ -131,6 +136,9 @@ public partial class ProxyConnection : IDisposable
 
         if (isDisposing)
         {
+            Volatile.Write(ref _isClientConnected, 0);
+            Volatile.Write(ref _isServerConnected, 0);
+
             _sendQueue.Writer.TryComplete();
             _prioritySendQueue.Writer.TryComplete();
 

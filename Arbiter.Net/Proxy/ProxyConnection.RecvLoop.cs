@@ -120,14 +120,6 @@ public partial class ProxyConnection
                 }
             }
             
-            if (direction == ProxyDirection.ClientToServer)
-            {
-                ClientDisconnected?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                ServerDisconnected?.Invoke(this, EventArgs.Empty);
-            }
         }
         catch when (token.IsCancellationRequested)
         {
@@ -136,6 +128,17 @@ public partial class ProxyConnection
         {
             ArrayPool<byte>.Shared.Return(recvBuffer);
             _sendQueue.Writer.TryComplete();
+
+            if (direction == ProxyDirection.ClientToServer)
+            {
+                Volatile.Write(ref _isClientConnected, 0);
+                ClientDisconnected?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                Volatile.Write(ref _isServerConnected, 0);
+                ServerDisconnected?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
