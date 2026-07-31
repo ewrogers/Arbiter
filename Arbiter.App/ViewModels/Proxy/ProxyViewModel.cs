@@ -51,6 +51,12 @@ public partial class ProxyViewModel : ViewModelBase
         _logger.LogInformation("Proxy started on 127.0.0.1:{Port}", localPort);
     }
 
+    public void SetRemoteEndpoint(IPAddress remoteIpAddress, int remotePort)
+    {
+        _proxyServer.SetRemoteEndpoint(remoteIpAddress, remotePort);
+        _logger.LogInformation("Proxy remote server updated to {Endpoint}", _proxyServer.RemoteEndpoint);
+    }
+
     private void OnClientConnected(object? sender, ProxyConnectionEventArgs e)
     {
         var name = e.Connection.Name ?? e.Connection.Id.ToString();

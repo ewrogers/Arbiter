@@ -135,6 +135,30 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private async Task UpdateRemoteEndpointAsync()
+    {
+        try
+        {
+            var remoteIpAddress = await Dns.GetHostAddressesAsync(Settings.RemoteServerAddress);
+            if (remoteIpAddress.Length == 0)
+            {
+                throw new Exception("Failed to resolve remote server address");
+            }
+
+            Proxy.SetRemoteEndpoint(remoteIpAddress[0], Settings.RemoteServerPort);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update remote server");
+            await _dialogService.ShowMessageBoxAsync(new MessageBoxDetails
+            {
+                Title = "Failed to Update Remote Server",
+                Message = $"An error occurred while updating the remote server:\n\n{ex.Message}",
+                Description = "Check the remote server address and port in Settings."
+            });
+        }
+    }
+
     private void OnPacketSelected(TracePacketViewModel? viewModel)
     {
         if (viewModel is null)
@@ -166,10 +190,21 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        var remoteEndpointChanged =
+            !string.Equals(Settings.RemoteServerAddress, newSettings.RemoteServerAddress,
+                StringComparison.OrdinalIgnoreCase) ||
+            Settings.RemoteServerPort != newSettings.RemoteServerPort;
+
         Settings = newSettings;
         Settings.SettingsPanelIndex = vm.SelectedTabIndex;
         
         await _settingsService.SaveToFileAsync(Settings);
+
+        if (remoteEndpointChanged)
+        {
+            await UpdateRemoteEndpointAsync();
+        }
+
         await _gameSpriteService.LoadAsync(Settings.ClientExecutablePath);
         LaunchClientCommand.NotifyCanExecuteChanged();
 
