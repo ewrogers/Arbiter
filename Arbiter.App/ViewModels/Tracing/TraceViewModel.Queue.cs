@@ -6,17 +6,22 @@ using Arbiter.App.Threading;
 using Arbiter.Net;
 using Arbiter.Net.Filters;
 using Arbiter.Net.Proxy;
+using Microsoft.Extensions.Logging;
 
 namespace Arbiter.App.ViewModels.Tracing;
 
 public partial class TraceViewModel
 {
+    private const int MaxPendingTracePackets = 4096;
+
     private sealed record QueuedTracePacket(long Generation, NetworkPacket Encrypted, NetworkPacket Decrypted,
         NetworkFilterResult? FilterResult, string? ClientName, int ConnectionId, PacketDisplayMode DisplayMode);
 
     private readonly DispatcherBatchQueue<QueuedTracePacket> _packetQueue;
     private long _packetGeneration;
     private int _isAcceptingPackets;
+    private int _hasReportedPacketOverflow;
+    private bool _isApplyingPacketBatch;
 
     private void QueuePacket(ProxyConnectionDataEventArgs e)
     {
@@ -35,32 +40,55 @@ public partial class TraceViewModel
             return;
         }
 
-        _packetQueue.Enqueue(new QueuedTracePacket(generation, e.Encrypted, e.Decrypted, e.FilterResult,
-            name, connection.Id, _packetDisplayMode));
+        var droppedItems = _packetQueue.Enqueue(new QueuedTracePacket(generation, e.Encrypted, e.Decrypted,
+            e.FilterResult, name, connection.Id, _packetDisplayMode));
+        if (droppedItems > 0 && Interlocked.CompareExchange(ref _hasReportedPacketOverflow, 1, 0) == 0)
+        {
+            _logger.LogWarning("Trace processing fell behind; oldest pending packets will be dropped");
+        }
     }
 
     private void ApplyPacketBatch(IReadOnlyList<QueuedTracePacket> packets)
     {
         var generation = Volatile.Read(ref _packetGeneration);
-        foreach (var queued in packets)
+        var removedPackets = false;
+
+        _isApplyingPacketBatch = true;
+        try
         {
-            if (queued.Generation != generation)
+            using (FilteredPackets.DeferRefresh())
             {
-                continue;
+                foreach (var queued in packets)
+                {
+                    if (queued.Generation != generation)
+                    {
+                        continue;
+                    }
+
+                    var vm = new TracePacketViewModel(queued.Encrypted, queued.Decrypted, queued.FilterResult,
+                        queued.ClientName, queued.ConnectionId)
+                    {
+                        DisplayMode = queued.DisplayMode
+                    };
+
+                    AddPacketToTrace(vm, false);
+                }
+
+                while (_allPackets.Count > MaxTraceHistory)
+                {
+                    _allPackets.RemoveAt(0);
+                    removedPackets = true;
+                }
             }
-
-            var vm = new TracePacketViewModel(queued.Encrypted, queued.Decrypted, queued.FilterResult,
-                queued.ClientName, queued.ConnectionId)
-            {
-                DisplayMode = queued.DisplayMode
-            };
-
-            AddPacketToTrace(vm, false);
+        }
+        finally
+        {
+            _isApplyingPacketBatch = false;
         }
 
-        while (_allPackets.Count > MaxTraceHistory)
+        if (removedPackets)
         {
-            _allPackets.RemoveAt(0);
+            RefreshAfterPacketRemoval();
         }
     }
 }

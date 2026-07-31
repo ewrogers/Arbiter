@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.9] - 2026-07-31
+
+### Fixed
+
+- Apply remote server address and port changes to new proxy connections without restarting Arbiter
+- Prevent runaway memory use and UI stalls while tracing by bounding pending packets, batching updates, and promptly closing disconnected proxy connections
+
 ## [1.9.8] - 2026-07-24
 
 ### Added

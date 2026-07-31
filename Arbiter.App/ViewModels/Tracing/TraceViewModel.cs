@@ -112,7 +112,8 @@ public partial class TraceViewModel : ViewModelBase
 
         SelectedTraceClient = TraceClients.FirstOrDefault();
         FilteredPackets = new FilteredObservableCollection<TracePacketViewModel>(_allPackets, MatchesFilter);
-        _packetQueue = new DispatcherBatchQueue<QueuedTracePacket>(ApplyPacketBatch);
+        _packetQueue = new DispatcherBatchQueue<QueuedTracePacket>(ApplyPacketBatch,
+            maxPendingItems: MaxPendingTracePackets);
 
         _allPackets.CollectionChanged += OnPacketCollectionChanged;
         SelectedPackets.CollectionChanged += OnSelectedPacketsCollectionChanged;
@@ -173,7 +174,20 @@ public partial class TraceViewModel : ViewModelBase
         // When packets are removed/reset, prune client filters that no longer exist in any remaining packet
         if (e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Reset)
         {
-            PruneClientsNotInPackets();
+            if (_isApplyingPacketBatch)
+            {
+                return;
+            }
+
+            RefreshAfterPacketRemoval();
+        }
+    }
+
+    private void RefreshAfterPacketRemoval()
+    {
+        PruneClientsNotInPackets();
+        if (IsSearchActive)
+        {
             RefreshSearchResults();
         }
     }
@@ -243,6 +257,8 @@ public partial class TraceViewModel : ViewModelBase
 
         TraceClientName = SelectedTraceClient?.Name;
 
+        _packetQueue.ResetDroppedItemCount();
+        Interlocked.Exchange(ref _hasReportedPacketOverflow, 0);
         Volatile.Write(ref _isAcceptingPackets, 1);
         _proxyServer.PacketReceived += OnPacketReceived;
         _proxyServer.PacketQueued += OnPacketQueued;
@@ -270,6 +286,13 @@ public partial class TraceViewModel : ViewModelBase
         Interlocked.Increment(ref _packetGeneration);
 
         IsRunning = false;
+
+        var droppedPackets = _packetQueue.DroppedItemCount;
+        if (droppedPackets > 0)
+        {
+            _logger.LogWarning("Trace dropped {Count} pending packets to keep the application responsive",
+                droppedPackets);
+        }
 
         PruneClients();
         _logger.LogInformation("Trace stopped");

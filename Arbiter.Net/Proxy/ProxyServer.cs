@@ -20,7 +20,7 @@ public partial class ProxyServer : IDisposable
 
     public bool IsRunning => _listener is not null;
     public IPEndPoint? LocalEndpoint => _listener?.LocalEndpoint as IPEndPoint;
-    public IPEndPoint? RemoteEndpoint => _remoteEndpoint;
+    public IPEndPoint? RemoteEndpoint => Volatile.Read(ref _remoteEndpoint);
 
     public event Action? Started;
     public event Action? Stopped;
@@ -59,7 +59,7 @@ public partial class ProxyServer : IDisposable
             throw new InvalidOperationException("Proxy server is already running");
         }
 
-        _remoteEndpoint = remoteEndpoint;
+        SetRemoteEndpoint(remoteEndpoint);
 
         _cancelTokenSource = new CancellationTokenSource();
         _listener = new TcpListener(IPAddress.Loopback, listenPort);
@@ -68,6 +68,17 @@ public partial class ProxyServer : IDisposable
         _ = AcceptLoopAsync(_cancelTokenSource.Token);
 
         Started?.Invoke();
+    }
+
+    public void SetRemoteEndpoint(IPAddress remoteAddress, int remotePort) =>
+        SetRemoteEndpoint(new IPEndPoint(remoteAddress, remotePort));
+
+    public void SetRemoteEndpoint(IPEndPoint remoteEndpoint)
+    {
+        CheckIfDisposed();
+        ArgumentNullException.ThrowIfNull(remoteEndpoint);
+
+        Volatile.Write(ref _remoteEndpoint, remoteEndpoint);
     }
 
     public void Stop()

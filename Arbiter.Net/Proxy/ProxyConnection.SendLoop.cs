@@ -7,8 +7,9 @@ namespace Arbiter.Net.Proxy;
 
 public partial class ProxyConnection
 {
-    private async Task SendLoopAsync(CancellationToken token = default)
+    private async Task SendLoopAsync(CancellationTokenSource tokenSource)
     {
+        var token = tokenSource.Token;
         var headerBuffer = ArrayPool<byte>.Shared.Rent(NetworkPacket.HeaderSize);
 
         try
@@ -107,8 +108,9 @@ public partial class ProxyConnection
                 }
                 catch (IOException)
                 {
-                    // Socket was disconnected, cancel the send operation
-                    continue;
+                    // Either socket ending tears down the whole proxy connection.
+                    await tokenSource.CancelAsync().ConfigureAwait(false);
+                    break;
                 }
 
                 // Notify that we have sent a packet

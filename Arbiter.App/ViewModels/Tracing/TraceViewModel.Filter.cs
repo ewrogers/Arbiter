@@ -139,16 +139,15 @@ public partial class TraceViewModel
     // Prune any client entries from filter parameters that are no longer present in the packet list
     private void PruneClientsNotInPackets()
     {
-        // Build case-insensitive set of remaining client names from all packets
-        var remaining = _allPackets
-            .Select(p => p.DisplayClientName ?? string.Empty)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
         if (FilterParameters.Clients.Count == 0)
         {
             return;
         }
+
+        // Build case-insensitive set of remaining client names from all packets
+        var remaining = _allPackets
+            .Select(p => p.DisplayClientName ?? string.Empty)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         // Determine which client filter entries are no longer present
         var toRemove = FilterParameters.Clients
